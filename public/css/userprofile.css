@@ -1,0 +1,252 @@
+/* Import Google Fonts - Inter is used throughout */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        /* Base Body Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            line-height: 1.5; /* Default line height for readability */
+            color: #333; /* Dark gray for general text */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #f0f2f5; /* Light background for the page */
+            display: flex; /* Use flexbox to push content down from sticky header */
+            flex-direction: column;
+            min-height: 100vh; /* Ensures body takes full viewport height */
+        }
+
+        /* Main content wrapper to push content down and allow flex-grow */
+        .user-main-content {
+            flex-grow: 1; /* Allows it to take up available space */
+            padding: 2rem 0; /* Adjust padding as needed */
+            display: flex; /* To center the profile container */
+            justify-content: center;
+            align-items: flex-start; /* Align to the top of the available space */
+        }
+
+        .profile-container {
+            background-color: white;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* shadow-lg */
+            padding: 2.5rem;
+            max-width: 900px; /* Max width for the entire profile card */
+            width: 95%; /* Responsive width */
+            margin: 2rem auto; /* Center the container with vertical margin */
+        }
+
+        .profile-title {
+            font-size: 2rem; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            color: #1f2937; /* gray-800 */
+            margin-bottom: 2rem;
+            text-align: left; /* Align title to left as per screenshot */
+        }
+
+        .profile-card {
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            gap: 2rem; /* Space between left and right sections */
+            margin-bottom: 2rem;
+        }
+
+        .profile-left {
+            flex: 1; /* Takes available space */
+            min-width: 250px; /* Minimum width before wrapping */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center items vertically */
+            gap: 1.5rem; /* Space between image and button */
+            padding-right: 1rem; /* Padding for visual separation from right column */
+        }
+
+        .profile-image-placeholder {
+            width: 180px; /* Large square */
+            height: 180px;
+            background-color: #e5e7eb; /* gray-200 */
+            border-radius: 0.75rem; /* rounded-xl */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4rem; /* large icon */
+            color: #9ca3af; /* gray-400 */
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+
+        .appointment-history-button {
+            background-color: #0C969C;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%; /* Full width within its container */
+            max-width: 200px; /* Limit button width */
+        }
+
+        .appointment-history-button:hover {
+            background-color: #0A7075;
+        }
+
+        .profile-right {
+            flex: 2; /* Takes more space than left */
+            min-width: 300px; /* Minimum width for info fields */
+            display: flex;
+            flex-direction: column;
+            gap: 1rem; /* Space between info groups */
+        }
+
+        .profile-info-group {
+            display: flex;
+            align-items: center; /* Align label and input */
+            gap: 1rem;
+        }
+
+        .profile-info-group label {
+            font-weight: 600; /* font-semibold */
+            color: #4b5563; /* gray-700 */
+            width: 120px; /* Fixed width for labels for alignment */
+            text-align: right;
+            flex-shrink: 0; /* Prevent label from shrinking */
+        }
+
+        .profile-info-group input[type="text"],
+        .profile-info-group input[type="email"],
+        .profile-info-group input[type="tel"] {
+            flex-grow: 1; /* Input takes remaining space */
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db; /* gray-300 */
+            border-radius: 0.5rem;
+            background-color: #f9fafb; /* gray-50 */
+            color: #1f2937; /* gray-800 */
+            font-size: 1rem;
+            cursor: default; /* Indicate it's read-only */
+        }
+
+        /* Specific style for read-only inputs */
+        .profile-info-group input[readonly] {
+            background-color: #e5e7eb; /* gray-200 */
+            cursor: default;
+            opacity: 0.9;
+        }
+
+        .profile-actions {
+            display: flex;
+            justify-content: flex-end; /* Align buttons to the right */
+            gap: 1rem; /* Space between buttons */
+            margin-top: 2rem; /* Space above buttons */
+            padding-top: 1.5rem; /* Padding at the top of the actions section */
+            border-top: 1px solid #e5e7eb; /* Subtle line above buttons */
+        }
+
+        .action-button {
+            font-weight: 600; /* font-semibold */
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .edit-button {
+            background-color: white;
+            color: #0C969C;
+            border: 1px solid #0C969C;
+        }
+
+        .edit-button:hover {
+            background-color: #0C969C;
+            color: white;
+        }
+
+        .save-button {
+            background-color: #0C969C;
+            color: white;
+        }
+
+        .save-button:hover {
+            background-color: #0A7075;
+        }
+
+        .logout-button {
+            background-color: #EF4444; /* red-500 */
+            color: white;
+        }
+
+        .logout-button:hover {
+            background-color: #DC2626; /* red-600 */
+        }
+
+        /* --- Responsive Adjustments --- */
+        @media (min-width: 768px) { /* md breakpoint and up */
+
+            .profile-card {
+                flex-direction: row; /* Keep content in a row on larger screens */
+            }
+
+            .profile-left {
+                align-items: flex-start; /* Align left content to the left */
+                padding-right: 2rem; /* More space */
+            }
+        }
+
+        @media (max-width: 767px) { /* Small screens (below md) */
+            .profile-container {
+                padding: 1.5rem; /* Smaller padding on mobile */
+            }
+
+            .profile-title {
+                font-size: 1.5rem; /* Smaller title on mobile */
+                text-align: center; /* Center title on mobile */
+                margin-bottom: 1.5rem;
+            }
+
+            .profile-card {
+                flex-direction: column; /* Stack left and right parts vertically */
+                align-items: center; /* Center items when stacked */
+                gap: 1.5rem; /* Adjust gap */
+            }
+
+            .profile-left {
+                width: 100%;
+                padding-right: 0; /* Remove padding */
+                border-bottom: 1px solid #e5e7eb; /* Add a separator */
+                padding-bottom: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .profile-right {
+                width: 100%;
+                min-width: unset; /* Remove min-width constraint */
+            }
+
+            .profile-info-group {
+                flex-direction: column; /* Stack label and input vertically */
+                align-items: flex-start; /* Align stacked items to left */
+                gap: 0.5rem;
+            }
+
+            .profile-info-group label {
+                width: auto; /* Allow label to take natural width */
+                text-align: left;
+            }
+
+            .profile-actions {
+                flex-direction: column; /* Stack action buttons vertically */
+                align-items: center; /* Center action buttons */
+                gap: 0.75rem; /* Smaller gap between buttons */
+            }
+
+            .action-button {
+                width: 100%; /* Full width buttons */
+                max-width: 250px; /* Limit max width for readability */
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 900px) { /* Adjust for smaller desktop/large tablet */
+            .profile-info-group label {
+                width: 90px; /* Slightly smaller label width to fit more */
+            }
+        }
+ 

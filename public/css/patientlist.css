@@ -1,0 +1,156 @@
+   
+
+        /* Main Container */
+        .patient-container {
+            /* max-width: 1000px; Adjusted max-width for the patient list */
+            margin: 0;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+
+        /* Search Bar */
+        .search-bar {
+            position: relative;
+            margin-bottom: 25px;
+            max-width: 300px; /* Constrain width as per screenshot */
+        }
+
+        .search-bar input {
+            width: calc(100% - 40px); /* Adjust width for icon */
+            padding: 12px 20px 12px 40px; /* Left padding for icon */
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 1em;
+            outline: none;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        /* Patient Table Styles (Similar to Appointment Table) */
+        .patient-table-container {
+            overflow-x: auto; /* Allows horizontal scrolling on small screens */
+        }
+
+        .patient-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .patient-table th,
+        .patient-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .patient-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #555;
+            text-transform: uppercase;
+        }
+
+        .patient-table td:last-child {
+            text-align: center; /* Center the view button */
+        }
+
+        .patient-table .view-button {
+            padding: 8px 12px;
+            background-color: #2e8b7f; /* Teal button */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none; /* For if it's an <a> tag */
+            display: inline-block; /* Ensure padding works */
+            transition: background-color 0.3s ease;
+        }
+
+        .patient-table .view-button:hover {
+            background-color: #257a6e;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+
+
+            .patient-container {
+                margin: 20px 15px;
+                padding: 15px;
+            }
+
+            .search-bar {
+                max-width: 100%; /* Allow search bar to take full width on small screens */
+            }
+
+            /* Table responsiveness for small screens */
+            .patient-table thead {
+                display: none; /* Hide table headers */
+            }
+
+            .patient-table,
+            .patient-table tbody,
+            .patient-table tr,
+            .patient-table td {
+                display: block; /* Make table elements behave like block elements */
+                width: 100%;
+            }
+
+            .patient-table tr {
+                margin-bottom: 15px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                background-color: #fff;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            }
+
+            .patient-table td {
+                text-align: right;
+                padding-left: 50%; /* Space for the "label" */
+                position: relative;
+            }
+
+            .patient-table td::before {
+                content: attr(data-label); /* Use data-label for content */
+                position: absolute;
+                left: 15px;
+                width: calc(50% - 30px);
+                padding-right: 10px;
+                white-space: nowrap;
+                text-align: left;
+                font-weight: bold;
+                color: #777;
+            }
+
+            .patient-table td:last-child {
+                text-align: right; /* Ensure button aligns right with label */
+            }
+
+            .patient-table .view-button {
+                width: auto; /* Allow button to size itself */
+                display: inline-block; /* Keep it inline-block */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .search-bar input {
+                width: calc(100% - 30px); /* Adjust width for smaller icon */
+                padding: 10px 15px 10px 35px; /* Adjust padding for smaller icon */
+            }
+
+            .search-bar i {
+                left: 10px;
+                font-size: 0.9em;
+            }
+        }
