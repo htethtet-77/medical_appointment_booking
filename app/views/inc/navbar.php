@@ -13,7 +13,7 @@
         <li><a href="<?php echo URLROOT; ?>/pages/doctors">DOCTORS</a></li>
         <li><a href="<?php echo URLROOT; ?>/pages/appointment">APPOINTMENT</a></li>
         <li><a href="<?php echo URLROOT; ?>/pages/contactus">CONTACT</a></li>
-        <li><a href="<?php echo URLROOT; ?>/admin/"><i class="fas fa-user"></i> User</a></li>
+        <li><a href="<?php echo URLROOT; ?>/pages/"><i class="fas fa-user"></i> User</a></li>
 
     </nav>
 </header>
