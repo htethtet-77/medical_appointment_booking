@@ -50,7 +50,7 @@
                     </div>
                     <h3>Dr. Daniel</h3>
                     <p>General Physician</p>
-                    <a href="doctorprofile.html" class="view-profile-button">
+                    <a href="<?php echo URLROOT; ?>/pages/doctorprofile" class="view-profile-button">
                         View Profile
                     </a>
                 </div>

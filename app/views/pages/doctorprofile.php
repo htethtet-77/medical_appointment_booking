@@ -12,18 +12,8 @@
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/doctorprofile.css">
 </head>
 <body class="antialiased">
-
-    <!-- Header Section -->
-    <header class="bg-[#0A7075] shadow-md py-4">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <!-- Navigation Menu for Desktop -->
           <?php require APPROOT . '/views/inc/navbar.php'; ?>
-            <!-- Mobile Menu Button (Hamburger Icon) - Hidden on desktop -->
-            <button class="md:hidden text-white text-2xl focus:outline-none">
-                &#9776; <!-- Unicode for hamburger icon -->
-            </button>
-        </div>
-    </header>
+      
 
     <!-- Doctor Profile Main Section -->
 <section id="doctorProfileSection" class="bg-gray-200 py-10 px-4">

@@ -1,4 +1,5 @@
 <?php require_once APPROOT . '/views/inc/header.php'; ?>
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/register.css">
 
 <div class="container">
 	<div class="register-box">
