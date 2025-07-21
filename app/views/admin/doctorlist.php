@@ -1,5 +1,7 @@
-<?php require APPROOT . '/views/inc/header.php'; ?>
+<!-- <?php require APPROOT . '/views/inc/header.php'; ?> -->
+ <title><?php echo SITENAME; ?></title>
 <?php require APPROOT . '/views/inc/sidebar.php'; ?>
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/doctorlist.css">
 
 
     <div class="container">

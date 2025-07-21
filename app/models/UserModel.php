@@ -13,7 +13,8 @@ class UserModel
     private $is_active;
     private $is_login;
     // private $date;
-
+    private $type_id;
+    private $status_id;
     
 
     public function setName($name)
@@ -96,7 +97,25 @@ class UserModel
         return $this->is_login;
     }
 
- 
+     public function setTypeId($type_id)
+    {
+        $this->type_id = $type_id;
+    }
+
+    public function getTypeId()
+    {
+        return $this->type_id;
+    }
+
+    public function setStatusId($status_id)
+    {
+        $this->status_id = $status_id;
+    }
+
+    public function getStatusId()
+    {
+        return $this->status_id;
+    }
 
     // public function setDate($date)
     // {
@@ -118,6 +137,8 @@ class UserModel
             "is_confirmed" => $this->getIsConfirmed(),
             "is_active" => $this->getIsActive(),
             "is_login" => $this->getIsLogin(),
+            "type_id" => $this->getTypeId(),
+            "status_id" => $this->getStatusId()
             // "date" => $this->getDate()
         ];
     }

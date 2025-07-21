@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/doctorprofile.css">
 </head>
 <body class="antialiased">
-          <?php require APPROOT . '/views/inc/navbar.php'; ?>
+    <?php require APPROOT . '/views/inc/navbar.php'; ?>
       
 
     <!-- Doctor Profile Main Section -->
