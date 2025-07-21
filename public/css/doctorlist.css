@@ -1,0 +1,251 @@
+
+        :root {
+            --primary-color: #00796b; /* A teal/cyan color */
+            --secondary-color: #f0f0f0; /* Light grey for backgrounds */
+            --text-color: #333;
+            --light-text-color: #777;
+            --white: #fff;
+            --button-bg: #00796b;
+            --button-hover-bg: #004d40;
+            --delete-button-bg: #d32f2f; /* Red for delete */
+            --delete-button-hover-bg: #b71c1c;
+            --card-bg: #f5f5f5;
+            --border-color: #ddd;
+            --shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .doctor-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap; /* Allow header items to wrap */
+        }
+
+        .doctor-list-header h1 {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .search-bar {
+            position: relative;
+            flex-grow: 1;
+            max-width: 400px; /* Limit search bar width */
+            margin-top: 15px; /* Add margin for smaller screens */
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 15px 12px 45px; /* Adjust padding for icon */
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            font-size: 16px;
+            box-sizing: border-box; /* Include padding in width */
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .search-bar .material-icons {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light-text-color);
+        }
+
+        .doctor-card {
+            display: flex;
+            display: flex;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            align-items: center;
+            flex-wrap: wrap; /* Allow card content to wrap */
+        }
+
+        .doctor-card .avatar {
+            width: 80px;
+            height: 80px;
+            background-color: #ccc;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            color: var(--white);
+            margin-right: 20px;
+            flex-shrink: 0; /* Prevent avatar from shrinking */
+        }
+
+        .doctor-card .info {
+            flex-grow: 1;
+            min-width: 200px; /* Ensure info has a minimum width */
+            margin-right: 20px; /* Space between info and buttons */
+        }
+
+        .doctor-card .info h3 {
+            margin: 0 0 8px 0;
+            font-size: 22px;
+            color: var(--text-color);
+        }
+
+        .doctor-card .info p {
+            margin: 4px 0;
+            font-size: 15px;
+            color: var(--light-text-color);
+        }
+
+        .doctor-card .actions {
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0; /* Prevent actions from shrinking */
+            margin-top: 15px; /* Add margin for smaller screens */
+        }
+
+        .doctor-card .actions button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            white-space: nowrap; /* Prevent button text from wrapping */
+        }
+
+        .doctor-card .actions .edit-btn {
+            background-color: var(--button-bg);
+            color: var(--white);
+        }
+
+        .doctor-card .actions .edit-btn:hover {
+            background-color: var(--button-hover-bg);
+        }
+
+        .doctor-card .actions .delete-btn {
+            background-color: var(--delete-button-bg);
+            color: var(--white);
+        }
+
+        .doctor-card .actions .delete-btn:hover {
+            background-color: var(--delete-button-hover-bg);
+        }
+
+        .add-doctor-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            text-decoration: none;
+            box-shadow: var(--shadow);
+            transition: background-color 0.3s ease;
+            z-index: 1000;
+        }
+
+        .add-doctor-btn:hover {
+            background-color: var(--button-hover-bg);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+
+
+            .doctor-list-header {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-bottom: 20px;
+            }
+
+            .doctor-list-header h1 {
+                margin-bottom: 15px;
+            }
+
+            .search-bar {
+                width: 100%;
+                max-width: none; /* Remove max-width for full width */
+                margin-top: 0;
+            }
+
+            .doctor-card {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px;
+            }
+
+            .doctor-card .avatar {
+                margin-right: 0;
+                margin-bottom: 15px;
+                width: 60px;
+                height: 60px;
+                font-size: 30px;
+            }
+
+            .doctor-card .info {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 15px;
+                min-width: unset;
+            }
+
+            .doctor-card .info h3 {
+                font-size: 20px;
+            }
+
+            .doctor-card .info p {
+                font-size: 14px;
+            }
+
+            .doctor-card .actions {
+                width: 100%;
+                justify-content: space-around;
+                margin-top: 0;
+            }
+
+            .doctor-card .actions button {
+                flex: 1; /* Make buttons take equal width */
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+
+            .add-doctor-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 30px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .add-doctor-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 28px;
+            }
+        }
+   

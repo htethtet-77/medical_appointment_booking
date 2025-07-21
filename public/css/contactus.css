@@ -1,0 +1,56 @@
+
+     
+        .form-input-field {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            border: 1px solid #e5e7eb; /* gray-200 */
+            background-color: #f3f4f6; /* gray-100 */
+            font-size: 1rem;
+            color: #4b5563; /* gray-700 */
+            transition: all 0.2s ease-in-out;
+        }
+        .form-input-field:focus {
+            outline: none;
+            border-color: #0C969C; /* Primary teal color on focus */
+            box-shadow: 0 0 0 3px rgba(12, 150, 156, 0.3); /* Ring focus style */
+            background-color: white;
+        }
+        .send-message-btn {
+            background-color: #0C969C;
+            color: white;
+            font-weight: 600;
+            padding: 1rem 2.5rem; /* py-4 px-10 */
+            border-radius: 9999px; /* rounded-full */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease-in-out;
+            border: none;
+            cursor: pointer;
+            width: 100%; /* Now takes full width of its container */
+        }
+        .send-message-btn:hover {
+            background-color: #0A7075;
+        }
+        .contact-info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem; /* mb-6 */
+        }
+        .contact-info-icon {
+            font-size: 1.75rem; /* text-3xl */
+            color: black;
+            margin-right: 2rem; /* Increased from 1rem to 1.5rem for more space */
+            width: 2.5rem; /* Fixed width for consistent alignment */
+            text-align: right; /* Aligns the icon itself to the right within its 2.5rem width */
+            padding-right: 0.5rem; /* Add some padding to push it slightly more right from the edge */
+        }
+        .contact-info-text strong {
+            display: block;
+            font-weight: 600; /* font-semibold */
+            color: #374151; /* gray-700 */
+            margin-bottom: 0.25rem; /* mb-1 */
+        }
+        .contact-info-text span {
+            color: #4b5563; /* gray-600 */
+            font-size: 0.95rem;
+        }

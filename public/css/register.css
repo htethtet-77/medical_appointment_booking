@@ -1,0 +1,140 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+}
+.show-password {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 15px;
+  color: #333;
+}
+
+.show-password input[type="checkbox"] {
+  accent-color: #009688; /* Modern browsers */
+  margin-right: 8px;
+  transform: scale(1.2);
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.show-password label {
+  cursor: pointer;
+  user-select: none;
+}
+.container {
+  /* background: url('background.jpg') no-repeat center center/cover; */
+  /* background-color: #ffffff; */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.register-box {
+  background: white;
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 400px;
+}
+
+.register-box h2 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.register-box p {
+  text-align: center;
+  font-size: 14px;
+  color: red;
+  margin-bottom: 20px;
+}
+
+.register-box form input[type="text"],
+.register-box form input[type="email"],
+.register-box form input[type="date"],
+.register-box form input[type="tel"],
+.register-box form input[type="password"] {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.input-icon {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+
+.input-icon .icon,
+.input-icon .flag {
+  background: #f0f0f0;
+  padding: 10px;
+  font-size: 16px;
+  border-right: 1px solid #ccc;
+}
+
+.input-icon input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  outline: none;
+  font-size: 14px;
+}
+
+.gender-selection {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.gender-selection label {
+  font-size: 15px;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background: #009688;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background: #00796b;
+}
+.alreadyRegi{
+  margin-top: 2px;
+  margin-left: 20%;
+}
+/* Responsive */
+@media screen and (max-width: 480px) {
+  .register-box {
+    padding: 20px;
+  }
+
+  .gender-selection {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

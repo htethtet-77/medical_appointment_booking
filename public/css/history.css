@@ -1,0 +1,76 @@
+
+        /* General Body Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        /* Main Container */
+        .history-container {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        /* Appointment Table Styles */
+        .appointment-table-container {
+            overflow-x: auto; /* Allows horizontal scrolling on small screens */
+        }
+
+       
+
+        /* Status Specific Styling */
+        .status-confirmed {
+            color: #28a745; /* Green for confirmed */
+            font-weight: bold;
+        }
+
+        .status-cancel {
+            color: #dc3545; /* Red for cancel */
+            font-weight: bold;
+        }
+
+        .status-pending {
+            color: #ffc107; /* Yellow for pending */
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+           
+            .history-container {
+                margin: 20px 15px;
+                padding: 15px;
+            }
+
+            .appointment-table td::before {
+                content: attr(data-label); /* Use data-label for content */
+                position: absolute;
+                left: 15px;
+                width: calc(50% - 30px);
+                padding-right: 10px;
+                white-space: nowrap;
+                text-align: left;
+                font-weight: bold;
+                color: #777;
+            }
+
+            .status-confirmed,
+            .status-cancel,
+            .status-pending {
+                text-align: right; /* Ensure status text is right-aligned */
+            }
+        }
+ 

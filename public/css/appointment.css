@@ -1,0 +1,32 @@
+
+        .add-appointment-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: #0C969C;
+            color: white;
+            border-radius: 9999px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+            z-index: 50; /* Ensure it's above other content */
+        }
+        .add-appointment-btn:hover {
+            background-color: #0A7075;
+            transform: scale(1.05);
+        }
+        .appointment-card {
+            background-color: white;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-lg */
+            padding: 1.5rem; /* p-6 */
+            display: flex;
+            align-items: center;
+            gap: 1.5rem; /* gap-6 */
+        }

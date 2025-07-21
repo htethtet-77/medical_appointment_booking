@@ -1,0 +1,94 @@
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f8f8; /* Light gray background for the whole page */
+        }
+        /* Custom styles for the date picker and time slots to match the screenshot */
+        .datepicker-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+        .datepicker-day {
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        .datepicker-day:hover:not(.day-empty):not(.day-selected):not(.day-inactive) {
+            background-color: #e0e0e0;
+        }
+        .day-selected {
+            background-color: #0C969C;
+            color: white;
+            font-weight: bold;
+        }
+        .day-today {
+            border: 1px solid #0C969C; /* Highlight today's date */
+        }
+        .day-inactive {
+            color: #ccc; /* Faded color for inactive days (e.g., previous/next month days in view) */
+            cursor: not-allowed;
+        }
+        .day-empty {
+            visibility: hidden; /* Hide empty cells in the calendar grid */
+        }
+        .time-slot-btn {
+            background-color: #10B981; /* A specific shade of green for time slots */
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px; /* Slightly more rounded for buttons */
+            font-weight: 500;
+            transition: background-color 0.2s ease-in-out;
+            border: none; /* Remove default button border */
+            cursor: pointer;
+        }
+        .time-slot-btn:hover {
+            background-color: #059669; /* Darker green on hover */
+        }
+        .time-slot-btn.selected {
+            background-color: #0C969C; /* Use the primary teal color for selected time slot */
+        }
+        /* Style for the submit button */
+        .submit-btn {
+            background-color: #0C969C;
+            color: white;
+            font-weight: 600;
+            padding: 12px 32px;
+            border-radius: 9999px; /* Fully rounded */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #0A7075;
+        }
+        /* Styles for the KBZ buttons to match the image */
+        .kbz-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f0f0f0; /* Light gray background */
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .kbz-button:hover {
+            background-color: #e0e0e0;
+            border-color: #aaa;
+        }
+        .kbz-button img {
+            height: 24px; /* Adjust as needed */
+            margin-right: 8px;
+        }
+        .kbz-button.selected {
+            border-color: #0C969C; /* Highlight selected KBZ button */
+            background-color: #e0f2f2; /* Light teal background */
+        }
+  
