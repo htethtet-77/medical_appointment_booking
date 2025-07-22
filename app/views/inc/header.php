@@ -18,6 +18,8 @@
     <!-- Doctor -->
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/newappointment.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/all.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/profile.css">
+
 
     <!-- admin -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">

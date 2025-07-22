@@ -73,10 +73,11 @@
         }
 
         .appointment-history-button {
+             text-decoration: none;        /* 🔥 removes underline */
             background-color: #0C969C;
             color: white;
             font-weight: 600;
-            padding: 0.75rem 1.5rem;
+            padding: 0.75rem 1rem;
             border-radius: 0.5rem; /* rounded-lg */
             border: none;
             cursor: pointer;
@@ -123,6 +124,17 @@
             font-size: 1rem;
             cursor: default; /* Indicate it's read-only */
         }
+        .readonly-box {
+            border: 1px solid #ccc;
+            padding: 8px;
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            width: 100%;
+            font-size: 16px;
+            color: #333;
+        }
+
+
 
         /* Specific style for read-only inputs */
         .profile-info-group input[readonly] {

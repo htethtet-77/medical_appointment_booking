@@ -13,8 +13,6 @@
 </head>
 <body class="antialiased">
           <?php require APPROOT . '/views/inc/navbar.php'; ?>
-          
-      
 
      <!-- Main Content Section: My Appointments -->
     <main class="py-10 px-4 min-h-[calc(100vh-160px)]"> <!-- Min-height to push footer down -->

@@ -7,6 +7,7 @@ class DoctorModel {
     private $bio;
     private $service;
     private $specialty;
+    private $address;
     private $user_id;
  public function setId($id)
     {
@@ -74,6 +75,14 @@ class DoctorModel {
     {
         return $this->user_id;
     }
+     public function setAddress($address)
+    {
+        $this->address = $address;
+    }
+    public function getAddress()
+    {
+        return $this->address;
+    }
 
     public function toArray()
     {
@@ -84,6 +93,7 @@ class DoctorModel {
             "bio" => $this->getBio(),
             "service"  => $this->getService(),
             "specialty"  => $this->getSpecialty(),
+            "address"  => $this->getAddress(),
             "user_id" => $this->getUserId()
         ];
     }

@@ -46,14 +46,15 @@
             margin-top: 20px;
         }
 
-        .patient-table th,
+        .patient-table th
         .patient-table td {
-            padding: 12px 15px;
+           padding: 6px 15px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
         }
 
         .patient-table th {
+            text-align: center;
             background-color: #f2f2f2;
             font-weight: bold;
             color: #555;

@@ -8,11 +8,7 @@ class User extends Controller
         $this->model('UserModel');
         $this->db = new Database();
     }
-    public function profile()
-    {   
-  
-        $this->view('pages/userprofile');
-    }
+ 
 
 
 

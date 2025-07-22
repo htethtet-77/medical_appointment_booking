@@ -15,6 +15,8 @@ class Admin extends Controller
     }
      public function doctorlist()
     {
+        // $doctors = $this->db->readAll('doctorprofile');
+        // $this->view('admin/doctorlist', ['doctors' => $doctors]);
         $this->view('admin/doctorlist');
     }
     public function adddoctor()
@@ -48,6 +50,10 @@ class Admin extends Controller
     //     }
     // }
 
+    public function doctorList() {
+        $doctors = $this->db->readWithCondition('users', 'role', 'doctor');
+        $this->view('admin/doctorlist', ['doctors' => $doctors]);
+    }
 
     public function dashboard()
     {

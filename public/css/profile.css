@@ -1,0 +1,238 @@
+
+        /* Basic Reset & Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5; /* Light grey background */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        
+        /* Profile Container */
+        .profile-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 40px auto;
+            padding: 30px;
+            max-width: 900px;
+            width: 90%;
+            flex-grow: 1; /* Allows container to grow and fill space */
+        }
+
+        .profile-container h2 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .profile-content {
+            display: flex;
+            flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+            gap: 40px; /* Space between sidebar and details */
+            margin-bottom: 30px;
+        }
+
+        /* Profile Sidebar */
+        .profile-sidebar {
+            flex: 1; /* Takes up available space */
+            min-width: 250px; /* Minimum width for sidebar */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-right: 1px solid #eee; /* Separator line */
+        }
+
+        .profile-picture {
+            width: 180px;
+            height: 180px;
+            background-color: #e0e0e0; /* Placeholder grey */
+            border-radius: 5px; /* Slightly rounded corners */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            font-size: 60px;
+            color: #888;
+        }
+
+        /* Profile Details */
+        .profile-details {
+            flex: 2; /* Takes up more space */
+            min-width: 300px; /* Minimum width for details */
+            padding: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .detail-row label {
+            font-weight: bold;
+            color: #555;
+            min-width: 120px; /* Align labels */
+            margin-right: 15px;
+        }
+
+        .detail-row input[type="text"],
+        .detail-row input[type="email"] {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #f9f9f9; /* Light background for readonly */
+            color: #333;
+            outline: none; /* Remove outline on focus */
+        }
+
+        /* Profile Actions (Buttons) */
+        .profile-actions {
+            display: flex;
+            justify-content: flex-end; /* Align buttons to the right */
+            gap: 15px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            margin-bottom: 25px; /* Space before warning message */
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .edit-btn {
+            background-color: #21a19b; /* Teal */
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background-color: #1a8b84;
+        }
+
+        .save-btn {
+            background-color: #008CBA; /* Blue */
+            color: white;
+        }
+
+        .save-btn:hover {
+            background-color: #007bb5;
+        }
+
+        .logout-btn {
+            background-color: #f44336; /* Red */
+            color: white;
+        }
+
+        .logout-btn:hover {
+            background-color: #da190b;
+        }
+
+        /* Warning Message */
+        .warning-message {
+            display: flex;
+            align-items: flex-start;
+            background-color: #fff3cd; /* Light yellow */
+            color: #856404; /* Dark yellow text */
+            border: 1px solid #ffeeba;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .warning-message i {
+            color: #dc3545; /* Red icon */
+            margin-right: 10px;
+            font-size: 20px;
+            flex-shrink: 0; /* Prevent icon from shrinking */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .profile-content {
+                flex-direction: column; /* Stack sidebar and details */
+                align-items: center; /* Center items when stacked */
+                gap: 20px;
+            }
+
+            .profile-sidebar {
+                border-right: none; /* Remove border on smaller screens */
+                border-bottom: 1px solid #eee; /* Add bottom border */
+                padding-bottom: 20px;
+                width: 100%; /* Full width */
+                min-width: unset; /* Remove min-width constraint */
+            }
+
+            .profile-details {
+                width: 100%; /* Full width */
+                min-width: unset; /* Remove min-width constraint */
+                padding-top: 0; /* Adjust padding */
+            }
+
+            .detail-row {
+                flex-direction: column; /* Stack label and input */
+                align-items: flex-start;
+            }
+
+            .detail-row label {
+                margin-bottom: 5px;
+                min-width: unset; /* Remove min-width */
+            }
+
+            .profile-actions {
+                flex-direction: column; /* Stack buttons */
+                align-items: stretch; /* Stretch buttons to full width */
+            }
+
+            .btn {
+                width: 100%; /* Make buttons full width */
+                margin-bottom: 10px; /* Add space between stacked buttons */
+            }
+
+            .warning-message {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .warning-message i {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-container {
+                margin: 20px auto;
+                padding: 20px;
+            }
+
+            .profile-container h2 {
+                font-size: 24px;
+            }
+
+            .profile-picture {
+                width: 150px;
+                height: 150px;
+                font-size: 50px;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 15px;
+            }
+        }
+  

@@ -1,9 +1,8 @@
  <?php require APPROOT . '/views/inc/header.php'; ?>
 <?php require APPROOT . '/views/inc/navbar.php'; ?>
-<!-- <?php 
-session_start();
+ <?php 
 $user = $_SESSION['current_user'];
-?> -->
+?>
 <body>
     <div class="user-main-content">
         <div class="container profile-container">
@@ -13,34 +12,32 @@ $user = $_SESSION['current_user'];
                     <div class="profile-image-placeholder">
                         <i class="fas fa-image"></i>
                     </div>
-                    <button class="appointment-history-button">
-                        Appointment History
-                    </button>
+                    <a href="<?php echo URLROOT;?>/pages/history" class="appointment-history-button">
+                        Appointment History</a>
                 </div>
                 <div class="profile-right">
                     <div class="profile-info-group">
                         <label for="name">Name :</label>
-                        <li>
-                        <?php echo $user['name']; ?>
-                        </li>
+                        <input type="text" class="readonly-box" value="<?php echo htmlspecialchars($user['name']); ?>" readonly>
+    
                        
                     </div>
                     <div class="profile-info-group">
                         <label for="email">Email:</label>
-                        <span><?php echo htmlspecialchars($user['email']); ?></span>
+                        <input type="text" class="readonly-box" value="<?php echo htmlspecialchars($user['email']); ?>" readonly>
 
                     </div>
-                    <div class="profile-info-group">
+                    <!-- <div class="profile-info-group">
                         <label for="dob">Date of birth:</label>
-                        <input type="text" id="dob" value="09 123 456 78" readonly>
-                    </div>
+                        <span><?php echo htmlspecialchars($user['email']); ?></span>
+                    </div> -->
                     <div class="profile-info-group">
                         <label for="gender">Gender:</label>
-                        <input type="text" id="gender" value="Male" readonly>
+                        <input type="text" class="readonly-box" value="<?php echo htmlspecialchars($user['gender']); ?>" readonly>
                     </div>
                     <div class="profile-info-group">
                         <label for="phone">Ph No:</label>
-                        <input type="tel" id="phone" value="09 123 456 78" readonly>
+                        <input type="text" class="readonly-box" value="<?php echo htmlspecialchars($user['phone']); ?>" readonly>
                     </div>
                 </div>
             </div>
