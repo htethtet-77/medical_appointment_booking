@@ -97,36 +97,28 @@ class Auth extends Controller
         // SHOW THE REGISTRATION FORM FOR GET REQUEST
         $this->view('pages/register');
     }
-}
+    }
+public function registerDoctor()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-
-
-    public function registerDoctor()
-    {
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = $_POST['email'];
         $isUserExist = $this->db->columnFilter('users', 'email', $email);
 
         if ($isUserExist) {
             setMessage('error', 'This email is already registered!');
             redirect('pages/register');
-        } else {
-            $validation = new UserValidator($_POST);
-            $data = $validation->validateForm();
+        }
 
-            if (count($data) > 0) {
-                $this->view('pages/register', $data);
-            } else {
-            
-                $phone = $_POST['phone'];
+        $phone = $_POST['phone'];
+        $phonecheck = $this->db->columnFilter('users', 'phone', $phone);
 
-                $phonecheck =$this->db->columnFilter('users','phone',$phone);
-
-                if($phonecheck){
-                    setMessage('error','Phone Number is already exit');
-                    redirect('pages/register');
-                }
-                else{
+        if ($phonecheck) {
+            setMessage('error', 'Phone number already exists!');
+            redirect('pages/register');
+        }
+        else{
+        // Insert user first
                 $name = $_POST['name'];
                 $email = $_POST['email'];
                 $gender = $_POST['gender'];
@@ -145,32 +137,49 @@ class Auth extends Controller
                 $user->setIsLogin(0);
                 $user->setIsActive(0);
                 $user->setIsConfirmed(0);
-                $user->setTypeId(2);
+                $user->setTypeId(3);
                 $user->setStatusId(2);
-                // $user->setDate(date('Y-m-d H:i:s'));
 
-                $userCreated = $this->db->create('users', $user->toArray());
-                // echo "Generated Token: $token<br>";
-                // exit();
+        $user_id = $this->db->create('users', $user);
 
+        if ($user_id) {
+            // Insert doctor profile
+                $name = $_POST['name'];
+                $email = $_POST['email'];
+                $password = $_POST['password'];
 
-                    if ($userCreated) {
-                    $mail = new Mail();
-                    $mail->verifyMail($email, $name);
+                $profile_image = 'default_profile.jpg';
+                $password = base64_encode($password); // Note: base64 is NOT secure for real passwords
 
-                    setMessage('success', 'Please check your Mail box!');
-                    redirect('pages/login');
-                
-                } else {
-                    // setMessage('error', 'Something went wrong while creating your account.');
-                    // redirect('pages/register');
-                }
+                $doctor = new DoctorModel();
+                $doctor->setDegree($_POST['degree']);
+                $doctor->setExperience($_POST['experience']);
+                $doctor->setBio($_POST['bio']);
+                $doctor->setService($_POST['service']);
+                $doctor->setSpecialty($_POST['specialty']);
+                $doctor->setAddress($_POST['address']);
+                $doctor->setUserId($user_id);
+
+                $doctorCreated = $this->db->create('doctorprofile', $doctor->toArray());
+
+            if ($doctorCreated) {
+                $mail = new Mail();
+                $mail->verifyMail($email, $name);
+
+                setMessage('success', 'Doctor account created! Verification sent.');
+                redirect('pages/login');
+            } else {
+                setMessage('error', 'Doctor profile could not be created.');
+                redirect('pages/register');
             }
-            }
+        } else {
+            setMessage('error', 'User creation failed.');
+            redirect('pages/register');
         }
+    }
+
     } else {
-        // SHOW THE REGISTRATION FORM FOR GET REQUEST
-        $this->view('pages/register');
+        $this->view('pages/register'); // GET request shows form
     }
 }
 
