@@ -27,7 +27,7 @@ class Auth extends Controller
     }
 
     public function register()
-{
+    {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = $_POST['email'];
         $isUserExist = $this->db->columnFilter('users', 'email', $email);
@@ -70,6 +70,8 @@ class Auth extends Controller
                 $user->setIsLogin(0);
                 $user->setIsActive(0);
                 $user->setIsConfirmed(0);
+                $user->setTypeId(3);
+                $user->setStatusId(2);
                 // $user->setDate(date('Y-m-d H:i:s'));
 
                 $userCreated = $this->db->create('users', $user->toArray());
@@ -99,32 +101,149 @@ class Auth extends Controller
 
 
 
-
-    public function login()
+    public function registerDoctor()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if (isset($_POST['email']) && isset($_POST['password'])) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $email = $_POST['email'];
+        $isUserExist = $this->db->columnFilter('users', 'email', $email);
+
+        if ($isUserExist) {
+            setMessage('error', 'This email is already registered!');
+            redirect('pages/register');
+        } else {
+            $validation = new UserValidator($_POST);
+            $data = $validation->validateForm();
+
+            if (count($data) > 0) {
+                $this->view('pages/register', $data);
+            } else {
+            
+                $phone = $_POST['phone'];
+
+                $phonecheck =$this->db->columnFilter('users','phone',$phone);
+
+                if($phonecheck){
+                    setMessage('error','Phone Number is already exit');
+                    redirect('pages/register');
+                }
+                else{
+                $name = $_POST['name'];
                 $email = $_POST['email'];
-                $password = base64_encode($_POST['password']);
+                $gender = $_POST['gender'];
+                $password = $_POST['password'];
 
-                $isLogin = $this->db->loginCheck($email, $password);
+                $profile_image = 'default_profile.jpg';
+                $password = base64_encode($password); // Note: base64 is NOT secure for real passwords
 
-                if ($isLogin) {
-                    setMessage('id', base64_encode($isLogin['id']));
-                    $id = $isLogin['id'];
-                    $setLogin = $this->db->setLogin($id);
-                    redirect('pages/home');
-                } else {
-                    setMessage('error', 'Login Fail!');
+                $user = new UserModel();
+                $user->setName($name);
+                $user->setEmail($email);
+                $user->setGender($gender);
+                $user->setPhone($phone);
+                $user->setPassword($password);
+                $user->setProfileImage($profile_image);
+                $user->setIsLogin(0);
+                $user->setIsActive(0);
+                $user->setIsConfirmed(0);
+                $user->setTypeId(2);
+                $user->setStatusId(2);
+                // $user->setDate(date('Y-m-d H:i:s'));
+
+                $userCreated = $this->db->create('users', $user->toArray());
+                // echo "Generated Token: $token<br>";
+                // exit();
+
+
+                    if ($userCreated) {
+                    $mail = new Mail();
+                    $mail->verifyMail($email, $name);
+
+                    setMessage('success', 'Please check your Mail box!');
                     redirect('pages/login');
+                
+                } else {
+                    // setMessage('error', 'Something went wrong while creating your account.');
+                    // redirect('pages/register');
                 }
             }
+            }
+        }
+    } else {
+        // SHOW THE REGISTRATION FORM FOR GET REQUEST
+        $this->view('pages/register');
+    }
+}
+
+public function login(){
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            if(isset($_POST['email']) && isset($_POST['password'])){
+                // session_start();
+                $email = $_POST['email'];
+                $password = $_POST['password'];
+                $password = base64_encode($password);
+
+                $islogin = $this->db->loginCheck($email,$password);
+                $name = $islogin['name'] ?? '';
+                
+                
+                // if($ischeck && $ischeck['role_id'] == Admin){
+                //     $_SESSION['name'] = $ischeck['name'];
+                //     redirect('admin/adminDashboard');
+                // }elseif($ischeck && $ischeck['role_id'] == user){
+                //     $_SESSION['name'] = $ischeck['name'];
+                //     redirect('pages/category');
+                // }
+                // else{
+                //     setMessage('error','Invalid Username & Password');
+                //     redirect('pages/login');
+                // }
+
+                if ($islogin) {
+                $_SESSION['name'] = $islogin['name'];
+
+                switch ($islogin['type_id']) {
+                    case ROLE_ADMIN:
+                        redirect('admin/dashboard');
+                        break;
+
+                    case ROLE_DOCTOR:
+                        redirect('doctor/all');
+                        break;
+
+                    case ROLE_PATIENT:
+                        redirect('pages/home');
+                        break;
+                    default:
+                        // Optional: handle unknown roles
+                        setMessage('error','Invalid Username & Password');
+                        redirect('pages/login');
+                        break;
+                }
         }
     }
+}
+}
 
-    function logout($id)
-    {
-        $this->db->unsetLogin($id);
-        redirect('pages/login');
+
+
+    // function logout($id)
+    // {
+    //     $this->db->unsetLogin($id);
+    //     redirect('pages/login');
+    // }
+   public function logout($id = null)
+{
+    // If $id is null, use session-based user ID
+    if ($id === null && isset($_SESSION['user_id'])) {
+        $id = $_SESSION['user_id'];
     }
+
+    if ($id) {
+        $this->db->unsetLogin($id);
+    }
+
+    session_unset();
+    session_destroy();
+    redirect('pages/login');
+}
 }

@@ -11,6 +11,10 @@ class Pages extends Controller
 
     public function index()
     {
+        $this->view('pages/login');
+    }
+    public function home()
+    {
         $this->view('pages/home');
     }
     public function doctors()
@@ -26,6 +30,11 @@ class Pages extends Controller
     {
     
         $this->view('pages/doctorprofile');
+    }
+    public function approve()
+    {
+    
+        $this->view('pages/approve');
     }
     public function contactus()
     {

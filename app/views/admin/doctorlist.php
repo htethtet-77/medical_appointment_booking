@@ -1,4 +1,4 @@
-<!-- <?php require APPROOT . '/views/inc/header.php'; ?> -->
+
  <title><?php echo SITENAME; ?></title>
 <?php require APPROOT . '/views/inc/sidebar.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/doctorlist.css">
@@ -8,7 +8,7 @@
         <div class="doctor-list-header">
             <h1>Doctor List</h1>
             <div class="search-bar">
-                <span class="material-icons">search</span>
+                <button><span class="material-icons"><i class="fa fa-search" aria-hidden="true"></i></span></button> 
                 <input type="text" placeholder="Search by Specialty">
             </div>
         </div>
@@ -58,7 +58,6 @@
             </div>
         </div>
     </div>
-
         <a href="<?php echo URLROOT; ?>/admin/adddoctor" class="add-doctor-btn">+</a>
 
 <script>

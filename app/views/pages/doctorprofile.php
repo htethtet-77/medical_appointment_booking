@@ -201,7 +201,7 @@
                 </button>
             </div>
 
-           <a href="adminapprove.html"  class="w-full submit-btn mt-8" role="button">
+           <a href="<?php echo URLROOT;?>/pages/approve"  class="w-full submit-btn mt-8" role="button">
             Confirm
             </a>
         </div>

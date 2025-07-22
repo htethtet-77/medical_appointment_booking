@@ -17,6 +17,7 @@ class DoctorModel {
         return $this->id;
     }
 
+
     public function setDegree($degree)
     {
         $this->degree = $degree;
