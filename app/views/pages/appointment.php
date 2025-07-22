@@ -13,7 +13,7 @@
 </head>
 <body class="antialiased">
           <?php require APPROOT . '/views/inc/navbar.php'; ?>
-            <!-- Mobile Menu Button (Hamburger Icon) - Hidden on desktop -->
+          
       
 
      <!-- Main Content Section: My Appointments -->

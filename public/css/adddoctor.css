@@ -1,437 +1,261 @@
-
-/* --- Utility Class for Hiding Elements --- */
-.hidden {
-    display: none !important;
-    /* For smooth transition, you might use max-height and overflow:hidden */
-    /* Example: max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.3s ease-out, opacity 0.3s ease-out; */
-}
-
-/* --- Main Content Area Wrapper --- */
-
-.formcontainer {
-    /* background-color: var(--white); */
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    padding: 30px;
-    max-width: 90px;
-    width: 100%;
-    box-sizing: border-box;
-    margin-left: 300px;
-}
-
-.formcontainer h1 {
-    font-size: 28px;
-    color: var(--primary-color);
-    margin-bottom: 25px;
-    text-align: center;
-}
-
-.form-layout {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    margin-bottom: 30px;
-}
-
-.form-section {
-    flex: 1;
-    min-width: 300px;
+/* General Body and Container Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6; /* Light gray background */
     display: flex;
     flex-direction: column;
+    min-height: 100vh; /* Ensure body takes full viewport height */
+    overflow: hidden; /* Prevent body scroll, content will need to fit */
 }
 
-.image-placeholder {
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex-grow: 1; /* Allow container to grow and fill available space */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Keep content within container without internal scroll by default */
+}
+
+/* Header Styles */
+.header {
+    background-color: #2e8b7f; /* Teal color from image */
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky; /* Sticky header */
+    top: 0;
+    width: 100%;
+    box-sizing: border-box; /* Include padding in width calculation */
+    z-index: 1000;
+}
+
+.header .logo {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.header .logo .fa-stethoscope {
+    transform: rotate(45deg); /* To mimic the logo's angle */
+    margin-right: 5px;
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.navbar li {
+    margin-left: 30px;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px 0;
+    transition: all 0.3s ease;
+}
+
+.navbar a:hover {
+    border-bottom: 2px solid white;
+}
+
+.navbar .admin-link {
+    display: flex;
+    align-items: center;
+}
+
+.navbar .admin-link .fa-user-circle {
+    margin-right: 5px;
+    font-size: 1.2em;
+}
+
+/* Page Title */
+.page-title {
+    color: #333;
+    font-size: 1.8em;
+    margin-bottom: 25px;
+    margin-top: 10px;
+}
+
+/* Form Section */
+.form-section {
+    display: flex;
+    gap: 40px; /* Space between columns */
+    flex-wrap: wrap; /* Allow columns to wrap on smaller screens */
+    padding-bottom: 20px; /* Space at the bottom */
+    flex-grow: 1; /* Allow form section to grow */
+    overflow-y: auto; /* Allow scroll within this section if content exceeds height */
+    padding-right: 15px; /* Account for scrollbar width if present */
+}
+
+.form-column {
+    flex: 1; /* Each column takes equal space */
+    min-width: 300px; /* Minimum width for columns before wrapping */
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between input groups */
+}
+
+.profile-column {
+    max-width: 350px; /* Adjust as needed for the left column */
+}
+
+.details-column {
+    max-width: 500px; /* Adjust as needed for the right column */
+}
+
+.profile-pic-upload {
     width: 150px;
     height: 150px;
-    background-color: #e0e0e0;
-    border: 2px dashed var(--input-border);
-    border-radius: 8px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 60px;
-    color: var(--light-text-color);
-    margin: 0 auto 20px auto;
-    cursor: pointer;
+    font-size: 3em;
+    color: #aaa;
+    margin-bottom: 20px;
+    border-radius: 8px; /* Slightly rounded corners */
 }
 
-.form-section label {
-    font-size: 15px;
-    color: var(--label-color);
-    margin-top: 15px;
-    margin-bottom: 5px;
+/* Input Group Styles */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px; /* Smaller margin for tighter layout */
+}
+
+.input-group label {
+    margin-bottom: 8px;
     font-weight: bold;
-}
-.form-section label:first-of-type {
-    margin-top: 0;
+    color: #555;
 }
 
-
-.form-section input[type="text"],
-.form-section input[type="email"],
-.form-section input[type="password"],
-.form-section select {
-    width: 100%;
+.input-group input,
+.input-group select {
     padding: 12px;
-    border: 1px solid var(--input-border);
+    border: 1px solid #ddd;
     border-radius: 5px;
-    font-size: 16px;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease;
-    outline: none;
+    font-size: 1em;
+    box-sizing: border-box; /* Include padding in width */
+    width: 100%; /* Take full width of parent */
 }
 
-.form-section input:focus,
-.form-section select:focus {
-    border-color: var(--input-focus-border);
-}
-
-/* --- Availability Toggle Row (for "Overall Availability" label and switch) --- */
-.availability-toggle-row {
+/* Buttons */
+.buttons {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 15px; /* Aligns with other labels */
-    margin-bottom: 5px; /* Space below this row */
-    padding-right: 5px; /* A little padding to ensure space for the toggle */
-}
-.availability-toggle-row label {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-
-/* --- Availability Details Panel Styling (combines day toggles and time config) --- */
-.availability-card { /* This now acts as the main panel container */
-    background-color: var(--card-bg);
-    border-radius: 8px;
-    padding: 20px;
-    margin-top: 15px; /* Space above the panel */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Space between elements within the card */
-    /* Add transition for smooth show/hide effect */
-    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out, margin 0.3s ease-in-out;
-    overflow: hidden; /* Hide overflowing content during transition */
-    max-height: 500px; /* A value larger than the max possible height when visible */
-    opacity: 1;
-}
-
-/* When hidden, collapse and hide */
-.availability-card.hidden {
-    max-height: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    opacity: 0;
-}
-
-
-/* Toggle Switch Styles (already existing, but important for context) */
-.day-toggles { /* Applies to the section containing day switches */
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.day-toggle-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 16px;
-    color: var(--text-color);
-}
-
-/* The switch - the box around the slider */
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 45px;
-    height: 25px;
-}
-
-/* Hide default HTML checkbox */
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-/* The slider */
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--toggle-bg-off);
-    -webkit-transition: .4s;
-    transition: .4s;
-    border-radius: 25px;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 19px;
-    width: 19px;
-    left: 3px;
-    bottom: 3px;
-    background-color: var(--toggle-circle);
-    -webkit-transition: .4s;
-    transition: .4s;
-    border-radius: 50%;
-}
-
-input:checked + .slider {
-    background-color: var(--toggle-bg-on);
-}
-
-input:focus + .slider {
-    box-shadow: 0 0 1px var(--toggle-bg-on);
-}
-
-input:checked + .slider:before {
-    -webkit-transform: translateX(20px);
-    -ms-transform: translateX(20px);
-    transform: translateX(20px);
-}
-
-/* Rounded sliders */
-.slider.round {
-    border-radius: 25px;
-}
-
-.slider.round:before {
-    border-radius: 50%;
-}
-
-
-.time-slot-config {
-    display: flex;
-    flex-direction: column;
+    justify-content: flex-end; /* Align buttons to the right */
     gap: 15px;
-    margin-top: 10px;
+    margin-top: 30px;
 }
 
-.time-range-inputs {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.time-range-inputs input[type="text"] {
-    flex: 1;
-    padding: 10px;
-    text-align: center;
-}
-
-.time-range-inputs .material-icons {
-    font-size: 24px;
-    color: var(--light-text-color);
-}
-
-.save-availability-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 25px;
-    font-size: 15px;
-    cursor: pointer;
-    background-color: var(--primary-color);
-    color: var(--white);
-    transition: background-color 0.3s ease;
-    align-self: flex-end;
-    margin-top: 10px;
-}
-
-.save-availability-btn:hover {
-    background-color: var(--button-hover-bg);
-}
-
-
-/* --- Form Actions --- */
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-    padding-top: 20px;
-    border-top: 1px solid var(--secondary-color);
-}
-
-.form-actions button {
+.btn {
     padding: 12px 25px;
     border: none;
-    border-radius: 25px;
-    font-size: 16px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-size: 1em;
     font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
-.form-actions .edit-btn {
-    background-color: var(--secondary-color);
-    color: var(--text-color);
-    border: 1px solid var(--input-border);
+.edit-btn {
+    background-color: #6c757d; /* Gray for Edit */
+    color: white;
 }
 
-.form-actions .edit-btn:hover {
-    background-color: #e0e0e0;
+.edit-btn:hover {
+    background-color: #5a6268;
 }
 
-.form-actions .add-btn {
-    background-color: var(--button-bg);
-    color: var(--white);
+.add-btn {
+    background-color: #2e8b7f; /* Teal for Add */
+    color: white;
 }
 
-.form-actions .add-btn:hover {
-    background-color: var(--button-hover-bg);
+.add-btn:hover {
+    background-color: #246e65;
 }
 
-/* --- Responsive Adjustments --- */
-
+/* Responsive Design (Mobile View) */
 @media (max-width: 768px) {
-    .main-content-wrapper {
-        padding: 15px;
-    }
-
-    .formcontainer {
-        padding: 20px;
-    }
-
-    .formcontainer h1 {
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
-
-    .form-layout {
+    .header {
         flex-direction: column;
-        gap: 20px;
+        align-items: flex-start;
+        padding: 10px 15px;
+    }
+
+    .navbar ul {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .navbar li {
+        margin: 5px 0;
+        text-align: center;
+        width: 100%;
     }
 
     .form-section {
-        min-width: unset;
-        width: 100%;
+        flex-direction: column; /* Stack columns vertically on mobile */
+        gap: 20px;
+        padding-left: 0; /* Reset padding for mobile */
+        padding-right: 0; /* Reset padding for mobile */
+        overflow-y: auto; /* Allow scroll if content is too long */
     }
 
-    .image-placeholder {
-        width: 120px;
-        height: 120px;
-        font-size: 50px;
+    .form-column {
+        min-width: auto; /* Remove min-width constraint */
+        max-width: 100%; /* Take full width */
+        padding: 0 15px; /* Add horizontal padding for content */
+        box-sizing: border-box;
     }
 
-    .form-section label {
-        font-size: 14px;
-        margin-top: 10px;
-    }
-    .form-section label:first-of-type {
-        margin-top: 0;
+    .profile-pic-upload {
+        margin: 0 auto 20px auto; /* Center profile pic on mobile */
     }
 
-
-    .form-section input,
-    .form-section select {
-        padding: 10px;
-        font-size: 15px;
+    .buttons {
+        justify-content: center; /* Center buttons on mobile */
+        margin-top: 20px;
     }
 
-    /* Availability Card specific adjustments */
-    .availability-card {
+    /* Adjust padding of container for smaller screens */
+    .container {
         padding: 15px;
-        gap: 10px;
-    }
-    .day-toggle-item {
-        font-size: 15px;
-    }
-    .time-range-inputs input[type="text"] {
-        padding: 8px;
-        font-size: 14px;
-    }
-    .time-range-inputs .material-icons {
-        font-size: 20px;
-    }
-
-
-    .form-actions {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .form-actions button {
-        width: 100%;
-        max-width: 250px;
-        padding: 10px 20px;
-        font-size: 15px;
+        margin: 10px auto;
     }
 }
 
+/* Adjustments for "no scroll" - This is tricky and might involve compromises */
+/* The main approach to 'no scroll' is to make sure content always fits.
+   For forms, this means fields might need to be smaller, or fonts, or
+   the layout needs to be more compact. */
+
+/* Example of making fonts smaller on very small screens if necessary */
 @media (max-width: 480px) {
-    .main-content-wrapper {
+    body {
+        font-size: 0.9em;
+    }
+    .page-title {
+        font-size: 1.5em;
+    }
+    .input-group input,
+    .input-group select,
+    .btn {
         padding: 10px;
-    }
-
-    .formcontainer {
-        padding: 15px;
-    }
-
-    .formcontainer h1 {
-        font-size: 20px;
-        margin-bottom: 15px;
-    }
-
-    .image-placeholder {
-        width: 100px;
-        height: 100px;
-        font-size: 40px;
-        margin-bottom: 15px;
-    }
-
-    .form-section label {
-        font-size: 13px;
-    }
-
-    .form-section input,
-    .form-section select {
-        font-size: 14px;
-        padding: 8px;
-    }
-
-    /* Availability Card specific adjustments */
-    .availability-card {
-        padding: 10px;
-    }
-    .day-toggle-item {
-        font-size: 14px;
-    }
-    .switch {
-        width: 40px;
-        height: 22px;
-    }
-    .slider:before {
-        height: 16px;
-        width: 16px;
-        left: 3px;
-        bottom: 3px;
-    }
-    input:checked + .slider:before {
-        -webkit-transform: translateX(18px);
-        -ms-transform: translateX(18px);
-        transform: translateX(18px);
-    }
-    .time-range-inputs input[type="text"] {
-        padding: 6px;
-        font-size: 13px;
-    }
-    .time-range-inputs .material-icons {
-        font-size: 18px;
-    }
-
-
-    .form-actions button {
-        font-size: 14px;
-        padding: 8px 15px;
+        font-size: 0.9em;
     }
 }

@@ -5,7 +5,7 @@
 
 </head>
 <body>
-
+<?php $name = $_SESSION['name'];?>
 <header class="navbar">
     <a href="#" class="logo">Dashboard</a>
 
@@ -15,7 +15,9 @@
     <nav class="navbar-nav">
         <li><a href="<?php echo URLROOT; ?>/doctor/newappointment">NEW APPOINTMENT</a></li>
         <li><a href="<?php echo URLROOT; ?>/doctor/all">HISTORY</a></li>
-        <li><i class="fas fa-user"></i> Doctor</a></li>
+        <li><i class="fas fa-user"></i> <span><?php echo " Dr.";echo htmlspecialchars($name) ?></span></a></li>
+
+        <!-- <li><i class="fas fa-user"></i> Doctor</a></li> -->
     </nav>
 </header>
 

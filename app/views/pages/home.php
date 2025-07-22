@@ -1,5 +1,6 @@
  <?php require APPROOT . '/views/inc/header.php'; ?>
 <?php require APPROOT . '/views/inc/navbar.php'; ?>
+
 <body class="antialiased">
 
     <section class="hero-section">
@@ -10,7 +11,7 @@
                 Skip the waiting room. Find your doctor and book appointments instantly.
                 It's Fast, Easy, Simple.
             </p>
-            <a href="reg.html" class="hero-button">
+            <a href="<?php echo URLROOT;?>/pages/register" class="hero-button">
                 Appointment Now
             </a>
         </div>
