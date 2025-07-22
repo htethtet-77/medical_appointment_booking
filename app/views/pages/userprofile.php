@@ -1,5 +1,9 @@
  <?php require APPROOT . '/views/inc/header.php'; ?>
 <?php require APPROOT . '/views/inc/navbar.php'; ?>
+<!-- <?php 
+session_start();
+$user = $_SESSION['current_user'];
+?> -->
 <body>
     <div class="user-main-content">
         <div class="container profile-container">
@@ -16,11 +20,15 @@
                 <div class="profile-right">
                     <div class="profile-info-group">
                         <label for="name">Name :</label>
-                        <input type="text" id="name" value="John" readonly>
+                        <li>
+                        <?php echo $user['name']; ?>
+                        </li>
+                       
                     </div>
                     <div class="profile-info-group">
                         <label for="email">Email:</label>
-                        <input type="email" id="email" value="John@gmail.com" readonly>
+                        <span><?php echo htmlspecialchars($user['email']); ?></span>
+
                     </div>
                     <div class="profile-info-group">
                         <label for="dob">Date of birth:</label>
@@ -37,7 +45,7 @@
                 </div>
             </div>
             <div class="profile-actions">
-                <button class="action-button logout-button">Logout</button>
+                <a href="<?php echo URLROOT; ?>/auth/logout" class="action-button logout-button">Logout</a>
             </div>
         </div>
     </div>
