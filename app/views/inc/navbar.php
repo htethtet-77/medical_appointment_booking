@@ -13,10 +13,12 @@
         <li><a href="<?php echo URLROOT; ?>/pages/doctors">DOCTORS</a></li>
         <li><a href="<?php echo URLROOT; ?>/pages/appointment">APPOINTMENT</a></li>
         <li><a href="<?php echo URLROOT; ?>/pages/contactus">CONTACT</a></li>
-        <li><i class="fas fa-user"></i> <span><?php echo htmlspecialchars($name) ?></span></a></li>
-        <!-- <li><a href="<?php echo URLROOT; ?>/auth/logout"><i class="fas fa-lock"></i> LOGOUT</a></li>
-        <i class="fas fa-user-circle user-icon"></i>
-        <span><?php echo $name; ?></span> -->
+        <li>
+        <a href="<?php echo URLROOT; ?>/pages/userprofile">
+            <i class="fas fa-user"></i>
+            <span><?php echo htmlspecialchars($name); ?></span>
+        </a>
+        </li>
 
     </nav>
 </header>

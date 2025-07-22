@@ -177,54 +177,45 @@ class Auth extends Controller
 public function login(){
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(isset($_POST['email']) && isset($_POST['password'])){
-                // session_start();
                 $email = $_POST['email'];
                 $password = $_POST['password'];
                 $password = base64_encode($password);
 
-                $islogin = $this->db->loginCheck($email,$password);
-                $name = $islogin['name'] ?? '';
-                
-                
-                // if($ischeck && $ischeck['role_id'] == Admin){
-                //     $_SESSION['name'] = $ischeck['name'];
-                //     redirect('admin/adminDashboard');
-                // }elseif($ischeck && $ischeck['role_id'] == user){
-                //     $_SESSION['name'] = $ischeck['name'];
-                //     redirect('pages/category');
-                // }
-                // else{
-                //     setMessage('error','Invalid Username & Password');
-                //     redirect('pages/login');
-                // }
+                $islogin = $this->db->columnFilter('users','email',$email);
+                $currentpassword = $islogin['password'];
+                $_SESSION['current_user'] = $islogin;
 
-                if ($islogin) {
-                $_SESSION['name'] = $islogin['name'];
 
-                switch ($islogin['type_id']) {
-                    case ROLE_ADMIN:
-                        redirect('admin/dashboard');
-                        break;
+                if($islogin && $password === $currentpassword){
 
-                    case ROLE_DOCTOR:
-                        redirect('doctor/all');
-                        break;
+                    $this->db->setLogin($islogin['id']);
 
-                    case ROLE_PATIENT:
-                        redirect('pages/home');
-                        break;
-                    default:
-                        // Optional: handle unknown roles
-                        setMessage('error','Invalid Username & Password');
-                        redirect('pages/login');
-                        break;
+
+                    if ($islogin) {
+                        
+                        switch ($islogin['type_id']) {
+                            case ROLE_ADMIN:
+                                redirect('admin/dashboard');
+                                break;
+
+                            case ROLE_DOCTOR:
+                                redirect('doctor/newappointment');
+                                break;
+                            case ROLE_PATIENT:
+                                redirect('pages/home');
+                                break;
+
+                            default:
+                                // Optional: handle unknown roles
+                                setMessage('error','Invalid Username & Password');
+                                redirect('pages/login');
+                                break;
+                        }
+                    }
                 }
+            }
         }
     }
-}
-}
-
-
 
     // function logout($id)
     // {

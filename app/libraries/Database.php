@@ -180,7 +180,6 @@ class Database
     {
        try{ 
            $sql = "UPDATE users SET is_login = :false WHERE id = :id"; //is_login = :false .is a placeholder to indicate user login(true) or not(false)
-                                                                              // id = :id also 
            $stm = $this->pdo->prepare($sql);
            $stm->bindValue(':false','0');
            $stm->bindValue(':id',$id);
