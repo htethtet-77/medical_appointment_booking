@@ -18,29 +18,27 @@ $user = $_SESSION['current_user'];
                 </div>
                 <div class="detail-row">
                     <label for="specialty">Specialty:</label>
-                    <input type="text" id="specialty" value="General Physician" readonly>
+                    <input type="text" class="readonly-box" value="<?php echo htmlspecialchars($doctor['specialty']); ?>" readonly>
                 </div>
                 <div class="detail-row">
                     <label for="email">Email:</label>
-                    <input type="email" id="email" value="daniel@gmail.com" readonly>
+                    <input type="text" class="readonly-box" value="<?php echo htmlspecialchars($user['email']); ?>" readonly>
                 </div>
                 <div class="detail-row">
                     <label for="phno">Ph No :</label>
-                    <input type="text" id="phno" value="09 123 456 78" readonly>
+                    <input type="text" class="readonly-box" value="<?php echo htmlspecialchars($user['phone']); ?>" readonly>
                 </div>
                 <div class="detail-row">
                     <label for="exp">Exp :</label>
-                    <input type="text" id="exp" value="10 years" readonly>
+                    <input type="text" class="readonly-box" value="<?php echo htmlspecialchars($doctor['experience']); ?>" readonly>
                 </div>
                 <div class="detail-row">
                     <label for="location">Location :</label>
-                    <input type="text" id="location" value="123 Main Street ,NY" readonly>
+                    <input type="text" class="readonly-box" value="<?php echo htmlspecialchars($doctor['address']); ?>" readonly>
                 </div>
             </div>
         </div>
         <div class="profile-actions">
-            <button class="btn edit-btn">Edit</button>
-            <button class="btn save-btn">Save</button>
             <button class="btn logout-btn">Logout</button>
         </div>
         <div class="warning-message">

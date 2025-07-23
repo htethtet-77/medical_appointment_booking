@@ -224,6 +224,19 @@ class Database
         return ($success) ? $row : [];
     }
 
+ public function getAllDoctors()
+{
+    $sql = "SELECT u.name, u.email, d.specialty, d.experience, d.fee, d.address
+            FROM users u
+            INNER JOIN doctorprofile d ON u.id = d.user_id
+            WHERE u.type_id = 2";
+
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
     // For Dashboard
     // public function incomeTransition()
     // {

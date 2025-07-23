@@ -15,7 +15,7 @@
     <nav class="navbar-nav">
         <li><a href="<?php echo URLROOT; ?>/doctor/newappointment">NEW APPOINTMENT</a></li>
         <li><a href="<?php echo URLROOT; ?>/doctor/all">HISTORY</a></li>
-        <li><i class="fas fa-user"></i> <span><?php echo " Dr.";echo htmlspecialchars($name['name']) ?></span></a></li>
+        <li><a href="<?php echo URLROOT; ?>/doctor/profile"><i class="fas fa-user"></i> <span><?php echo " Dr.";echo htmlspecialchars($name['name']) ?></span></a></li></a>
 
         <!-- <li><i class="fas fa-user"></i> Doctor</a></li> -->
     </nav>

@@ -1,89 +1,60 @@
-
- <title><?php echo SITENAME; ?></title>
+<title><?php echo SITENAME; ?></title>
 <?php require APPROOT . '/views/inc/sidebar.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/doctorlist.css">
 
-
-    <div class="container">
-        <div class="doctor-list-header">
-            <h1>Doctor List</h1>
-            <div class="search-bar">
-                <button><span class="material-icons"><i class="fa fa-search" aria-hidden="true"></i></span></button> 
-                <input type="text" placeholder="Search by Specialty">
-            </div>
-        </div>
-
-        <div class="doctor-card">
-            <div class="avatar">🖼️</div>
-            <div class="info">
-                <h3>Dr. Daniel</h3>
-                <p>General Physician</p>
-                <p>10 years of Exp</p>
-                <p>Consultation Fee:120$</p>
-                <p>Location :New York ,NY</p>
-            </div>
-            <div class="actions">
-                <button class="edit-btn">Edit</button>
-                <button class="delete-btn">Delete</button>
-            </div>
-        </div>
-
-        <div class="doctor-card">
-            <div class="avatar">🖼️</div>
-            <div class="info">
-                <h3>Dr. Daniel</h3>
-                <p>General Physician</p>
-                <p>10 years of Exp</p>
-                <p>Consultation Fee:120$</p>
-                <p>Location :New York ,NY</p>
-            </div>
-            <div class="actions">
-                <button class="edit-btn">Edit</button>
-                <button class="delete-btn">Delete</button>
-            </div>
-        </div>
-
-        <div class="doctor-card">
-            <div class="avatar">🖼️</div>
-            <div class="info">
-                <h3>Dr. Daniel</h3>
-                <p>General Physician</p>
-                <p>10 years of Exp</p>
-                <p>Consultation Fee:120$</p>
-                <p>Location :New York ,NY</p>
-            </div>
-            <div class="actions">
-                <button class="edit-btn">Edit</button>
-                <button class="delete-btn">Delete</button>
-            </div>
+<div class="container">
+    <div class="doctor-list-header">
+        <h1>Doctor List</h1>
+        <div class="search-bar">
+            <button><span class="material-icons"><i class="fa fa-search" aria-hidden="true"></i></span></button> 
+            <input type="text" placeholder="Search by Specialty">
         </div>
     </div>
-        <a href="<?php echo URLROOT; ?>/admin/adddoctor" class="add-doctor-btn">+</a>
+
+    <?php if (!empty($data['doctors'])) : ?>
+    <?php foreach ($data['doctors'] as $doctor) : ?>
+        <div class="doctor-card">
+            <div class="avatar">🖼️</div>
+            <div class="info">
+                <h3>Dr. <?php echo htmlspecialchars($doctor['name'] ?? 'UN'); ?></h3>
+                <p><?php echo htmlspecialchars($doctor['specialty'] ?? ''); ?></p>
+                <p><?php echo htmlspecialchars($doctor['experience'] ?? ''); ?> years of Exp</p>
+                <p>Consultation Fee: <?php echo htmlspecialchars($doctor['fee'] ?? ''); ?>$</p>
+                <p>Location: <?php echo htmlspecialchars($doctor['address'] ?? ''); ?></p>
+            </div>
+            <div class="actions">
+                <button class="edit-btn">Edit</button>
+                <button class="delete-btn">Delete</button>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php else: ?>
+    <p>No doctors found.</p>
+<?php endif; ?>
+
+
+<a href="<?php echo URLROOT; ?>/admin/adddoctor" class="add-doctor-btn">+</a>
 
 <script>
-// Get references to the search input and the doctor cards container
-const searchInput = document.querySelector('.search');
-const doctorCardsContainer = document.querySelector('.doctor-list-section'); // Or a more specific container if you have one
-const doctorCards = doctorCardsContainer ? doctorCardsContainer.querySelectorAll('.doctor-card') : [];
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.querySelector('input[placeholder="Search by Specialty"]');
+    const doctorCards = document.querySelectorAll('.doctor-card');
 
-// Add an event listener for input changes
-if (searchInput) {
-    searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase(); // Get the typed text and convert to lowercase for case-insensitive search
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            const searchTerm = this.value.toLowerCase();
 
-        doctorCards.forEach(card => {
-            const doctorDetails = card.querySelector('.doctor-details');
-            if (doctorDetails) {
-                const cardText = doctorDetails.textContent.toLowerCase(); // Get all visible text from the doctor's details
+            doctorCards.forEach(card => {
+                const info = card.querySelector('.info');
+                const text = info.textContent.toLowerCase();
 
-                // Check if the card's text contains the search term
-                if (cardText.includes(searchTerm)) {
-                    card.style.display = 'flex'; // Show the card (or 'block' depending on your card's default display)
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'flex'; // Show match
                 } else {
-                    card.style.display = 'none'; // Hide the card
+                    card.style.display = 'none'; // Hide non-match
                 }
-            }
+            });
         });
-    });
-}
+    }
+});
 </script>

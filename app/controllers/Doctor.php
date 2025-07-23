@@ -6,6 +6,7 @@ class Doctor extends Controller
 
     public function __construct()
     {
+        $this->model('DoctorModel');
         $this->db = new Database();
     }
 
@@ -17,10 +18,24 @@ class Doctor extends Controller
     {
         $this->view('doctor/all');
     }
-     public function profile()
-    {
-        $this->view('doctor/profile');
-    }
+    public function profile()
+{
+    // 1. Get current user info from session
+    $user = $_SESSION['current_user']; 
+    $userId = $user['id']; // Assuming user ID stored in session
+
+    // 2. Load doctor profile from DB using user_id
+    $doctor = $this->db->getById('doctorprofile', ['user_id' => $userId]);
+
+    // 3. Pass both $user and $doctor to the view
+    $data = [
+        'user' => $user,
+        'doctor' => $doctor,
+    ];
+
+    $this->view('doctor/profile', $data);
+}
+
     // Show all doctors
 //     public function index()
 //     {

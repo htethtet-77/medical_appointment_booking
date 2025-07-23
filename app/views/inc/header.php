@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/doctorpage.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/userprofile.css">
     
+    
     <!-- Doctor -->
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/newappointment.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/all.css">
@@ -25,8 +26,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/adddoctor.css"> -->
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/doctorlist.css">
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/patientlist.css">
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/appointmentview.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dashboard.css?v=2">
+
 
     <!-- Home -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">

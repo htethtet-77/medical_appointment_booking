@@ -1,96 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dashboard.css">
-</head>
-<body>
-         <?php require APPROOT . '/views/inc/sidebar.php'; ?>
-        <!-- Main Content Area -->
-        <main class="container mx-auto p-4 md:p-8">
-            <!-- Summary Cards Section -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                <!-- Total Doctor Card -->
-                <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105 duration-300">
-                    <i class="fas fa-user-md text-blue-600 text-4xl mb-3"></i>
-                    <p class="text-gray-700 text-xl font-semibold mb-1">Total Doctor</p>
-                    <p class="text-gray-900 text-3xl font-bold">8</p>
-                </div>
+ <?php require APPROOT . '/views/inc/header.php'; ?>
+<?php require APPROOT . '/views/inc/sidebar.php'; ?>
+    <div class="dashboard-container">
 
-                <!-- Total Patient Card -->
-                <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105 duration-300">
-                    <i class="fas fa-hospital-user text-green-600 text-4xl mb-3"></i>
-                    <p class="text-gray-700 text-xl font-semibold mb-1">Total Patient</p>
-                    <p class="text-gray-900 text-3xl font-bold">6</p>
-                </div>
-
-                <!-- History Card -->
-                <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105 duration-300">
-                    <i class="fas fa-history text-purple-600 text-4xl mb-3"></i>
-                    <p class="text-gray-700 text-xl font-semibold mb-1">History</p>
-                    <p class="text-gray-900 text-3xl font-bold">6</p>
-                </div>
+        <!-- Stats Cards -->
+        <div class="stats-container">
+            <div class="stat-card doctors">
+                <div class="stat-icon"></div>
+                <div class="stat-number">8</div>
+                <div class="stat-label">Total Doctors</div>
             </div>
-
-            <!-- Appointment Request Section -->
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">Appointment Request</h2>
-
-                <!-- Responsive Table Container -->
-                <div class="overflow-x-auto table-container rounded-lg border border-gray-200">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg">Id</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient Name</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tr-lg">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <!-- Table Row 1 -->
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">1</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Patient Name</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Dr.Daniel</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">120$</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200 mr-2">Approve</button>
-                                    <button class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200">Cancel</button>
-                                </td>
-                            </tr>
-                            <!-- Table Row 2 -->
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">2</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Patient Name</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Dr.Daniel</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">120$</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200 mr-2">Approve</button>
-                                    <button class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200">Cancel</button>
-                                </td>
-                            </tr>
-                            <!-- Table Row 3 -->
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">3</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Patient Name</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Dr.Daniel</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">120$</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200 mr-2">Approve</button>
-                                    <button class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200">Cancel</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="stat-card patients">
+                <div class="stat-icon"></div>
+                <div class="stat-number">6</div>
+                <div class="stat-label">Total Patients</div>
             </div>
-        </main>
+            <div class="stat-card history">
+                <div class="stat-icon"></div>
+                <div class="stat-number">6</div>
+                <div class="stat-label">History Records</div>
+            </div>
+        </div>
+
+        <!-- Appointment Request Section -->
+        <section class="appointment-section">
+            <h2 class="section-title">Appointment Requests</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Patient Name</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1</strong></td>
+                            <td>John Doe</td>
+                            <td>Dr.Daniel@clinic.com</td>
+                            <td><span class="status-badge">$120</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="#" class="btn btn-approve">Approve</a>
+                                    <a href="#" class="btn btn-cancel">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>2</strong></td>
+                            <td>Jane Smith</td>
+                            <td>Dr.Daniel@clinic.com</td>
+                            <td><span class="status-badge">$120</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="#" class="btn btn-approve">Approve</a>
+                                    <a href="#" class="btn btn-cancel">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong></td>
+                            <td>Michael Johnson</td>
+                            <td>Dr.Daniel@clinic.com</td>
+                            <td><span class="status-badge">$120</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="#" class="btn btn-approve">Approve</a>
+                                    <a href="#" class="btn btn-cancel">Cancel</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </div>
 </body>
 </html>
