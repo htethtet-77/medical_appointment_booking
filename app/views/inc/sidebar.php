@@ -11,9 +11,6 @@ $name = $_SESSION['current_user'];
 <header class="navbar">
     <a href="#" class="logo">Dashboard</a>
 
-    <button class="navbar-toggle" onclick="document.querySelector('.navbar-nav').classList.toggle('show')">
-        &#9776; </button>
-
     <nav class="navbar-nav">
         <li><a href="<?php echo URLROOT; ?>/admin/dashboard">HOME</a></li>
         <li><a href="<?php echo URLROOT; ?>/admin/patientlist">PATIENTS</a></li>

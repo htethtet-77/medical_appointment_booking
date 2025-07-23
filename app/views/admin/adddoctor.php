@@ -1,284 +1,274 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}?>
+<title><?php echo SITENAME; ?></title>
 <?php require APPROOT . '/views/inc/sidebar.php'; ?>
+<link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>/vendor/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
 
 <style>
-                /* General Body and Container Styles */
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #f4f7f6; /* Light gray background */
-                display: flex;
-                flex-direction: column;
-                min-height: 100vh; /* Ensure body takes full viewport height */
-                overflow: hidden; /* Prevent body scroll, content will need to fit */
-            }
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f4f7f6;
+        overflow-y: auto; /* ✅ allow page scroll */
+    }
 
-            .container {
-                max-width: 1200px;
-                max-height: 760px;
-                margin: 20px auto;
-                padding: 20px;
-                background-color: #fff;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                flex-grow: 1; /* Allow container to grow and fill available space */
-                display: flex;
-                flex-direction: column;
-                overflow: hidden; /* Keep content within container without internal scroll by default */
-            }
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
 
+    .page-title {
+        color: #333;
+        font-size: 1.8em;
+        margin-bottom: 25px;
+        margin-top: 10px;
+    }
 
-            /* Page Title */
-            .page-title {
-                color: #333;
-                font-size: 1.8em;
-                margin-bottom: 25px;
-                margin-top: 10px;
-            }
+    .form-section {
+        display: flex;
+        gap: 40px;
+        flex-wrap: wrap;
+        padding-bottom: 20px;
+    }
 
-            /* Form Section */
-            .form-section {
-                display: flex;
-                gap: 40px; /* Space between columns */
-                flex-wrap: wrap; /* Allow columns to wrap on smaller screens */
-                padding-bottom: 20px; /* Space at the bottom */
-                flex-grow: 1; /* Allow form section to grow */
-                overflow-y: auto; /* Allow scroll within this section if content exceeds height */
-                padding-right: 15px; /* Account for scrollbar width if present */
-            }
+    .form-column {
+        flex: 1;
+        min-width: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
 
-            .form-column {
-                flex: 1; /* Each column takes equal space */
-                min-width: 300px; /* Minimum width for columns before wrapping */
-                display: flex;
-                flex-direction: column;
-                gap: 15px; /* Space between input groups */
-            }
+    .profile-column {
+        max-width: 350px;
+    }
 
-            .profile-column {
-                max-width: 350px; /* Adjust as needed for the left column */
-            }
+    .details-column {
+        max-width: 500px;
+    }
 
-            .details-column {
-                max-width: 500px; /* Adjust as needed for the right column */
-            }
+    .profile-pic-upload {
+        width: 150px;
+        height: 150px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 3em;
+        color: #aaa;
+        margin-bottom: 20px;
+        border-radius: 8px;
+    }
 
-            .profile-pic-upload {
-                width: 150px;
-                height: 150px;
-                background-color: #f0f0f0;
-                border: 1px solid #ccc;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 3em;
-                color: #aaa;
-                margin-bottom: 20px;
-                border-radius: 8px; /* Slightly rounded corners */
-            }
+    .input-group {
+        display: flex;
+        flex-direction: column;
+    }
 
-            /* Input Group Styles */
-            .input-group {
-                display: flex;
-                flex-direction: column;
-                margin-bottom: 5px; /* Smaller margin for tighter layout */
-            }
+    .input-group label {
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #555;
+    }
 
-            .input-group label {
-                margin-bottom: 8px;
-                font-weight: bold;
-                color: #555;
-            }
+    .input-group input,
+    .input-group select {
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1em;
+        width: 100%;
+        box-sizing: border-box;
+    }
 
-            .input-group input,
-            .input-group select {
-                padding: 12px;
-                border: 1px solid #ddd;
-                border-radius: 5px;
-                font-size: 1em;
-                box-sizing: border-box; /* Include padding in width */
-                width: 100%; /* Take full width of parent */
-            }
+    .buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-top: 30px;
+    }
 
-            /* Buttons */
-            .buttons {
-                display: flex;
-                justify-content: flex-end; /* Align buttons to the right */
-                gap: 15px;
-                margin-top: 30px;
-            }
+    .btn {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
 
-            .btn {
-                padding: 12px 25px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                font-size: 1em;
-                font-weight: bold;
-                transition: background-color 0.3s ease;
-            }
+    .add-btn {
+        background-color: #2e8b7f;
+        color: white;
+    }
 
-            .edit-btn {
-                background-color: #6c757d; /* Gray for Edit */
-                color: white;
-            }
+    .add-btn:hover {
+        background-color: #246e65;
+    }
 
-            .edit-btn:hover {
-                background-color: #5a6268;
-            }
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .form-section {
+            flex-direction: column;
+            gap: 20px;
+            padding: 0;
+        }
 
-            .add-btn {
-                background-color: #2e8b7f; /* Teal for Add */
-                color: white;
-            }
+        .form-column {
+            max-width: 100%;
+            padding: 0 15px;
+        }
 
-            .add-btn:hover {
-                background-color: #246e65;
-            }
+        .buttons {
+            justify-content: center;
+        }
 
-            /* Responsive Design (Mobile View) */
-            @media (max-width: 768px) {
-                .header {
-                    flex-direction: column;
-                    align-items: flex-start;
-                    padding: 10px 15px;
-                }
+        .container {
+            padding: 15px;
+            margin: 10px auto;
+        }
+    }
 
-                .navbar ul {
-                    flex-direction: column;
-                    width: 100%;
-                    margin-top: 10px;
-                }
+    @media (max-width: 480px) {
+        body {
+            font-size: 0.9em;
+        }
 
-                .navbar li {
-                    margin: 5px 0;
-                    text-align: center;
-                    width: 100%;
-                }
+        .page-title {
+            font-size: 1.5em;
+        }
 
-                .form-section {
-                    flex-direction: column; /* Stack columns vertically on mobile */
-                    gap: 20px;
-                    padding-left: 0; /* Reset padding for mobile */
-                    padding-right: 0; /* Reset padding for mobile */
-                    overflow-y: auto; /* Allow scroll if content is too long */
-                }
-
-                .form-column {
-                    min-width: auto; /* Remove min-width constraint */
-                    max-width: 100%; /* Take full width */
-                    padding: 0 15px; /* Add horizontal padding for content */
-                    box-sizing: border-box;
-                }
-
-                .profile-pic-upload {
-                    margin: 0 auto 20px auto; /* Center profile pic on mobile */
-                }
-
-                .buttons {
-                    justify-content: center; /* Center buttons on mobile */
-                    margin-top: 20px;
-                }
-
-                /* Adjust padding of container for smaller screens */
-                .container {
-                    padding: 15px;
-                    margin: 10px auto;
-                }
-            }
-
-            /* Adjustments for "no scroll" - This is tricky and might involve compromises */
-            /* The main approach to 'no scroll' is to make sure content always fits.
-            For forms, this means fields might need to be smaller, or fonts, or
-            the layout needs to be more compact. */
-
-            /* Example of making fonts smaller on very small screens if necessary */
-            @media (max-width: 480px) {
-                body {
-                    font-size: 0.9em;
-                }
-                .page-title {
-                    font-size: 1.5em;
-                }
-                .input-group input,
-                .input-group select,
-                .btn {
-                    padding: 10px;
-                    font-size: 0.9em;
-                }
-            }
+        .input-group input,
+        .input-group select,
+        .btn {
+            padding: 10px;
+            font-size: 0.9em;
+        }
+    }
 </style>
 
+<div class="container">
+    <h1 class="page-title">ADD Doctor</h1>
+<?php require APPROOT . '/views/components/auth_message.php'; ?>
 
-    <div class="container">
-        <h1 class="page-title">ADD Doctor</h1>
-
+    <form action="<?php echo URLROOT; ?>/admin/adddoctor" method="POST">
         <div class="form-section">
+            <!-- Left Column -->
             <div class="form-column profile-column">
                 <div class="profile-pic-upload">
                     <i class="fas fa-image"></i>
                 </div>
+
                 <div class="input-group">
                     <label for="name">Your Name</label>
-                    <input type="text" id="name" placeholder="Name">
+                    <input type="text" name="name" id="name" placeholder="Name" required>
+                    <p class="text-danger ml-4">
+                        <?php
+                        if(isset($data['name-err']))
+                        echo $data['name-err'];
+                        ?>
+                    </p>
+
                 </div>
+
                 <div class="input-group">
                     <label for="doctor-email">Doctor Email</label>
-                    <input type="email" id="doctor-email" placeholder="Email">
+                    <input type="email" name="email" id="doctor-email" placeholder="Email" required>
+                    <p class="text-danger ml-4">
+                        <?php
+                        if(isset($data['email-err']))
+                        echo $data['email-err'];
+                        ?>
+                    </p>
                 </div>
+
+                <div class="input-group">
+                    <label for="services">Phone Number</label>
+                    <input type="text" name="phone" id="services" placeholder="Phone Number" required>
+                </div>
+
                 <div class="input-group">
                     <label for="password">Set Password</label>
-                    <input type="password" id="password" placeholder="Password">
+                    <input type="text" name="password" id="password" placeholder="Password" required>
+                    <?php
+                        if(isset($data['password-err']))
+                        echo $data['password-err'];
+                        ?>
+                    </p>
+
                 </div>
+
                 <div class="input-group">
-                    <label for="experience">Experience</label>
-                    <select id="experience">
-                        <option>1 Year</option>
-                        <option>2 Years</option>
-                        <option>3+ Years</option>
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
                     </select>
                 </div>
+
+                <div class="input-group">
+                    <label for="experience">Experience</label>
+                    <input type="text" name="experience" id="experience" placeholder="Experience Year">
+
+                </div>
+
                 <div class="input-group">
                     <label for="about-doctor">About Doctor</label>
-                    <input type="text" id="about-doctor" placeholder="Write about doctor">
+                    <input type="text" name="bio" id="about-doctor" placeholder="Write about doctor ">
                 </div>
             </div>
 
+            <!-- Right Column -->
             <div class="form-column details-column">
                 <div class="input-group">
                     <label for="fees">Fees</label>
-                    <input type="text" id="fees" placeholder="Doctor fees">
+                    <input type="text" name="fee" id="fees" placeholder="Doctor fees" required>
                 </div>
+
                 <div class="input-group">
-                    <label for="speciality">Speciality</label>
-                    <input type="text" id="speciality" placeholder="General Physician">
+                    <label for="specialty">Specialty</label>
+                    <input type="text" name="specialty" id="specialty" placeholder="Doctor's Specialty" required>
                 </div>
+
                 <div class="input-group">
                     <label for="degree">Degree</label>
-                    <input type="text" id="degree" placeholder="Degree">
+                    <input type="text" name="degree" id="degree" placeholder="Degree" required>
                 </div>
+
                 <div class="input-group">
                     <label for="address">Address</label>
-                    <input type="text" id="address" placeholder="Address">
+                    <input type="text" name="address" id="address" placeholder="Address" required>
                 </div>
-                <div class="input-group">
-                    <label for="services">Services</label>
-                    <input type="text" id="services" placeholder="Services">
-                </div>
+
                 <div class="input-group">
                     <label for="availability">Availability</label>
-                    <select id="availability">
-                        <option>Availability</option>
-                        <option>Monday - Friday</option>
-                        <option>Weekends</option>
+                    <select id="availability" name="availability" required>
+                        <option value="">Select Availability</option>
+                        <option value="Monday - Friday">Monday - Friday</option>
+                        <option value="Weekends">Weekends</option>
                     </select>
                 </div>
+
                 <div class="buttons">
-                    <!-- <button class="btn edit-btn">Edit</button> -->
-                    <button class="btn add-btn">Add</button>
+                    <button type="submit" class="btn add-btn">Add</button>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
+</div>
 </body>
 </html>

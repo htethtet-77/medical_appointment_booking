@@ -4,7 +4,7 @@ class UserValidator
 {
     private $data;
     private $errors = [];
-    private static $fields = ['name', 'email', 'password'];
+    private static $fields = ['name', 'email', 'password','phone'];
 
     public function __construct($post_data)
     {

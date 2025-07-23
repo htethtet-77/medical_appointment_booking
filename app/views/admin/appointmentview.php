@@ -1,123 +1,160 @@
- <?php require APPROOT . '/views/inc/header.php'; ?>
+<title><?php echo SITENAME;?></title>
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/appointmentview.css?v=2">
+
 <?php require APPROOT . '/views/inc/sidebar.php'; ?>
 
-    <main class="view-container">
-        <h1 class="page-title">All Appointment</h1>
-
-        <div class="filters">
-            <div class="filter-group">
-                <label for="selectedDate">Selected Date :</label>
-                <div class="custom-datepicker">
-                    <input type="date" id="selectedDate" name="selectedDate" value="2025-05-15">
+    <div class="app-container">
+        <div class="appointment-header">
+            <h1 class="appointment-title">All Appointments</h1>
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="selectedDate">Selected Date:</label>
+                    <input type="date" id="selectedDate" class="date-input" value="2025-05-15">
                 </div>
-            </div>
-
-            <div class="filter-group">
-                <div class="custom-select">
-                    <select id="appointmentStatus" name="appointmentStatus">
-                        <option value="All" selected>All</option> <option value="Confirmed">Confirmed</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Cancel">Cancel</option>
+                <div class="filter-group">
+                    <label for="statusFilter">Status:</label>
+                    <select id="statusFilter" class="status-select">
+                        <option value="all">All Appointments</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="pending">Pending</option>
+                        <option value="cancelled">Cancelled</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <div class="appointment-table-container">
-            <table class="appointment-table">
+        <div class="appointmentview-table">
+            <table>
                 <thead>
                     <tr>
-                        <th>id</th>
+                        <th>ID</th>
                         <th>Patient Name</th>
                         <th>Doctor</th>
                         <th>Fees</th>
-                        <th>Action</th>
+                        <th>Time</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr data-status="Confirmed">
-                        <td data-label="id">1</td>
-                        <td data-label="Patient Name">Patient One</td>
-                        <td data-label="Doctor">Dr. Daniel</td>
-                        <td data-label="Fees">120$</td>
-                        <td data-label="Action" class="action-cell status-confirmed">Confirmed</td>
+                    <tr>
+                        <td>1</td>
+                        <td>John Smith</td>
+                        <td>Dr. Daniel</td>
+                        <td class="fees">120$</td>
+                        <td>09:00 AM</td>
+                        <td>
+                            <span class="status-badge status-confirmed">
+                                confirmed
+                            </span>
+                        </td>
                     </tr>
-                    <tr data-status="Confirmed">
-                        <td data-label="id">4</td>
-                        <td data-label="Patient Name">Patient Two</td>
-                        <td data-label="Doctor">Dr. Daniel</td>
-                        <td data-label="Fees">120$</td>
-                        <td data-label="Action" class="action-cell status-confirmed">Confirmed</td>
+                    <tr>
+                        <td>2</td>
+                        <td>Sarah Johnson</td>
+                        <td>Dr. Emily</td>
+                        <td class="fees">150$</td>
+                        <td>10:30 AM</td>
+                        <td>
+                            <span class="status-badge status-pending">
+                                pending
+                            </span>
+                        </td>
                     </tr>
-                    <tr data-status="Pending">
-                        <td data-label="id">5</td>
-                        <td data-label="Patient Name">Patient Three</td>
-                        <td data-label="Doctor">Dr. Smith</td>
-                        <td data-label="Fees">150$</td>
-                        <td data-label="Action" class="action-cell status-pending">Pending</td>
+                    <tr>
+                        <td>3</td>
+                        <td>Michael Brown</td>
+                        <td>Dr. Daniel</td>
+                        <td class="fees">120$</td>
+                        <td>11:00 AM</td>
+                        <td>
+                            <span class="status-badge status-confirmed">
+                                confirmed
+                            </span>
+                        </td>
                     </tr>
-                    <tr data-status="Cancel">
-                        <td data-label="id">6</td>
-                        <td data-label="Patient Name">Patient Four</td>
-                        <td data-label="Doctor">Dr. Jane</td>
-                        <td data-label="Fees">100$</td>
-                        <td data-label="Action" class="action-cell status-cancel">Cancel</td>
+                    <tr>
+                        <td>4</td>
+                        <td>Lisa Wilson</td>
+                        <td>Dr. Sarah</td>
+                        <td class="fees">180$</td>
+                        <td>02:00 PM</td>
+                        <td>
+                            <span class="status-badge status-cancelled">
+                                cancelled
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>David Lee</td>
+                        <td>Dr. Daniel</td>
+                        <td class="fees">120$</td>
+                        <td>03:30 PM</td>
+                        <td>
+                            <span class="status-badge status-confirmed">
+                                confirmed
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Emma Davis</td>
+                        <td>Dr. Emily</td>
+                        <td class="fees">150$</td>
+                        <td>04:00 PM</td>
+                        <td>
+                            <span class="status-badge status-pending">
+                                pending
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Robert Taylor</td>
+                        <td>Dr. Sarah</td>
+                        <td class="fees">180$</td>
+                        <td>04:30 PM</td>
+                        <td>
+                            <span class="status-badge status-confirmed">
+                                confirmed
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Jennifer Martinez</td>
+                        <td>Dr. Daniel</td>
+                        <td class="fees">120$</td>
+                        <td>05:00 PM</td>
+                        <td>
+                            <span class="status-badge status-cancelled">
+                                cancelled
+                            </span>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-    </main>
-
+    </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const statusDropdown = document.getElementById('appointmentStatus');
-            const datePicker = document.getElementById('selectedDate');
-            const tableRows = document.querySelectorAll('.appointment-table tbody tr'); // Get all rows
+    const statusFilter = document.getElementById("statusFilter");
+    const tableRows = document.querySelectorAll("tbody tr");
 
-            // Add a data-status attribute to each row based on its content for easier filtering
-            tableRows.forEach(row => {
-                const statusCell = row.querySelector('.action-cell');
-                if (statusCell) {
-                    const statusText = statusCell.textContent.trim();
-                    row.setAttribute('data-status', statusText);
-                }
-            });
+    statusFilter.addEventListener("change", function () {
+        const selectedStatus = this.value.toLowerCase();
 
-            function filterTable() {
-                const selectedStatus = statusDropdown.value;
-                const selectedDate = datePicker.value; // Get the date in YYYY-MM-DD format
+        tableRows.forEach(row => {
+            const statusBadge = row.querySelector(".status-badge");
+            const rowStatus = statusBadge ? statusBadge.textContent.trim().toLowerCase() : "";
 
-                tableRows.forEach(row => {
-                    const rowStatus = row.getAttribute('data-status');
-                    const rowDateText = row.children[0].textContent; // Assuming Date is the first column (adjust index if needed)
-
-                    // Convert table date (e.g., "15 May 2025") to YYYY-MM-DD for comparison
-                    const parts = rowDateText.split(' ');
-                    // Simple month mapping (you might need a more robust solution for all months)
-                    const monthMap = {
-                        'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05', 'Jun': '06',
-                        'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
-                    };
-                    const formattedRowDate = parts[2] + '-' + monthMap[parts[1]] + '-' + (parts[0].length === 1 ? '0' + parts[0] : parts[0]);
-
-                    const statusMatch = (selectedStatus === 'All' || rowStatus === selectedStatus);
-                    const dateMatch = (selectedDate === '' || formattedRowDate === selectedDate); // Check if date filter is empty or matches
-
-                    if (statusMatch && dateMatch) {
-                        row.style.display = ''; // Show the row
-                    } else {
-                        row.style.display = 'none'; // Hide the row
-                    }
-                });
+            if (selectedStatus === "all" || rowStatus === selectedStatus) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
             }
-
-            // Add event listeners
-            statusDropdown.addEventListener('change', filterTable);
-            datePicker.addEventListener('change', filterTable); // Listen for date changes
-
-            // Initial filter when the page loads
-            filterTable();
         });
-    </script>
+    });
+</script>
+
 </body>
 </html>

@@ -1,22 +1,17 @@
 <?php
 
 class DoctorModel {
-    private $id;
+
     private $degree;
     private $experience;
     private $bio;
-    private $service;
+    private $fee;
+
     private $specialty;
     private $address;
+    private $availability;
+  
     private $user_id;
- public function setId($id)
-    {
-        $this->id = $id;
-    }
-    public function getId()
-    {
-        return $this->id;
-    }
 
 
     public function setDegree($degree)
@@ -48,16 +43,15 @@ class DoctorModel {
     {
         return $this->bio;
     }
-
-    public function setService($service)
+    public function setFee($fee)
     {
-        $this->service = $service;
+        $this->fee = $fee;
     }
-    public function getService() 
+    public function getFee() 
     {
-        return $this->service;
+        return $this->fee;
     }
-
+  
     public function setSpecialty($specialty)
     {
         $this->specialty = $specialty;
@@ -83,17 +77,25 @@ class DoctorModel {
     {
         return $this->address;
     }
-
+    public function setAvailability($availability)
+    {
+        $this->availability = $availability;
+    }
+    public function getAvailability()
+    {
+        return $this->availability;
+    }
     public function toArray()
     {
         return [
-            "id"    => $this->getId(),
+            // "id"    => $this->getId(),
             "degree" => $this->getDegree(),
             "experience" => $this->getExperience(),
             "bio" => $this->getBio(),
-            "service"  => $this->getService(),
+            "fee" => $this->getFee(),
             "specialty"  => $this->getSpecialty(),
             "address"  => $this->getAddress(),
+            "availability"  => $this->getAvailability(),
             "user_id" => $this->getUserId()
         ];
     }
