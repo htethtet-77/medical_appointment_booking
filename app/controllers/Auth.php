@@ -26,78 +26,67 @@ class Auth extends Controller
         }
     }
 
-    public function register()
-    {
+   public function register()
+{
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = $_POST['email'];
-        $isUserExist = $this->db->columnFilter('users', 'email', $email);
+        $phone = $_POST['phone'];
 
-        if ($isUserExist) {
+        if ($this->db->columnFilter('users', 'email', $email)) {
             setMessage('error', 'This email is already registered!');
             redirect('pages/register');
+            return;
+        }
+
+        $validation = new UserValidator($_POST);
+        $errors = $validation->validateForm();
+
+        if (count($errors) > 0) {
+            $this->view('pages/register', $errors);
+            return;
+        }
+
+        if ($this->db->columnFilter('users', 'phone', $phone)) {
+            setMessage('error', 'Phone Number is already exit');
+            redirect('pages/register');
+            return;
+        }
+
+        $name = $_POST['name'];
+        $gender = $_POST['gender'];
+        $password = base64_encode($_POST['password']); // Note: base64 is NOT secure for real passwords
+        $profile_image = 'default_profile.jpg';
+
+        $user = new UserModel();
+        $user->setName($name);
+        $user->setEmail($email);
+        $user->setGender($gender);
+        $user->setPhone($phone);
+        $user->setPassword($password);
+        $user->setProfileImage($profile_image);
+        $user->setIsLogin(0);
+        $user->setIsActive(0);
+        $user->setIsConfirmed(0);
+        $user->setTypeId(3);
+        $user->setStatusId(6);
+
+        $userCreated = $this->db->create('users', $user->toArray());
+
+        if ($userCreated) {
+            $mail = new Mail();
+            $mail->verifyMail($email, $name);
+            setMessage('success', 'Please check your Mail box!');
+            redirect('pages/login');
         } else {
-            $validation = new UserValidator($_POST);
-            $data = $validation->validateForm();
-
-            if (count($data) > 0) {
-                $this->view('pages/register', $data);
-            } else {
-            
-                $phone = $_POST['phone'];
-
-                $phonecheck =$this->db->columnFilter('users','phone',$phone);
-
-                if($phonecheck){
-                    setMessage('error','Phone Number is already exit');
-                    redirect('pages/register');
-                }
-                else{
-                $name = $_POST['name'];
-                $email = $_POST['email'];
-                $gender = $_POST['gender'];
-                $password = $_POST['password'];
-
-                $profile_image = 'default_profile.jpg';
-                $password = base64_encode($password); // Note: base64 is NOT secure for real passwords
-
-                $user = new UserModel();
-                $user->setName($name);
-                $user->setEmail($email);
-                $user->setGender($gender);
-                $user->setPhone($phone);
-                $user->setPassword($password);
-                $user->setProfileImage($profile_image);
-                $user->setIsLogin(0);
-                $user->setIsActive(0);
-                $user->setIsConfirmed(0);
-                $user->setTypeId(3);
-                $user->setStatusId(2);
-                // $user->setDate(date('Y-m-d H:i:s'));
-
-                $userCreated = $this->db->create('users', $user->toArray());
-                // echo "Generated Token: $token<br>";
-                // exit();
-
-
-                    if ($userCreated) {
-                    $mail = new Mail();
-                    $mail->verifyMail($email, $name);
-
-                    setMessage('success', 'Please check your Mail box!');
-                    redirect('pages/login');
-                
-                } else {
-                    // setMessage('error', 'Something went wrong while creating your account.');
-                    // redirect('pages/register');
-                }
-            }
-            }
+            // setMessage('error', 'Something went wrong while creating your account.');
+            // redirect('pages/register');
         }
     } else {
         // SHOW THE REGISTRATION FORM FOR GET REQUEST
         $this->view('pages/register');
     }
-    }
+}
+
 
 
 public function login(){
@@ -106,8 +95,9 @@ public function login(){
                 $email = $_POST['email'];
                 $password = $_POST['password'];
                 $password = base64_encode($password);
-
+                
                 $islogin = $this->db->columnFilter('users','email',$email);
+            
                 $currentpassword = $islogin['password'];
                 $_SESSION['current_user'] = $islogin;
 
@@ -125,7 +115,9 @@ public function login(){
                                 break;
 
                             case ROLE_DOCTOR:
-                                redirect('doctor/newappointment');
+                                $doctor = $this->db->columnFilter('doctor_view','user_id',$islogin['id']);
+                                $_SESSION['current_doctor'] =$doctor;
+                                redirect('doctor/dash');
                                 break;
                             case ROLE_PATIENT:
                                 redirect('pages/home');

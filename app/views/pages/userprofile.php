@@ -1,8 +1,6 @@
  <?php require APPROOT . '/views/inc/header.php'; ?>
 <?php require APPROOT . '/views/inc/navbar.php'; ?>
- <?php 
-$user = $_SESSION['current_user'];
-?>
+
 <body>
     <div class="user-main-content">
         <div class="container profile-container">
@@ -12,7 +10,7 @@ $user = $_SESSION['current_user'];
                     <div class="profile-image-placeholder">
                         <i class="fas fa-image"></i>
                     </div>
-                    <a href="<?php echo URLROOT;?>/pages/history" class="appointment-history-button">
+                    <a href="<?php echo URLROOT;?>/pages/userappointment" class="appointment-history-button">
                         Appointment History</a>
                 </div>
                 <div class="profile-right">

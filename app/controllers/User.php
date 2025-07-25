@@ -7,6 +7,16 @@ class User extends Controller
         $this->model('UserModel');
         $this->db = new Database();
     }
+    public function doctors()
+    {
+        $doctorWithUserInfo = $this->db->readAll('doctor_view');
+        $data = [
+            'doctors' => $doctorWithUserInfo
+        ];
+
+        $this->view('pages/doctors', $data);
+    }
+
  
 
 

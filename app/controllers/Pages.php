@@ -19,18 +19,31 @@ class Pages extends Controller
     }
     public function doctors()
     {
-        $this->view('pages/doctors');
+        $doctorWithUserInfo = $this->db->readAll('doctor_view');
+        $data = [
+            'doctors' => $doctorWithUserInfo
+        ];
+
+        $this->view('pages/doctors', $data);
     }
      public function appointment()
     {
         $this->view('pages/appointment');
     }
 
-    public function doctorprofile()
-    {
-    
-        $this->view('pages/doctorprofile');
+  public function doctorprofile($email) {
+    // Replace 'doctor_id' with your actual PK column name
+    $doctor = $this->db->columnFilter('doctor_view', 'email', $email);
+
+    if (!$doctor) {
+        redirect('pages/notfound');
     }
+
+    $data = ['doctor' => $doctor];
+    $this->view('pages/doctorprofile', $data);
+}
+
+
     public function approve()
     {
     
@@ -48,25 +61,14 @@ class Pages extends Controller
     {
         $this->view('pages/history');
     }
-
-    // public function doctorprofile($id) {
-    //     $doctorData = $this->db->selectWhere('doctors', 'id', $id);
-
-    //     if ($doctorData) {
-    //         $doctor = new Doctor();
-    //         $doctor->setId($doctorData[0]->id);
-    //         $doctor->setName($doctorData[0]->name);
-    //         $doctor->setSpecialty($doctorData[0]->specialty);
-    //         $doctor->setExperience($doctorData[0]->experience);
-    //         $doctor->setPhone($doctorData[0]->phone);
-    //         $doctor->setImage($doctorData[0]->image);
-    //         $doctor->setDescription($doctorData[0]->description);
-
-    //         $this->view('pages/doctorprofile', ['doctor' => $doctor]);
-    //     } else {
-    //         redirect('pages/doctors');
-    //     }
-    // }
+    public function appointmentform()
+    {
+        $this->view('pages/appointmentform');
+    }
+     public function userappointment()
+    {
+        $this->view('pages/userappointment');
+    }
 
 
 

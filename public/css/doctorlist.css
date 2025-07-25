@@ -82,17 +82,22 @@
         }
 
         .doctor-card .avatar {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             background-color: #ccc;
-            border-radius: 8px;
+            border-radius: 8px; /* Rounded corners, not circular */
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 40px;
-            color: var(--white);
             margin-right: 20px;
-            flex-shrink: 0; /* Prevent avatar from shrinking */
+        }
+
+        .doctor-card .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures image fills square without distortion */
+            display: block;
         }
 
         .doctor-card .info {
@@ -130,14 +135,6 @@
             white-space: nowrap; /* Prevent button text from wrapping */
         }
 
-        .doctor-card .actions .edit-btn {
-            background-color: var(--button-bg);
-            color: var(--white);
-        }
-
-        .doctor-card .actions .edit-btn:hover {
-            background-color: var(--button-hover-bg);
-        }
 
         .doctor-card .actions .delete-btn {
             background-color: var(--delete-button-bg);

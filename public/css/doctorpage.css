@@ -1,66 +1,67 @@
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8f8f8; /* Light gray background for the whole page */
-        }
-        .specialty-category-card {
-            background-color: white;
-            border-radius: 0.75rem; /* rounded-xl */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* subtle shadow */
-            padding: 1rem;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 120px; /* Fixed height for consistent layout */
-        }
-        .specialty-category-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
-        }
-        .specialty-category-icon {
-            font-size: 2.5rem; /* Icon size */
-            color: #6BA3BE; /* Match the provided image's icon color */
-            margin-bottom: 0.5rem;
-        }
-        .doctor-card {
-            background-color: white;
-            border-radius: 0.75rem; /* rounded-xl */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            padding: 1.5rem;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .doctor-image-placeholder {
-            width: 100px;
-            height: 100px;
-            background-color: #e0e0e0; /* Placeholder color */
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-        .doctor-image-placeholder svg {
-            color: #9e9e9e; /* Icon color for placeholder */
-            font-size: 3rem;
-        }
-        .view-profile-btn {
-            background-color: #0C969C;
-            color: white;
-            font-weight: 500;
-            padding: 8px 24px;
-            border-radius: 9999px; /* Fully rounded */
-            transition: background-color 0.3s;
-            border: none;
-            cursor: pointer;
-            margin-top: 1rem;
-        }
-        .view-profile-btn:hover {
-            background-color: #0A7075;
-        }
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8f8f8;
+    }
+    .specialty-category-card {
+        background-color: white;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        padding: 1rem;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 120px;
+    }
+    .specialty-category-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+    }
+   .specialty-category-icon {
+    font-size: 2.5rem;
+    color: #6BA3BE; /* original icon color */
+    margin-bottom: 0.5rem;
+}
+    .doctor-card {
+        background-color: white;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        padding: 1.5rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .doctor-image-placeholder {
+        width: 100px;
+        height: 100px;
+        background-color: #e0e0e0;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+    .doctor-image-placeholder i {
+        color: #9e9e9e;
+        font-size: 3rem;
+    }
+    .view-profile-btn {
+        background-color: #0C969C;
+        color: white;
+        font-weight: 500;
+        padding: 8px 24px;
+        border-radius: 9999px;
+        transition: background-color 0.3s;
+        border: none;
+        cursor: pointer;
+        margin-top: 1rem;
+    }
+    .view-profile-btn:hover {
+        background-color: #0A7075;
+    }
+
