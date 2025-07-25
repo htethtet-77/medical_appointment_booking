@@ -1,0 +1,167 @@
+/* ... (The CSS from the previous response for appointment_form_style.css goes here. It's unchanged.) ... */
+
+/* General Body & Navbar Styles (can be shared with your main style.css if needed) */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f4f7f6;
+    color: #333;
+    line-height: 1.6;
+}
+
+.user-info {
+    font-size: 0.9em;
+}
+
+/* Form Container Styles */
+.appointmentform-container {
+    max-width: 600px; /* Limit form width */
+    margin: 30px auto; /* Center the form with some top/bottom margin */
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.appointmentform-container h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-size: 2em;
+}
+
+/* Form Sections (fieldset) */
+.form-section {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.form-section legend {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #3498db; /* Blue color for section titles */
+    padding: 0 10px;
+    margin-left: -10px; /* Pull legend slightly over the border */
+}
+
+/* Form Group Styles (label + input/select/textarea) */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block; /* Make label appear above the input */
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Style for the displayed doctor name */
+.form-group .selected-doctor-name {
+    margin-top: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #2c3e50; /* Darker color for prominence */
+    background-color: #eaf3f7; /* Light background to make it stand out */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #cce0eb;
+}
+
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="date"],
+.form-group select,
+.form-group textarea {
+    width: 100%; /* Full width within its container */
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    font-size: 1em;
+    color: #333;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="tel"]:focus,
+.form-group input[type="date"]:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #3498db; /* Highlight border on focus */
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5); /* Blue glow on focus */
+    outline: none; /* Remove default outline */
+}
+
+/* Specific adjustments for date input */
+input[type="date"] {
+    -webkit-appearance: none; /* Remove default Safari date input styling */
+    -moz-appearance: none; /* Remove default Firefox date input styling */
+    appearance: none;
+    /* You might need custom arrow icons for cross-browser consistency if desired */
+}
+
+/* Submit Button */
+.submit-btn {
+    display: block; /* Make button take full width */
+    width: 100%;
+    padding: 15px 25px;
+    background-color: #009688; /* Green color for submit */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .form-container {
+        margin: 20px 15px; /* Adjust margin for smaller screens */
+        padding: 20px;
+    }
+
+    .form-container h2 {
+        font-size: 1.8em;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="tel"],
+    .form-group input[type="date"],
+    .form-group select,
+    .form-group textarea {
+        padding: 10px; /* Slightly less padding on smaller screens */
+    }
+
+    .submit-btn {
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-container {
+        padding: 15px;
+        margin: 15px 10px;
+    }
+
+    .form-section {
+        padding: 15px;
+    }
+
+    .form-group label {
+        margin-bottom: 5px;
+    }
+}

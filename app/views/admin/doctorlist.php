@@ -1,3 +1,4 @@
+
 <title><?php echo SITENAME; ?></title>
 <?php require APPROOT . '/views/inc/sidebar.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/doctorlist.css">
@@ -14,17 +15,23 @@
     <?php if (!empty($data['doctors'])) : ?>
     <?php foreach ($data['doctors'] as $doctor) : ?>
         <div class="doctor-card">
-            <div class="avatar">🖼️</div>
+            <div class="avatar">
+                <img src="/<?= htmlspecialchars($doctor['profile_image'])?>">
+             </div>
             <div class="info">
                 <h3>Dr. <?php echo htmlspecialchars($doctor['name'] ?? 'UN'); ?></h3>
-                <p><?php echo htmlspecialchars($doctor['specialty'] ?? ''); ?></p>
+                <p>Specialization: <?php echo htmlspecialchars($doctor['specialty'] ?? ''); ?></p>
                 <p><?php echo htmlspecialchars($doctor['experience'] ?? ''); ?> years of Exp</p>
                 <p>Consultation Fee: <?php echo htmlspecialchars($doctor['fee'] ?? ''); ?>$</p>
                 <p>Location: <?php echo htmlspecialchars($doctor['address'] ?? ''); ?></p>
             </div>
             <div class="actions">
-                <button class="edit-btn">Edit</button>
-                <button class="delete-btn">Delete</button>
+                <form method="POST" action="<?php echo URLROOT; ?>/admin/deletedoctor" onsubmit="return confirm('Are you sure you want to delete this doctor?');">
+                    <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($doctor['user_id']); ?>">
+
+                    <button type="submit" class="delete-btn">Delete</button>
+
+                    </form>
             </div>
         </div>
     <?php endforeach; ?>

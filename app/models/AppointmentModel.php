@@ -3,7 +3,8 @@
 class AppointmentModel {
     private $id;
     private $created_at;
-    private $appointment_fee;
+    // private $appointment_fee;
+    private $reason;
     private $timeslot_id;
     private $user_id;
      private $status_id;
@@ -25,13 +26,21 @@ class AppointmentModel {
         return $this->created_at;
     }
 
-    public function setAppointmentFee($appointment_fee)
+    // public function setAppointmentFee($appointment_fee)
+    // {
+    //     $this->appointment_fee = $appointment_fee;
+    // }
+    // public function getAppointmentFee()
+    // {
+    //     return $this->appointment_fee;
+    // }
+    public function setReason($reason)
     {
-        $this->appointment_fee = $appointment_fee;
+        $this->reason = $reason;
     }
-    public function getAppointmentFee()
+    public function getReason()
     {
-        return $this->appointment_fee;
+        return $this->reason;
     }
 
     public function setTimeslotId($timeslot_id)
@@ -66,10 +75,12 @@ class AppointmentModel {
         return [
             "id"    => $this->getId(),
             "created_at" => $this->getCreatedAt(),
-            "appointment_fee" => $this->getAppointmentFee(),
+            // "appointment_fee" => $this->getAppointmentFee(),
+            "reason" => $this->getReason(),
             "timeslot_id" => $this->getTimeslotId(),
             "user_id" => $this->getUserId(),
             "status_id" => $this->getStatusId()
         ];
     }
 }
+?>

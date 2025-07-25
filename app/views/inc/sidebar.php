@@ -15,7 +15,7 @@ $name = $_SESSION['current_user'];
         <li><a href="<?php echo URLROOT; ?>/admin/dashboard">HOME</a></li>
         <li><a href="<?php echo URLROOT; ?>/admin/patientlist">PATIENTS</a></li>
          <li><a href="<?php echo URLROOT; ?>/admin/doctorlist">DOCTORS</a></li>
-        <li><a href="<?php echo URLROOT; ?>/admin/appointmentview">HISTORY</a></li>
+        <li><a href="<?php echo URLROOT; ?>/admin/appointmentview">APPOINTMENTS</a></li>
         <li><i class="fas fa-user"></i> <span><?php echo htmlspecialchars($name['name']) ?></span></a></li>
     </nav>
 </header>

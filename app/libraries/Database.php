@@ -108,10 +108,9 @@ class Database
 
         try {
             $columns = array_keys($data);
-            function map ($item) {
-                return $item . '=:' . $item;
-            }
-            $columns = array_map('map', $columns);
+            $columns = array_map(function($item) {
+            return $item . '=:' . $item;
+        }, $columns);
             $bindingSql = implode(',', $columns);
             // echo $bindingSql;
             // exit;
@@ -205,7 +204,7 @@ class Database
 
     public function getById($table, $id)
     {
-        $sql = 'SELECT * FROM ' . $table . ' WHERE `id` =:id';
+        $sql = 'SELECT * FROM ' . $table . ' WHERE id =:id';
         // print_r($sql);
         $stm = $this->pdo->prepare($sql);
         $stm->bindValue(':id', $id);
@@ -224,17 +223,7 @@ class Database
         return ($success) ? $row : [];
     }
 
- public function getAllDoctors()
-{
-    $sql = "SELECT u.name, u.email, d.specialty, d.experience, d.fee, d.address
-            FROM users u
-            INNER JOIN doctorprofile d ON u.id = d.user_id
-            WHERE u.type_id = 2";
-
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+ 
 
 
     // For Dashboard
@@ -270,6 +259,14 @@ class Database
             echo($e);
         }
     }
+    public function deletedoc($table, $value, $column = 'id')
+{
+    $sql = "DELETE FROM {$table} WHERE {$column} = :value";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->bindValue(':value', $value);
+    return $stmt->execute();
+}
+
 
 
     // public function expenseTransition()

@@ -6,7 +6,7 @@
 </head>
 <body>
 <?php 
-$name = $_SESSION['current_user'];
+$user = $_SESSION['current_user'];
 ?> 
 <header class="navbar">
     <a href="#" class="logo">Mediplus</a>
@@ -18,7 +18,7 @@ $name = $_SESSION['current_user'];
         <li>
         <a href="<?php echo URLROOT; ?>/pages/userprofile">
             <i class="fas fa-user"></i>
-            <span><?php echo htmlspecialchars($name['name']); ?></span>
+            <span><?php echo htmlspecialchars($user['name']); ?></span>
         </a>
         </li>
 

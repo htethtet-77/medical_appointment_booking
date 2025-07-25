@@ -23,7 +23,7 @@
 
         <!-- Appointment Request Section -->
         <section class="appointment-section">
-            <h2 class="section-title">Appointment Requests</h2>
+            <h2 class="section-title"> Today's Appointment </h2>
             <div class="table-container">
                 <table>
                     <thead>

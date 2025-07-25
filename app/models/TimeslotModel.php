@@ -1,49 +1,39 @@
 <?php
 
 class TimeslotModel {
-    private $id;
-    private $created_at;
-    private $appointment_fee;
-    private $timeslot_id;
+    private $date;
+    private $time;
+    private $is_available;
     private $user_id;
-     private $status_id;
- public function setId($id)
+
+    public function setDate($date)
     {
-        $this->id = $id;
+        $this->date = $date;
     }
-    public function getId()
+    public function getDate()
     {
-        return $this->id;
+        return $this->date;
     }
 
-    public function setCreatedAt($created_at)
+    public function setTime($time)
     {
-        $this->created_at= $created_at;
+        $this->time = $time;
     }
-    public function getCreatedAt()
+    public function getTime()
     {
-        return $this->created_at;
-    }
-
-    public function setAppointmentFee($appointment_fee)
-    {
-        $this->appointment_fee = $appointment_fee;
-    }
-    public function getAppointmentFee()
-    {
-        return $this->appointment_fee;
+        return $this->time;
     }
 
-    public function setTimeslotId($timeslot_id)
+    public function setIsAvailable($is_available)
     {
-        $this->timeslot_id = $timeslot_id;
+        $this->is_available = $is_available;
     }
-     public function getTimeslotId()
+    public function getIsAvailable()
     {
-        return $this->timeslot_id;
+        return $this->is_available;
     }
 
-     public function setUserId($user_id)
+    public function setUserId($user_id)
     {
         $this->user_id = $user_id;
     }
@@ -51,25 +41,14 @@ class TimeslotModel {
     {
         return $this->user_id;
     }
-     public function setStatusId($status_id)
-    {
-        $this->status_id = $status_id;
-    }
-
-    public function getStatusId()
-    {
-        return $this->status_id;
-    }
 
     public function toArray()
     {
         return [
-            "id"    => $this->getId(),
-            "created_at" => $this->getCreatedAt(),
-            "appointment_fee" => $this->getAppointmentFee(),
-            "timeslot_id" => $this->getTimeslotId(),
-            "user_id" => $this->getUserId(),
-            "status_id" => $this->getStatusId()
+            "date" => $this->getDate(),
+            "time" => $this->getTime(),
+            "is_available" => $this->getIsAvailable(),
+            "user_id" => $this->getUserId()
         ];
     }
 }

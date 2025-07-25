@@ -20,54 +20,82 @@ public function adddoctor()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = $_POST['email'];
-        $isUserExist = $this->db->columnFilter('users', 'email', $email);
 
+        // Check if email exists in users table (covers patients and doctors)
+        $isUserExist = $this->db->columnFilter('users', 'email', $email);
         if ($isUserExist) {
             setMessage('error', 'This email is already registered!');
             redirect('admin/adddoctor');
+            return;  // stop execution after redirect
         }
 
+        // Validate form data
         $validation = new UserValidator($_POST);
         $data = $validation->validateForm();
-
         if (count($data) > 0) {
             $this->view('admin/adddoctor', $data);
             return;
         }
 
         $phone = $_POST['phone'];
-        $phonecheck = $this->db->columnFilter('users', 'phone', $phone);
 
+        // Check if phone number exists
+        $phonecheck = $this->db->columnFilter('users', 'phone', $phone);
         if ($phonecheck) {
             setMessage('error', 'Phone number already exists!');
             redirect('admin/adddoctor');
-            return;
+            return;  // stop execution after redirect
         }
-
 
         // Collect form data
         $name = $_POST['name'];
         $password = $_POST['password'];
-        $gender = $_POST['gender'] ?? null;
+        $gender = $_POST['gender'];
         $degree = $_POST['degree'];
-        $experience = (int) $_POST['experience']; // Make sure it's an integer
+        $experience = (int) $_POST['experience']; // ensure integer
         $bio = $_POST['bio'];
         $fee = $_POST['fee'];
         $specialty = $_POST['specialty'];
         $address = $_POST['address'];
         $availability = $_POST['availability'];
+        
+
+        // $photo = $_POST['photo'];
 
         $encodedPassword = base64_encode($password);
-        $profile_image = 'default_profile.jpg';
+        $imagePath = null;
+
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = 'public/image/';
+            $originalName = basename($_FILES['image']['name']);
+            $imageName = uniqid('book_') . '_' . $originalName;
+            $targetPath = $uploadDir . $imageName;
+
+
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+
+            
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
+                $imagePath = $targetPath;
+            } else {
+                setMessage('error', ' Failed to move uploaded file.');
+                return;
+            }
+        } else {
+            setMessage('error', ' Image not uploaded or error occurred.');
+            return;
+        }
 
         // Create user
         $user = new UserModel();
         $user->setName($name);
         $user->setEmail($email);
         $user->setPhone($phone);
-        $user->setGender($gender); // Now accepts NULL if not set
+        $user->setGender($gender);
         $user->setPassword($encodedPassword);
-        $user->setProfileImage($profile_image);
+        $user->setProfileImage($imagePath);
         $user->setIsLogin(0);
         $user->setIsActive(0);
         $user->setIsConfirmed(0);
@@ -84,6 +112,7 @@ public function adddoctor()
 
         // Create doctor profile
         $doctor = new DoctorModel();
+        // $doctor=setId($id);
         $doctor->setDegree($degree);
         $doctor->setExperience($experience);
         $doctor->setBio($bio);
@@ -103,48 +132,47 @@ public function adddoctor()
             redirect('admin/adddoctor');
         }
     } else {
-        // GET Request – Show the form
         $this->view('admin/adddoctor');
     }
 }
 
-  public function doctorlist()
+
+    public function doctorlist()
+    {
+        $doctorWithUserInfo = $this->db->readAll('doctor_view');
+        $data = [
+            'doctors' => $doctorWithUserInfo
+        ];
+
+        $this->view('admin/doctorlist', $data);
+    }
+
+  public function deletedoctor()
 {
-    $doctors = $this->db->readAll('doctorprofile');
-    $users = $this->db->readAll('users');
+    $user_id = $_POST['user_id'];
 
-    // Build a map of user_id to user info
-    $users_map = [];
-    foreach ($users as $user) {
-        $users_map[$user['id']] = $user;
+    if (!$user_id) {
+        setMessage('error', 'User ID missing.');
+        redirect('admin/doctorlist');
+        return;
     }
 
-    // Merge each doctor with their user info
-    $doctorWithUserInfo = [];
-    foreach ($doctors as $doctor) {
-        $user_id = $doctor['user_id'];
-        if (isset($users_map[$user_id])) {
-            $doctorWithUserInfo[] = array_merge($doctor, $users_map[$user_id]);
-        } else {
-            $doctorWithUserInfo[] = $doctor; // fallback if no user found
-        }
+    // 1. Find doctorprofile record by user_id (foreign key)
+    $doctorProfile = $this->db->columnFilter('doctorprofile', 'user_id', $user_id);
+
+    if ($doctorProfile && isset($doctorProfile['id'])) {
+        // 2. Delete doctorprofile by id
+        $this->db->delete('doctorprofile', $doctorProfile['id']);
     }
 
-    $data = [
-        'doctors' => $doctorWithUserInfo
-    ];
+    // 3. Delete user by id (user_id)
+    $this->db->delete('users', $user_id);
 
-    $this->view('admin/doctorlist', $data);
+    setMessage('success', 'Doctor successfully deleted.');
+    redirect('admin/doctorlist');
 }
 
-
-
-
-    // public function adddoctor()
-    // {
-        
-    //     $this->view('admin/adddoctor');
-    // }
+ 
      public function patientlist()
     {
         $this->view('admin/patientlist');
