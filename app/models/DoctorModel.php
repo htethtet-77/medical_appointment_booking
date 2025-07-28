@@ -9,7 +9,6 @@ class DoctorModel {
 
     private $specialty;
     private $address;
-    private $availability;
   
     private $user_id;
 
@@ -77,14 +76,6 @@ class DoctorModel {
     {
         return $this->address;
     }
-    public function setAvailability($availability)
-    {
-        $this->availability = $availability;
-    }
-    public function getAvailability()
-    {
-        return $this->availability;
-    }
     public function toArray()
     {
         return [
@@ -95,7 +86,6 @@ class DoctorModel {
             "fee" => $this->getFee(),
             "specialty"  => $this->getSpecialty(),
             "address"  => $this->getAddress(),
-            "availability"  => $this->getAvailability(),
             "user_id" => $this->getUserId()
         ];
     }

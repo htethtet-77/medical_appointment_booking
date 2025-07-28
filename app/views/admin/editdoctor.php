@@ -1,6 +1,6 @@
 <?php
-$selectedSpecialty = $_POST['specialty'] ?? '';
-$selectedDegree = $_POST['degree'] ?? '';
+$selectedSpecialty = $_POST['specialty'] ?? $data['doctorprofile']['specialty'] ?? '';
+$selectedDegree = $_POST['degree'] ?? $data['doctorprofile']['degree'] ?? '';
 
 $degreeOptions = [
     "General Physician" => ["MBBS", "MD", "DO"],
@@ -130,10 +130,10 @@ $degreeOptions = [
 </style>
 
 <div class="container">
-    <h1 class="page-title">ADD Doctor</h1>
+    <h1 class="page-title">Update Doctor</h1>
     <?php require APPROOT . '/views/components/auth_message.php'; ?>
 
-    <form action="<?php echo URLROOT; ?>/admin/adddoctor" method="POST" enctype="multipart/form-data">
+    <form action="<?php echo URLROOT; ?>/admin/updatedoctor"method="POST" enctype="multipart/form-data">
         <div class="form-section">
             <!-- Left Column -->
             <div class="form-column">
@@ -142,71 +142,66 @@ $degreeOptions = [
                 <div class="input-group">
                     <label for="profile-photo">Upload Photo</label>
                     <input type="file" name="image" id="profile-photo" accept="image/*">
+                    <?php if (!empty($data['users']['profile_image'])): ?>
+                        <img src="<?= URLROOT . '/' . $data['users']['profile_image'] ?>" alt="Current Image" style="width: 100px; margin-top: 10px;">
+                    <?php endif; ?>
                 </div>
+                <input type="hidden" name="id" value="<?= $data['users']['id'] ?>">
+
 
                 <!-- Name -->
                 <div class="input-group">
                     <label for="name">Your Name</label>
-                    <input type="text" name="name" id="name" value="<?= $_POST['name'] ?? '' ?>" required>
-                    <?php if (isset($data['name-err'])): ?>
-                        <p class="error-msg"><?= $data['name-err']; ?></p>
-                    <?php endif; ?>
+                    <input type="text" name="name" id="name" value="<?= htmlspecialchars($data['users']['name']) ?>" required>
                 </div>
 
                 <!-- Email -->
                 <div class="input-group">
                     <label for="doctor-email">Doctor Email</label>
-                    <input type="email" name="email" id="doctor-email" value="<?= $_POST['email'] ?? '' ?>" required>
-                    <?php if (isset($data['email-err'])): ?>
-                        <p class="error-msg"><?= $data['email-err']; ?></p>
-                    <?php endif; ?>
+                    <input type="email" name="email" id="doctor-email" value="<?= htmlspecialchars($data['users']['email']) ?>" required>
                 </div>
 
                 <!-- Gender -->
                 <div class="input-group">
                     <label>Gender:</label>
                     <div class="gender-row">
-                        <label><input type="radio" name="gender" value="male" <?= ($_POST['gender'] ?? '') == 'male' ? 'checked' : '' ?>> Male</label>
-                        <label><input type="radio" name="gender" value="female" <?= ($_POST['gender'] ?? '') == 'female' ? 'checked' : '' ?>> Female</label>
+                        <label><input type="radio" name="gender" value="male" <?= $data['users']['gender'] == 'male' ? 'checked' : '' ?>> Male</label>
+                        <label><input type="radio" name="gender" value="female" <?= $data['users']['gender'] == 'female' ? 'checked' : '' ?>> Female</label>
                     </div>
                 </div>
 
                 <!-- Phone -->
                 <div class="input-group">
                     <label for="phone">Phone Number</label>
-                    <input type="text" name="phone" id="phone" value="<?= $_POST['phone'] ?? '' ?>" required>
-                    <?php if (isset($data['phone-err'])): ?>
-                        <p class="error-msg"><?= $data['phone-err']; ?></p>
-                    <?php endif; ?>
+                    <input type="text" name="phone" id="phone" value="<?= htmlspecialchars($data['users']['phone']) ?>" required>
                 </div>
 
                 <!-- Password -->
                 <div class="input-group">
-                    <label for="password">Set Password</label>
-                    <input type="text" name="password" id="password" required>
-                    <?php if (isset($data['password-err'])): ?>
-                        <p class="error-msg"><?= $data['password-err']; ?></p>
-                    <?php endif; ?>
+                    <label for="password">Set New Password</label>
+                    <input type="text" name="password" id="password" value="<?= htmlspecialchars($data['users']['password']) ?>">
                 </div>
 
                 <!-- Experience -->
                 <div class="input-group">
                     <label for="experience">Experience</label>
-                    <input type="text" name="experience" id="experience" value="<?= $_POST['experience'] ?? '' ?>">
+                    <input type="text" name="experience" id="experience" value="<?= htmlspecialchars($data['doctorprofile']['experience']) ?>">
                 </div>
 
                 <!-- Bio -->
                 <div class="input-group">
-                    <label for="about-doctor">About Doctor</label>
-                    <input type="text" name="bio" id="about-doctor" value="<?= $_POST['bio'] ?? '' ?>">
+                    <label for="bio">About Doctor</label>
+                    <input type="text" name="bio" id="bio" value="<?= htmlspecialchars($data['doctorprofile']['bio']) ?>">
                 </div>
             </div>
 
             <!-- Right Column -->
             <div class="form-column">
+
+                <!-- Fee -->
                 <div class="input-group">
                     <label for="fees">Fees</label>
-                    <input type="text" name="fee" id="fees"  required>
+                    <input type="text" name="fee" id="fees" value="<?= htmlspecialchars($data['doctorprofile']['fee']) ?>" required>
                 </div>
 
                 <!-- Specialty -->
@@ -225,19 +220,19 @@ $degreeOptions = [
                     <label for="degree">Degree</label>
                     <select name="degree" id="degree" required>
                         <option value="">-- Select Degree --</option>
-                        <?php if ($selectedSpecialty && isset($degreeOptions[$selectedSpecialty])): ?>
-                            <?php foreach ($degreeOptions[$selectedSpecialty] as $deg): ?>
-                                <option value="<?= $deg ?>" <?= $selectedDegree == $deg ? 'selected' : '' ?>><?= $deg ?></option>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
+                        <?php foreach ($degreeOptions[$selectedSpecialty] ?? [] as $deg): ?>
+                            <option value="<?= $deg ?>" <?= $selectedDegree == $deg ? 'selected' : '' ?>><?= $deg ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
 
+                <!-- Address -->
                 <div class="input-group">
                     <label for="address">Address</label>
-                    <input type="text" name="address" id="address"  required>
+                    <input type="text" name="address" id="address" value="<?= htmlspecialchars($data['doctorprofile']['address']) ?>" required>
                 </div>
 
+                <!-- Availability -->
                 <div class="input-group">
                     <label for="availability">Working Day</label>
                     <select id="availability" name="availability" required>
@@ -245,25 +240,28 @@ $degreeOptions = [
                         <?php
                         $days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
                         foreach ($days as $day) {
-                            $selected = ($_POST['availability'] ?? '') == $day ? 'selected' : '';
+                            $selected = $data['timeslots']['day'] == $day ? 'selected' : '';
                             echo "<option value=\"$day\" $selected>$day</option>";
                         }
                         ?>
                     </select>
                 </div>
 
+                <!-- Start Time -->
                 <div class="input-group">
                     <label for="start-time">Start Time</label>
-                    <input type="time" id="start-time" name="start_time"   required>
+                    <input type="time" id="start-time" name="start_time" value="<?= date('H:i', strtotime($data['timeslots']['start_time'])) ?>" required>
                 </div>
 
+                <!-- End Time -->
                 <div class="input-group">
                     <label for="end-time">End Time</label>
-                    <input type="time" id="end-time" name="end_time"  required>
+                    <input type="time" id="end-time" name="end_time" value="<?= date('H:i', strtotime($data['timeslots']['end_time'])) ?>" required>
                 </div>
 
+                <!-- Submit -->
                 <div class="buttons">
-                    <button type="submit" class="btn add-btn">Add</button>
+                    <button type="submit" class="btn add-btn">Save</button>
                 </div>
             </div>
         </div>

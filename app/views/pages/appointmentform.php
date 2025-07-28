@@ -1,11 +1,11 @@
 <title><?php echo SITENAME;?></title>
 <?php require APPROOT . '/views/inc/navbar.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/appointmentform.css?v=2">
-    <form action="<?php echo URLROOT; ?>/appointment/appointmentform" method="POST" >
+    <form action="<?php echo URLROOT; ?>/appointment/book" method="POST" >
+
 
     <div class="appointmentform-container">
         <h2>Book Your Appointment</h2>
-            <input type="hidden" name="doctorId" value="doc_alex_smith_123"> 
 
             <fieldset class="form-section">
                 <legend>Your Information</legend>
@@ -21,38 +21,40 @@
                     <label for="patientPhone">Phone Number:</label>
                     <input type="tel" id="phone" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>" required>
                 </div>
+                 <div class="form-group">
+                    <label for="patientPhone">Gender:</label>
+                    <input type="text" id="gender" name="gender" value="<?php echo htmlspecialchars($user['gender']); ?>" required>
+                </div>
             </fieldset>
 
             <fieldset class="form-section">
                 <legend>Appointment Details</legend>
-                
-                <!-- <div class="form-group">
+            <input type="hidden" name="doctorId" value="<?php echo htmlspecialchars($data['doctor']['user_id']); ?>">
+
+                <div class="form-group">
                     <label>Selected Doctor:</label>
-                    <p class="selected-doctor-name">Dr. Alex Smith (General Physician)</p>
+                    <p class="selected-doctor-name">
+                   
+                    Dr. <?=  htmlspecialchars($data['doctor']['name']??'') ?>
+                    (<?= htmlspecialchars($data['doctor']['degree']??'')  ?>)
+               
+
+                    </p>
+                </div>
+                 <!-- <div class="form-group">
+                    <label for="appointmentDate">Doctor Fee</label>
+                     <input type="text" id="doctorFee" name="doctor_fee" value="<?= htmlspecialchars($data['doctor']['fee'] ?? '') ?>" >
                 </div> -->
-                 <div class="form-group">
-                    <label for="appointmentDate">Select Date:</label>
-                    <input type="text" id="appointmentDate" name="doc" required>
+
+                <div class="form-group">
+                    <label for="appointmentDate"> Available Day:</label>
+                    <input type="text" id="appointmentDate" name="date" value="<?= htmlspecialchars($data['doctor']['day'] ?? '')?>">
                 </div>
 
                 <div class="form-group">
-                    <label for="appointmentDate">Select Date:</label>
-                    <input type="date" id="appointmentDate" name="date" min="2025-07-24" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="appointmentTime">Select Time Slot:</label>
-                    <select id="appointmentTime" name="time" required>
-                        <option value="">-- Please select a time --</option>
-                        <option value="09:00">09:00 AM</option>
-                        <option value="09:30">09:30 AM</option>
-                        <option value="10:00">10:00 AM</option>
-                        <option value="10:30">10:30 AM</option>
-                        <option value="11:00">11:00 AM</option>
-                        <option value="11:30">11:30 AM</option>
-                        <option value="13:00">01:00 PM</option>
-                        <option value="13:30">01:30 PM</option>
-                    </select>
+                    <label for="appointmentTime">Doctor's Available Time :</label>
+                    <input type="text" id="appointmentTime" name="time"  value="<?= htmlspecialchars(($data['doctor']['start_time'] ?? '') . ' => ' . ($data['doctor']['end_time'] ?? '')) ?>">
+                    
                 </div>
 
                 <div class="form-group">
@@ -61,10 +63,10 @@
                 </div>
             </fieldset>
 
-            <form action="<?php echo URLROOT; ?>/pages/appointment" method="POST">
+            
                 <!-- other form inputs here -->
-                <button type="submit" class="submit-btn">Book Appointment</button>
-            </form>        
+        <button type="submit" class="submit-btn">Book Appointment</button>
+               
         </form>
     </div>
 </body>

@@ -98,6 +98,7 @@ class Database
     }
 }
 
+
     // Update Query
     public function update($table, $id, $data)
     {   

@@ -39,7 +39,7 @@
                 </span>
                 <span class="flex items-center">
                     <i class="fa-solid fa-briefcase text-black mr-2"></i>
-                    <?php echo htmlspecialchars($data['doctor']['experience'] ?? 'Experience N/A'); ?>
+                    Experience: <?php echo htmlspecialchars($data['doctor']['experience'] ?? 'Experience N/A') ."Years"; ?>
                 </span>
                 <span class="flex items-center">
                     <i class="fa-solid fa-dollar-sign text-black mr-2"></i>
@@ -47,7 +47,7 @@
                 </span>
                 <span class="flex items-center">
                     <i class="fa-solid fa-map-marker-alt text-black mr-2"></i>
-                    Location - <?php echo htmlspecialchars($data['doctor']['location'] ?? 'N/A'); ?>
+                    Location - <?php echo htmlspecialchars($data['doctor']['address'] ?? 'N/A'); ?>
                 </span>
             </div>
         </div>
@@ -68,25 +68,23 @@
             <h2 class="text-2xl font-semibold text-gray-800 mb-4">Availability</h2>
             <div class="space-y-2 text-gray-700 text-base mb-6">
                 <?php
-                if (!empty($data['availability'])) {
-                    $availability = json_decode($data['doctor']['availability'], true);
-                    if (is_array($availability)) {
-                        foreach ($availability as $day => $time) {
-                            echo '<p class="flex justify-between"><span>' . htmlspecialchars($day) . ':</span> <span>' . htmlspecialchars($time) . '</span></p>';
-                        }
-                    } else {
-                        echo '<p>' . htmlspecialchars($data['availability']) . '</p>';
-                    }
-                } else {
-                    echo '<p>Availability information not provided.</p>';
-                }
+                echo '<p>' . htmlspecialchars($data['doctor']['day'] ?? '') . '</p>';
+                echo '<p>' . 
+                    htmlspecialchars($data['doctor']['start_time'] ?? '') . 
+                    ' -- ' . 
+                    htmlspecialchars($data['doctor']['end_time'] ?? '') . 
+                    '</p>';
+
+
+                   
                 ?>
             </div>
-            <a href="<?php echo URLROOT; ?>/pages/appointmentform" id="bookAppointmentBtn" class="bg-[#0C969C] hover:bg-opacity-90 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300">
+            <?php $doctor_id=$data['doctor']['user_id'] ;?>
+            <a href="<?php echo URLROOT; ?>/appointment/appointmentform/<?php echo $doctor_id?>" id="bookAppointmentBtn" class="bg-[#0C969C] hover:bg-opacity-90 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300">
                 Book Appointment
             </a>
         </div>
-
+     
         <div class="bg-white shadow-lg rounded-xl p-6 md:col-span-2">
             <h2 class="text-2xl font-semibold text-gray-800 mb-4">Services</h2>
             <ul class="list-disc list-inside space-y-2 text-gray-700 text-base">

@@ -1,7 +1,7 @@
 
 <title><?php echo SITENAME; ?></title>
 <?php require APPROOT . '/views/inc/sidebar.php'; ?>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/doctorlist.css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/doctorlist.css?v=2">
 
 <div class="container">
     <div class="doctor-list-header">
@@ -26,7 +26,16 @@
                 <p>Location: <?php echo htmlspecialchars($doctor['address'] ?? ''); ?></p>
             </div>
             <div class="actions">
-                <form method="POST" action="<?php echo URLROOT; ?>/admin/deletedoctor" onsubmit="return confirm('Are you sure you want to delete this doctor?');">
+               <?php $user_id = $doctor['user_id'] ?? null;?>
+
+                <form method="POST" action="<?= URLROOT ?>/admin/editdoctor/<?= $user_id ?>" >
+
+                    <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($doctor['user_id']); ?>">
+
+                    <button type="submit" class="edit-btn">Edit</button>
+
+                    </form>
+                <form method="POST" action="<?php echo URLROOT; ?>/admin/deletedoctor" >
                     <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($doctor['user_id']); ?>">
 
                     <button type="submit" class="delete-btn">Delete</button>

@@ -86,7 +86,7 @@ class Category extends Controller
             $category->setDescription($description);
             $category->setTypeId($type_id);
 
-            $isUpdated = $this->db->update('categories', $category->getId(), $category->toArray());
+            $isUpdated = $this->db->update(table: 'categories', $category->getId(), $category->toArray());
             // echo $isUpdated;
             setMessage('success', 'Update successful!');
             redirect('category');

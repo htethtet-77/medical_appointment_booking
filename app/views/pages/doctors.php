@@ -49,6 +49,8 @@
         const showAllBtn = document.getElementById('showAllDoctorsBtn');
         const doctorsGrid = document.getElementById('doctorsGrid');
         const allDoctors = <?php echo json_encode($data['doctors'] ?? []); ?>;
+        console.log("Doctors Data:", allDoctors);
+
 
         function renderDoctors(filter = null) {
             doctorsGrid.innerHTML = '';
@@ -73,23 +75,29 @@
                         <img src="${imagePath}" alt="Doctor Image" class="w-24 h-24 object-cover" />
                     </div>
 
-
                     <h3 class="text-xl font-semibold text-gray-800">Dr. ${doc.name}</h3>
-                    <p class="text-gray-600">${doc.specialty}</p>
+                    <p class="text-gray-600">${doc.specialty}(${doc.degree})</p>
                     <p class="text-sm text-gray-500">${doc.experience ?? 'Experience N/A'} Years Experience</p>
-                    <button class="view-profile-btn" data-doctor-id="${doc.email}">
+                    <p class="text-sm text-gray-500">${doc.day}</p>
+                    <p class="text-sm text-gray-500">${doc.start_time}-${doc.end_time}</p>
+                   
+
+                    <button class="view-profile-btn" data-doctor-id="${doc.user_id}">
                         View Profile
                     </button>
                 `;
+                
+
                 doctorsGrid.appendChild(card);
             });
+
 
 
             // View Profile Button Click Handler
             document.querySelectorAll('.view-profile-btn').forEach(btn => {
                 btn.addEventListener('click', function () {
                     const id = this.dataset.doctorId;
-                    window.location.href = `<?php echo URLROOT; ?>/pages/doctorprofile/${id}`;
+                    window.location.href = `<?php echo URLROOT; ?>/patient/doctorprofile/${id}`;
                 });
             });
         }
