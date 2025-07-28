@@ -13,7 +13,7 @@ $user = $_SESSION['current_user'];
     <nav class="navbar-nav">
         <li><a href="<?php echo URLROOT; ?>/pages/home">HOME</a></li>
         <li><a href="<?php echo URLROOT; ?>/patient/doctors">DOCTORS</a></li>
-        <li><a href="<?php echo URLROOT; ?>/pages/appointment">APPOINTMENT</a></li>
+        <li><a href="<?php echo URLROOT; ?>/appointment/appointmentlist">APPOINTMENT</a></li>
         <li><a href="<?php echo URLROOT; ?>/pages/contactus">CONTACT</a></li>
         <li>
         <a href="<?php echo URLROOT; ?>/pages/userprofile">

@@ -63,13 +63,19 @@
                 doctorsGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">No doctors found for this specialty.</p>`;
                 return;
             }
+            function formatTime(timeStr) {
+                if (!timeStr) return '';
+                const date = new Date("1970-01-01T" + timeStr);
+                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
 
             doctorsToShow.forEach(doc => {
                 const card = document.createElement('div');
                 card.className = 'doctor-card';
 
                 const imagePath = '<?= URLROOT ?>/' + doc.profile_image;
-
+                const startTime = doc.start_time ? formatTime(doc.start_time) : '';
+                const endTime = doc.end_time ? formatTime(doc.end_time) : '';
                 card.innerHTML = `
                     <div class="doctor-image-placeholder">
                         <img src="${imagePath}" alt="Doctor Image" class="w-24 h-24 object-cover" />
@@ -79,9 +85,7 @@
                     <p class="text-gray-600">${doc.specialty}(${doc.degree})</p>
                     <p class="text-sm text-gray-500">${doc.experience ?? 'Experience N/A'} Years Experience</p>
                     <p class="text-sm text-gray-500">${doc.day}</p>
-                    <p class="text-sm text-gray-500">${doc.start_time}-${doc.end_time}</p>
-                   
-
+                    <p class="text-sm text-gray-500">${startTime} - ${endTime}</p>
                     <button class="view-profile-btn" data-doctor-id="${doc.user_id}">
                         View Profile
                     </button>

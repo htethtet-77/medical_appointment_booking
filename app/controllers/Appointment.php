@@ -30,7 +30,7 @@ class Appointment extends Controller
         $patientEmail = $_POST['email'] ?? null;
         $reason       = $_POST['reason'] ?? '';
             // $user_id=$_POST['user_id'];
-var_dump($_POST); 
+// var_dump($_POST); 
 
             // Get doctor details from doctor_view by doctor user_id
             $doctor = $this->db->columnFilter('doctor_view', 'user_id', $doctorId);
@@ -47,7 +47,9 @@ var_dump($_POST);
             // }
 
             // Get patient user by email from user table (not doctor_view)
-            $patient = $this->db->columnFilter('users', 'email', $patientEmail);
+             $user = $_SESSION['current_user'] ?? null;
+            $patient = $this->db->columnFilter('users', 'id', $user['id']);
+
             // var_dump($patient);
             // exit;
             if (!$patient) {
@@ -63,7 +65,8 @@ var_dump($_POST);
             $appointment->setStatusId(2);
 
             $appointment_id = $this->db->create('appointment', $appointment->toArray());
-
+// var_dump($appointment_id);
+// exit;
             if (!$appointment_id) {
                 setMessage('error', 'Failed to create appointment.');
                 redirect('pages/appointmentform');
@@ -75,12 +78,31 @@ var_dump($_POST);
 
 }
 
-        public function appointmentlist(){
-            $appointment=$this->db->readAll('doctor_view');
-            $data=[
-                'appointment'=>$appointment
-            ];
-            $this->view("pages/appointment",$data);
+       public function appointmentlist() {
+            
+// session_start();
+
+            $user = $_SESSION['current_user'] ;
+            // var_dump($user);
+            // exit;
+
+            $appointments = $this->db->columnFilterAll('appointment_view', 'patient_user_id', $user['id']);
+            // var_dump($appointments);
+            // exit;
+            // if (!empty($appointments) && isset($appointments['appointment_id'])) {
+            //     $appointments = [$appointments]; // Wrap single row into array
+            // }
+
+            $data = [
+                'appointments' => $appointments,
+                'user'=>$user
+                ];
+                // var_dump($data);
+                // exit;
+
+            $this->view("pages/appointment", $data);
         }
+
+    
 }
 ?>
