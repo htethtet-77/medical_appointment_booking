@@ -210,7 +210,7 @@ class Admin extends Controller
                 redirect('admin/doctorlist');
                 return;
             }
-            $user = $this->db->getById('users', $user_id); // <- FIX: should get 1 user only
+            $user = $this->db->getById('users', $user_id); // <- user only
             $doctor = $this->db->columnFilter('doctorprofile', 'user_id', $user_id); // <- for doctor
             $timeslot = $this->db->columnFilter('timeslots', 'user_id', $user_id); // <- for timeslot
 

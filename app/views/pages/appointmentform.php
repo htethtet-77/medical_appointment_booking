@@ -3,7 +3,6 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/appointmentform.css?v=2">
     <form action="<?php echo URLROOT; ?>/appointment/book" method="POST" >
 
-
     <div class="appointmentform-container">
         <h2>Book Your Appointment</h2>
 
@@ -65,7 +64,9 @@
 
             
                 <!-- other form inputs here -->
-        <button type="submit" class="submit-btn">Book Appointment</button>
+        <form action="<?php echo URLROOT; ?>/appointment/appointmentlist" method="POST">
+            <button type="submit" class="submit-btn">Book Appointment</button>
+        </form>
                
         </form>
     </div>

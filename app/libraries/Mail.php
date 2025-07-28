@@ -34,7 +34,7 @@ class Mail
             // Content
             $mail->isHTML(true);                                  // Set email format to HTML
             $mail->Subject = 'Verify Mail';
-            $mail->Body    = "<b> <a href='$name' target='_blank'> Click here </a></b> to verify your registration.";
+            $mail->Body    = "<b> <a href='$recipient_name' target='_blank'> Click here </a></b> to verify your registration.";
             $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
             $success = $mail->send();
