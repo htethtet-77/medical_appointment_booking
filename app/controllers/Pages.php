@@ -19,29 +19,18 @@ class Pages extends Controller
     }
     public function doctors()
     {
-        $doctorWithUserInfo = $this->db->readAll('doctor_view');
-        $data = [
-            'doctors' => $doctorWithUserInfo
-        ];
-
-        $this->view('pages/doctors', $data);
+        $this->view('pages/doctors');
     }
      public function appointment()
     {
         $this->view('pages/appointment');
     }
 
-  public function doctorprofile($email) {
-    // Replace 'doctor_id' with your actual PK column name
-    $doctor = $this->db->columnFilter('doctor_view', 'email', $email);
-
-    if (!$doctor) {
-        redirect('pages/notfound');
+    public function doctorprofile($id) 
+    {
+    
+        $this->view('pages/doctorprofile');
     }
-
-    $data = ['doctor' => $doctor];
-    $this->view('pages/doctorprofile', $data);
-}
 
 
     public function approve()
@@ -69,8 +58,6 @@ class Pages extends Controller
     {
         $this->view('pages/userappointment');
     }
-
-
 
     public function login()
     {

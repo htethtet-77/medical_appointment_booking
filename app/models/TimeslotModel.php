@@ -1,36 +1,43 @@
 <?php
 
 class TimeslotModel {
-    private $date;
-    private $time;
-    private $is_available;
+    private $day;
+    private $start_time;
+    private $end_time;
+    private $is_booked;
     private $user_id;
-
-    public function setDate($date)
-    {
-        $this->date = $date;
+    public function setDay($day){
+        $this->day=$day;
     }
-    public function getDate()
-    {
-        return $this->date;
+    public function getDay(){
+        return $this->day;
     }
 
-    public function setTime($time)
+    public function setStartTime($start_time)
     {
-        $this->time = $time;
+        $this->start_time = $start_time;
     }
-    public function getTime()
+    public function getStartTime()
     {
-        return $this->time;
+        return $this->start_time;
     }
 
-    public function setIsAvailable($is_available)
+    public function setEndTime($end_time)
     {
-        $this->is_available = $is_available;
+        $this->end_time = $end_time;
     }
-    public function getIsAvailable()
+    public function getEndTime()
     {
-        return $this->is_available;
+        return $this->end_time;
+    }
+
+    public function setIsBooked($is_booked)
+    {
+        $this->is_booked = $is_booked;
+    }
+    public function getIsBooked()
+    {
+        return $this->is_booked;
     }
 
     public function setUserId($user_id)
@@ -45,9 +52,10 @@ class TimeslotModel {
     public function toArray()
     {
         return [
-            "date" => $this->getDate(),
-            "time" => $this->getTime(),
-            "is_available" => $this->getIsAvailable(),
+            "day"=>$this->getDay(),
+            "start_time" => $this->getStartTime(),
+            "end_time" => $this->getEndTime(),
+            "is_booked" => $this->getIsBooked(),
             "user_id" => $this->getUserId()
         ];
     }

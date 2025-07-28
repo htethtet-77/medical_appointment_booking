@@ -1,20 +1,20 @@
 <?php
 
 class AppointmentModel {
-    private $id;
+    private $doctor_id;
     private $created_at;
     // private $appointment_fee;
     private $reason;
     private $timeslot_id;
     private $user_id;
      private $status_id;
- public function setId($id)
+ public function setDoctorId($doctor_id)
     {
-        $this->id = $id;
+        $this->doctor_id = $doctor_id;
     }
-    public function getId()
+    public function getDoctorId()
     {
-        return $this->id;
+        return $this->doctor_id;
     }
 
     public function setCreatedAt($created_at)
@@ -73,7 +73,7 @@ class AppointmentModel {
     public function toArray()
     {
         return [
-            "id"    => $this->getId(),
+            "doctor_id"    => $this->getDoctorId(),
             "created_at" => $this->getCreatedAt(),
             // "appointment_fee" => $this->getAppointmentFee(),
             "reason" => $this->getReason(),

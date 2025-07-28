@@ -135,6 +135,16 @@
             white-space: nowrap; /* Prevent button text from wrapping */
         }
 
+        .doctor-card .actions .edit-btn {
+            background-color: var(--button-bg);
+            color: var(--white);
+        }
+
+        .doctor-card .actions .edit-btn:hover {
+            background-color: var(--button-hover-bg);
+        }
+
+
 
         .doctor-card .actions .delete-btn {
             background-color: var(--delete-button-bg);
@@ -144,6 +154,8 @@
         .doctor-card .actions .delete-btn:hover {
             background-color: var(--delete-button-hover-bg);
         }
+
+
 
         .add-doctor-btn {
             position: fixed;
