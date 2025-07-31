@@ -10,106 +10,67 @@ class Doctor extends Controller
         $this->db = new Database();
     }
 
-     public function newappointment()
+    public function dash()
     {
-        $this->view('doctor/newappointment');
+        $doctor = $_SESSION['current_doctor']['user_id'];
+        $date = new DateTime();
+        $dateString = $date->format('Y-m-d');
+        
+        // Get all appointments for this doctor
+        $allAppointments = $this->db->columnFilterAll('appointment_view', 'doctor_user_id', $doctor);
+        
+        // Group appointments by date
+        $appointmentsByDate = [];
+        $totalAppointments = 0;
+        $todaysAppointments = 0;
+        
+        if (!empty($allAppointments)) {
+            foreach ($allAppointments as $appointment) {
+                $appointmentDate = date('Y-m-d', strtotime($appointment['created_at']));
+                
+                if (!isset($appointmentsByDate[$appointmentDate])) {
+                    $appointmentsByDate[$appointmentDate] = [];
+                }
+                
+                $appointmentsByDate[$appointmentDate][] = $appointment;
+                $totalAppointments++;
+                
+                // Count today's appointments
+                if ($appointmentDate === $dateString) {
+                    $todaysAppointments++;
+                }
+            }
+        }
+        $totalPatients = count(array_unique(array: array_column($allAppointments, 'patient_id')));
+
+        // Sort dates in descending order (newest first)
+        krsort($appointmentsByDate);
+        
+        $data = [
+            'appointmentsByDate' => $appointmentsByDate,
+            'todayDate' => $dateString,
+            'totalAppointments' => $totalAppointments,
+            'todaysAppointments' => $todaysAppointments,
+            'totalPatients' => $totalPatients// You can calculate this from your database
+        ];
+        
+        $this->view('doctor/dash', $data);
     }
-     public function dash()
-    {
-        $this->view('doctor/dash');
-    }
-    public function all()
-    {
-        $this->view('doctor/all');
-    }
+
+    // public function all()
+    // {
+    //     $doctor = $_SESSION['current_doctor']['user_id'];
+    //     $appointments = $this->db->columnFilterAll('appointment_view', 'doctor_user_id', $doctor);
+    //     $status = $this->db->getById('status', 2);
+    //     $data = [
+    //         'appointments' => $appointments,
+    //         'status' => $status
+    //     ];
+    //     $this->view('doctor/all', $data);
+    // }
+    
     public function profile()
     {
-
         $this->view('doctor/profile');
     }
-
-    // Show all doctors
-//     public function index()
-//     {
-//         $doctors = $this->db->getAll('doctors');
-//         $this->view('pages/doctors/index', ['doctors' => $doctors]);
-//     }
-
-//     // Show doctor profile by ID
-//     public function profile($id)
-//     {
-//         $doctor = $this->db->getById('doctors', $id);
-
-//         if ($doctor) {
-//             $this->view('pages/doctorprofile', ['doctor' => $doctor]);
-//         } else {
-//             redirect('doctor/index');
-//         }
-//     }
-
-//     // Add new doctor form
-//     public function create()
-//     {
-//         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-//             $data = [
-//                 'name'        => $_POST['name'],
-//                 'specialty'   => $_POST['specialty'],
-//                 'qualification' => $_POST['qualification'],
-//                 'experience'  => $_POST['experience'],
-//                 'email'       => $_POST['email'],
-//                 'phone'       => $_POST['phone'],
-//                 'image'       => $_POST['image'] ?? '',
-//                 'description' => $_POST['description']
-//             ];
-
-//             if ($this->db->insert('doctors', $data)) {
-//                 redirect('doctor/index');
-//             } else {
-//                 $this->view('pages/doctors/create', ['error' => 'Failed to add doctor']);
-//             }
-//         } else {
-//             $this->view('pages/doctors/create');
-//         }
-//     }
-
-//     // Edit doctor form
-//     public function edit($id)
-//     {
-//         $doctor = $this->db->getById('doctors', $id);
-//         if (!$doctor) {
-//             redirect('doctor/index');
-//         }
-
-//         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-//             $data = [
-//                 'id'          => $id,
-//                 'name'        => $_POST['name'],
-//                 'specialty'   => $_POST['specialty'],
-//                 'qualification' => $_POST['qualification'],
-//                 'experience'  => $_POST['experience'],
-//                 'email'       => $_POST['email'],
-//                 'phone'       => $_POST['phone'],
-//                 'image'       => $_POST['image'] ?? '',
-//                 'description' => $_POST['description']
-//             ];
-
-//             if ($this->db->updateById('doctors', $id, $data)) {
-//                 redirect('doctor/index');
-//             } else {
-//                 $this->view('pages/doctors/edit', ['error' => 'Failed to update doctor', 'doctor' => $doctor]);
-//             }
-//         } else {
-//             $this->view('pages/doctors/edit', ['doctor' => $doctor]);
-//         }
-//     }
-
-//     // Delete doctor
-//     public function delete($id)
-//     {
-//         if ($this->db->deleteById('doctors', $id)) {
-//             redirect('doctor/index');
-//         } else {
-//             die('Delete failed.');
-//         }
-//     }
 }

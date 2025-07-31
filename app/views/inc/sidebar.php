@@ -6,8 +6,9 @@
 </head>
 <body>
 <?php 
-$name = $_SESSION['current_user'];
-?> 
+$isLoggedIn = isset($_SESSION['current_user']);
+$user = $isLoggedIn ? $_SESSION['current_user'] : null;
+?>
 <header class="navbar">
     <a href="#" class="logo">Dashboard</a>
 
@@ -16,8 +17,17 @@ $name = $_SESSION['current_user'];
         <li><a href="<?php echo URLROOT; ?>/admin/patientlist">PATIENTS</a></li>
          <li><a href="<?php echo URLROOT; ?>/admin/doctorlist">DOCTORS</a></li>
         <li><a href="<?php echo URLROOT; ?>/admin/appointmentview">APPOINTMENTS</a></li>
-        <li><i class="fas fa-user"></i> <span><?php echo htmlspecialchars($name['name']) ?></span></a></li>
-    </nav>
+            <?php if($isLoggedIn): ?>
+            <li>
+                    <i class="fas fa-user"></i>
+                    <span><?php echo htmlspecialchars($user['name']); ?></span>
+            
+            </li>
+            <li>
+                <a href="<?php echo URLROOT; ?>/auth/logout">Logout</a>
+            </li>
+        
+        <?php endif; ?>    </nav>
 </header>
 
 </body>

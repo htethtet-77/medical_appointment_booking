@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="reason">Reason for Visit (optional):</label>
+                    <label for="reason">Reason for Visit (Symptoms):</label>
                     <textarea id="reason" name="reason" rows="4" placeholder="Briefly describe your symptoms or reason for visit..."></textarea>
                 </div>
             </fieldset>

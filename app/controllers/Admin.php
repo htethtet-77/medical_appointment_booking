@@ -314,10 +314,10 @@ class Admin extends Controller
                 $doctor->setSpecialty($specialty);
                 $doctor->setAddress($address);
                 $doctor->setUserId($id);
-                $existingDoctor = $this->db->columnFilter('doctorprofile', 'user_id', $id);
-                if ($existingDoctor) {
-                    $this->db->update('doctorprofile', $existingDoctor['id'], $doctor->toArray());
-                }
+                    $existingDoctor = $this->db->columnFilter('doctorprofile', 'user_id', $id);
+    $existingDoctor
+        ? $this->db->update('doctorprofile', $existingDoctor['id'], $doctor->toArray())
+        : $this->db->create('doctorprofile', $doctor->toArray());
 
                 $timeslot=new TimeslotModel();
                 $timeslot->setDay($day);
@@ -352,48 +352,64 @@ class Admin extends Controller
  
         public function patientlist()
         {
-            $this->view('admin/patientlist');
+            $patient=$this->db->readAll("users");
+            $data=[
+                'user'=>$patient
+            ];
+            $this->view('admin/patientlist',$data);
         }
         public function appointmentview()
         {
-            $this->view('admin/appointmentview');
+            $appointments = $this->db->readAll('appointment_view');
+
+            $data = [
+                'appointments' => $appointments,
+                'todayDate'    => date('Y-m-d')
+            ];
+
+            $this->view('admin/appointmentview', $data);
         }
-    // public function doctorprofile($id) {
-    //     $doctorData = $this->db->selectWhere('doctors', 'id', $id);
-
-    //     if ($doctorData) {
-    //         $doctor = new Doctor();
-    //         $doctor->setId($doctorData[0]->id);
-    //         $doctor->setName($doctorData[0]->name);
-    //         $doctor->setSpecialty($doctorData[0]->specialty);
-    //         $doctor->setExperience($doctorData[0]->experience);
-    //         $doctor->setPhone($doctorData[0]->phone);
-    //         $doctor->setImage($doctorData[0]->image);
-    //         $doctor->setDescription($doctorData[0]->description);
-
-    //         $this->view('pages/doctorprofile', ['doctor' => $doctor]);
-    //     } else {
-    //         redirect('pages/doctors');
-    //     }
-    // }
-
-    // public function doctorList() {
-    //     $doctors = $this->db->readWithCondition('users', 'role', 'doctor');
-    //     $this->view('admin/doctorlist', ['doctors' => $doctors]);
-    // }
 
         public function dashboard()
         {
-            $income = $this->db->incomeTransition();
-            $expense = $this->db->expenseTransition();
+            $appointments = $this->db->readAll('appointment_view');
+            
+            $appointmentsByDate = [];
+            $totalAppointments = 0;
+            $todaysAppointments = 0;
+            $dateString = date('Y-m-d'); // today
+
+            if (!empty($appointments)) {
+                foreach ($appointments as $appointment) {
+                    $appointmentDate = date('Y-m-d', strtotime($appointment['appointment_date'] ?? $appointment['created_at']));
+
+                    if ($appointmentDate === $dateString) {
+                        if (!isset($appointmentsByDate[$appointmentDate])) {
+                            $appointmentsByDate[$appointmentDate] = [];
+                        }
+                        $appointmentsByDate[$appointmentDate][] = $appointment;
+                        $todaysAppointments++;
+                    }
+
+                    $totalAppointments++;
+                }
+            }
+
+            // Count unique patients
+            $totalPatients = count(array_unique(array: array_column($appointments, 'patient_id')));
 
             $data = [
-                'income' => isset($income['amount']) ? $income : ['amount' => 0],
-                'expense' => isset($expense['amount']) ? $expense : ['amount' => 0]
+                'appointmentsByDate' => $appointmentsByDate,
+                'totalAppointments'  => $totalAppointments,
+                'todaysAppointments' => $todaysAppointments,
+                'totalPatients'      => $totalPatients,
+                'todayDate'          => $dateString
             ];
 
             $this->view('admin/dashboard', $data);
         }
+
+
 
 }
 

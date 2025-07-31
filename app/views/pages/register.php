@@ -63,7 +63,7 @@ if (session_status() === PHP_SESSION_NONE) {
   				<label for="togglePassword">Show Password</label>
 			</div>
 
-			<button type="submit">Register</button>
+			<button type="submit"><a href="<?php echo URLROOT;?>/auth/register"></a>Register</button>
 
 			<label class="alreadyRegi">Already registered? <a href="<?php echo URLROOT;?>/pages/login">Login</a></label>
 		</form>

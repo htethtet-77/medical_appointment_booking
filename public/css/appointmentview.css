@@ -25,6 +25,46 @@
             align-items: center;
             flex-wrap: wrap;
         }
+                /* Confirm Button */
+        .confirm-btn {
+            background-color: #38a169; /* Green */
+            color: white;
+            border: none;
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .confirm-btn:hover {
+            background-color: #2f855a;
+            transform: scale(1.05);
+        }
+
+        /* Delete Button */
+        .delete-btn {
+            background-color: #e53e3e; /* Red */
+            color: white;
+            border: none;
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .delete-btn:hover {
+            background-color: #c53030;
+            transform: scale(1.05);
+        }
+
+        /* Keep buttons side by side */
+        td form {
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
 
         .filter-group {
             display: flex;

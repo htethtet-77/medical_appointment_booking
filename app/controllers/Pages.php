@@ -11,10 +11,11 @@ class Pages extends Controller
 
     public function index()
     {
-        $this->view('pages/login');
+        $this->view('pages/home');
     }
     public function home()
     {
+    
         $this->view('pages/home');
     }
     public function doctors()
