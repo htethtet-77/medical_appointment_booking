@@ -31,7 +31,7 @@
                 </div>
                 <div class="detail-row">
                     <label for="exp">Exp :</label>
-                    <input type="text" class="readonly-box" value="<?php echo htmlspecialchars($doctor['experience']); ?>" readonly>
+                    <input type="text" class="readonly-box" value="<?php echo htmlspecialchars($doctor['experience']);  ?> Years" readonly>
                 </div>
                 <div class="detail-row">
                     <label for="location">Location :</label>

@@ -89,51 +89,67 @@ class Auth extends Controller
 
 
 
-public function login(){
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            if(isset($_POST['email']) && isset($_POST['password'])){
-                $email = $_POST['email'];
-                $password = $_POST['password'];
-                $password = base64_encode($password);
-                
-                $islogin = $this->db->columnFilter('users','email',$email);
+public function login() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['email']) && isset($_POST['password'])) {
+            $email = $_POST['email'];
+            $password = base64_encode($_POST['password']);  // Note: consider more secure hashing in production
             
-                $currentpassword = $islogin['password'];
-                $_SESSION['current_user'] = $islogin;
-
-
-                if($islogin && $password === $currentpassword){
-
-                    $this->db->setLogin($islogin['id']);
-
-
-                    if ($islogin) {
-                        
-                        switch ($islogin['type_id']) {
-                            case ROLE_ADMIN:
-                                redirect('admin/dashboard');
-                                break;
-
-                            case ROLE_DOCTOR:
-                                $doctor = $this->db->columnFilter('doctor_view','user_id',$islogin['id']);
-                                $_SESSION['current_doctor'] =$doctor;
-                                redirect('doctor/dash');
-                                break;
-                            case ROLE_PATIENT:
-                                redirect('pages/home');
-                                break;
-
-                            default:
-                                // Optional: handle unknown roles
-                                setMessage('error','Invalid Username & Password');
-                                redirect('pages/login');
-                                break;
-                        }
-                    }
-                }
+            $user = $this->db->columnFilter('users', 'email', $email);
+            
+            if (!$user) {
+                // User not found
+                setMessage('error', 'Invalid email or password.');
+                redirect('pages/login');
+                return;
             }
+
+            if ($password !== $user['password']) {
+                // Password incorrect
+                setMessage('error', 'Invalid email or password.');
+                redirect('pages/login');
+                return;
+            }
+
+            // Credentials are valid, set session and login
+            $_SESSION['current_user'] = $user;
+            $this->db->setLogin($user['id']);
+
+            // Redirect by role
+            switch ($user['type_id']) {
+                case ROLE_ADMIN:
+                    redirect('admin/dashboard');
+                    break;
+
+                case ROLE_DOCTOR:
+                    $doctor = $this->db->columnFilter('doctor_view', 'user_id', $user['id']);
+                    if (!$doctor) {
+                        setMessage('error', 'Doctor profile not found.');
+                        redirect('pages/login');
+                        exit;
+                    }
+                    $_SESSION['current_doctor'] = $doctor;
+                    redirect('doctor/dash');
+                    break;
+
+                case ROLE_PATIENT:
+                    redirect('patient/doctors');
+                    break;
+
+                default:
+                    setMessage('error', 'Invalid user role.');
+                    redirect('pages/login');
+                    break;
+            }
+        } else {
+            setMessage('error', 'Please fill in both email and password.');
+            redirect('pages/login');
         }
+    } else {
+        // If GET request, show login form
+        $this->view('pages/login');
     }
+}
 
     // function logout($id)
     // {

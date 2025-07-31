@@ -11,7 +11,7 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>/vendor/css-hamburgers/hamburgers.min.css">
 	<!-- <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>/vendor/select2/select2.min.css"> -->
 	<link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>/css/util.css">
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/home.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/home.css?v=2">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/doctorpage.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/userprofile.css">
 
@@ -19,17 +19,15 @@
     
     <!-- Doctor -->
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/newappointment.css">
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/all.css">
+    <!-- <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/all.css"> -->
 
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/profile.css">
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dash.css?v=2">
 
 
 
     <!-- admin -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/adddoctor.css"> -->
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dashboard.css?v=2">
 
 
     <!-- Home -->

@@ -29,7 +29,7 @@
             border-radius: 0.75rem; /* rounded-xl */
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* shadow-lg */
             padding: 2.5rem;
-            max-width: 900px; /* Max width for the entire profile card */
+           -width: 900px; /* Max width for the entire profile card */
             width: 95%; /* Responsive width */
             margin: 2rem auto; /* Center the container with vertical margin */
         }

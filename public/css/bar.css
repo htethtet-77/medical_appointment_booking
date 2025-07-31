@@ -50,6 +50,12 @@
         .navbar-nav a:hover {
             color: #d1d9e0; /* Lighter shade on hover */
         }
+         /* Active Link Style */
+        .navbar-nav a.active {
+            color: #FFD700;
+            font-weight: 600;
+            border-bottom: 2px solid #FFD700;
+        }
 
         /* Toggle Button for Mobile */
         .navbar-toggle {

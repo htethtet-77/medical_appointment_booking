@@ -2,7 +2,28 @@
 <?php require APPROOT . '/views/inc/navbar.php'; ?>
 <!-- Tailwind CSS CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
+ <?php
+       
+        if (isset($_SESSION['error'])) {
+            echo '
+            <div class="max-w-lg mx-auto mt-6 flex items-center justify-between p-4 border border-red-300 text-red-700 bg-red-100 rounded-lg shadow-md transition transform hover:scale-[1.01]">
+                <span class="font-medium">'.htmlspecialchars($_SESSION['error']).'</span>
+                <button onclick="this.parentElement.remove();" 
+                    class="text-red-700 hover:text-red-900 font-bold text-xl leading-none">&times;</button>
+            </div>';
+            unset($_SESSION['error']);
+        }
 
+        if (isset($_SESSION['success'])) {
+            echo '
+            <div class="max-w-lg mx-auto mt-6 flex items-center justify-between p-4 border border-green-300 text-green-700 bg-green-100 rounded-lg shadow-md transition transform hover:scale-[1.01]">
+                <span class="font-medium">'.htmlspecialchars($_SESSION['success']).'</span>
+                <button onclick="this.parentElement.remove();" 
+                    class="text-green-700 hover:text-green-900 font-bold text-xl leading-none">&times;</button>
+            </div>';
+            unset($_SESSION['success']);
+        }
+        ?>
 <main class="py-10 px-4">
     <div class="container mx-auto max-w-6xl">
         <h1 class="text-3xl font-bold text-gray-800 mb-10 text-center">
@@ -12,19 +33,19 @@
         <!-- Specialty Categories -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
             <div class="specialty-category-card" data-specialty="General Physician">
-                <i class="fas fa-stethoscope specialty-category-icon text-blue-500"></i>
+                <i class="fas fa-stethoscope specialty-category-icon text-500"></i>
                 <span class="font-semibold text-gray-700">General Physician</span>
             </div>
             <div class="specialty-category-card" data-specialty="Pediatrician">
-                <i class="fas fa-baby specialty-category-icon text-pink-500"></i>
+                <i class="fas fa-baby specialty-category-icon text-500"></i>
                 <span class="font-semibold text-gray-700">Pediatrician</span>
             </div>
             <div class="specialty-category-card" data-specialty="Dermatologist">
-                <i class="fas fa-hand-sparkles specialty-category-icon text-yellow-500"></i>
+                <i class="fas fa-hand-sparkles specialty-category-icon text-500"></i>
                 <span class="font-semibold text-gray-700">Dermatologist</span>
             </div>
             <div class="specialty-category-card" data-specialty="Dentist">
-                <i class="fas fa-tooth specialty-category-icon text-green-500"></i>
+                <i class="fas fa-tooth specialty-category-icon text-500"></i>
                 <span class="font-semibold text-gray-700">Dentist</span>
             </div>
         </div>
