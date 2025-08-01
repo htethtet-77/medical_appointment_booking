@@ -30,15 +30,18 @@
                     <?php if(!empty($data['user'])): ?>
                         <?php foreach($data['user'] as $patient): ?>
                             <tr>
-                                <td><strong>#<?php echo $i++; ?></strong></td>
+                                <td><strong><?php echo $i++; ?></strong></td>
                                 <td><?php echo htmlspecialchars($patient['name']); ?></td>
                                 <td><?php echo htmlspecialchars($patient['gender']); ?></td>
                                 <td><?php echo htmlspecialchars($patient['email']); ?></td>
 
                                 <td><?php echo htmlspecialchars($patient['phone']); ?></td>
-                                <td>
-                                    <a href="<?php echo URLROOT ?>/pages/userprofile/<?php echo $patient['id']; ?>" class="view-btn">View</a>
+                               <td>
+                                    <span style="color: <?= $patient['is_login'] == 1 ? 'green' : 'red'; ?>; font-weight: bold;">
+                                        <?= $patient['is_login'] == 1 ? 'Active' : 'Not Active'; ?>
+                                    </span>
                                 </td>
+
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>

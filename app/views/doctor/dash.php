@@ -1,7 +1,7 @@
 
 <?php require APPROOT . '/views/inc/doctorbar.php'; ?>
 
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dash.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dash.css?v=2">
 
 <div class="dashboard-container">
     <div class="container">
@@ -72,7 +72,7 @@
                                                 
                                                 <td class="time-cell">
                                                     
-                                                    <?= date('g:i A', strtotime($appointment['start_time'])) ?>
+                                                    <?= date('g:i A', strtotime($appointment['appointment_time'])) ?>
                                                 </td>
                                                 <td>
                                                     <div class="patient-name">
@@ -94,7 +94,7 @@
                                                         <?= htmlspecialchars($appointment['reason']) ?>
                                                     </div>
                                                 </td>
-                                                                           <td>
+                                                 <td>
                                                 <div class="flex justify-between items-center mt-2">
                                                     <?php
                                                         $status = $appointment['status_name'] ?? 'Unknown';
@@ -116,13 +116,13 @@
                                                 <td class="action-cell">
                                                     <div class="action-buttons">
                                                         
-                                                        <button class="btn btn-view">
+                                                        <!-- <button class="btn btn-view">
                                                              View
-                                                        </button>
+                                                        </button> -->
                                                         <a href="<?php echo URLROOT;?>/appointment/confirm/<?php echo $appointment['appointment_id']; ?>" class="btn btn-confirm">
                                                             Confirm
                                                         </a>
-                                                        <a href="<?php echo URLROOT;?>/appointment/reject/<?php echo $appointment['appointment_id']; ?>" class="btn btn-confirm">
+                                                        <a href="<?php echo URLROOT;?>/appointment/reject/<?php echo $appointment['appointment_id']; ?>" class="btn btn-cancel">
                                                             Cancel
                                                         </a>
                                                     </div>

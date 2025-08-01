@@ -152,24 +152,7 @@ class Database
         return ($success) ? $row : [];
     }
 
-    public function columnFilterLatest($table, $column, $value, $orderBy = 'created_at')
-    {
-        // Ensure no backticks in the column name
-        $safeColumn = str_replace('`', '', $column);
-        $safeOrderBy = str_replace('`', '', $orderBy);
-
-        $sql = "SELECT * FROM {$table} 
-                WHERE `{$safeColumn}` = :value 
-                ORDER BY `{$safeOrderBy}` DESC 
-                LIMIT 1";
-
-        $stm = $this->pdo->prepare($sql);
-        $stm->bindValue(':value', $value);
-        $success = $stm->execute();
-        $row = $stm->fetch(PDO::FETCH_ASSOC);
-
-        return ($success && $row) ? $row : [];
-    }
+    
 
     public function columnFilterAll($table, $column, $value)
     {
@@ -181,24 +164,22 @@ class Database
         $rows = $stm->fetchAll(PDO::FETCH_ASSOC);
         return ($success) ? $rows : [];
     }
-    public function getBookedTimes($doctorId, $date)
+    public function customQuery($sql, $params = [])
     {
-        $dayName = date('l', strtotime($date)); // convert date to day name like 'Monday'
-
-        $sql = "SELECT ts.start_time AS appointment_time
-                FROM appointment a
-                JOIN timeslots ts ON a.timeslot_id = ts.id
-                WHERE a.doctor_id = :doctor_id
-                AND ts.day = :day";
-
-        $stm = $this->pdo->prepare($sql);
-        $stm->bindValue(':doctor_id', $doctorId);
-        $stm->bindValue(':day', $dayName);
-        $success = $stm->execute();
-
-        $rows = $stm->fetchAll(PDO::FETCH_ASSOC);
-        return ($success) ? $rows : [];
+        try {
+            $stm = $this->pdo->prepare($sql);
+            foreach ($params as $key => $value) {
+                // Numeric keys are 0-based but PDO expects 1-based
+                $stm->bindValue(is_int($key) ? $key + 1 : ':' . $key, $value);
+            }
+            $stm->execute();
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "CustomQuery Error: " . $e->getMessage();
+            return [];
+        }
     }
+
 
 
     public function loginCheck($email, $password)
@@ -309,13 +290,13 @@ class Database
             echo($e);
         }
     }
-    public function deletedoc($table, $value, $column = 'id')
-{
-    $sql = "DELETE FROM {$table} WHERE {$column} = :value";
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->bindValue(':value', $value);
-    return $stmt->execute();
-}
+        public function deletedoc($table, $value, $column = 'id')
+    {
+        $sql = "DELETE FROM {$table} WHERE {$column} = :value";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':value', $value);
+        return $stmt->execute();
+    }
 
 
 

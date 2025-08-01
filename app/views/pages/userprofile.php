@@ -10,8 +10,8 @@
                     <div class="profile-image-placeholder">
                         <i class="fas fa-image"></i>
                     </div>
-                    <a href="<?php echo URLROOT;?>/pages/userappointment" class="appointment-history-button">
-                        Appointment History</a>
+                    <!-- <a href="<?php echo URLROOT;?>/pages/userappointment" class="appointment-history-button">
+                        Appointment History</a> -->
                 </div>
                 <div class="profile-right">
                     <div class="profile-info-group">

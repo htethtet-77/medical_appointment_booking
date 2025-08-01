@@ -75,10 +75,13 @@
                                 </h3>
                                 <p class="text-gray-600"><?= htmlspecialchars($appointment['specialty'] ?? '') ?></p>
                                 <p class="text-gray-700 mt-2">
-                                    <?= htmlspecialchars($appointment['day'] ?? '') ?>, 
+                                    Available: <?= htmlspecialchars($appointment['day'] ?? '') ?>, 
                                     <?= !empty($appointment['start_time']) ? date("h:i A", strtotime($appointment['start_time'])) : '' ?>
                                     -
                                     <?= !empty($appointment['end_time']) ? date("h:i A", strtotime($appointment['end_time'])) : '' ?>
+                                </p>
+                                <p class="text-gray-700 mt-2">
+                                    Appointment Time: <?= !empty($appointment['appointment_time']) ? date("h:i A", strtotime($appointment['appointment_time'])) : '' ?>
                                 </p>
                                 <p class="text-gray-700">
                                     Consultation Fee: 

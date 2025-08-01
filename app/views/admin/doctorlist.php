@@ -2,6 +2,17 @@
 <title><?php echo SITENAME; ?></title>
 <?php require APPROOT . '/views/inc/sidebar.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/doctorlist.css?v=2">
+<?php
+if (isset($_SESSION['error'])) {
+    echo '<div>'.htmlspecialchars($_SESSION['error']).'</div>';
+    unset($_SESSION['error']);
+}
+
+if (isset($_SESSION['success'])) {
+    echo '<div>'.htmlspecialchars($_SESSION['success']).'</div>';
+    unset($_SESSION['success']);
+}
+?>
 
 <div class="container">
     <div class="doctor-list-header">

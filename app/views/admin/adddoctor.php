@@ -12,7 +12,28 @@ $degreeOptions = [
 
 <title><?php echo SITENAME; ?></title>
 <?php require APPROOT . '/views/inc/sidebar.php'; ?>
+ <?php
+       
+        if (isset($_SESSION['error'])) {
+            echo '
+            <div class="max-w-lg mx-auto mt-6 flex items-center justify-between p-4 border border-red-300 text-red-700 bg-red-100 rounded-lg shadow-md transition transform hover:scale-[1.01]">
+                <span class="font-medium">'.htmlspecialchars($_SESSION['error']).'</span>
+                <button onclick="this.parentElement.remove();" 
+                    class="text-red-700 hover:text-red-900 font-bold text-xl leading-none">&times;</button>
+            </div>';
+            unset($_SESSION['error']);
+        }
 
+        if (isset($_SESSION['success'])) {
+            echo '
+            <div class="max-w-lg mx-auto mt-6 flex items-center justify-between p-4 border border-green-300 text-green-700 bg-green-100 rounded-lg shadow-md transition transform hover:scale-[1.01]">
+                <span class="font-medium">'.htmlspecialchars($_SESSION['success']).'</span>
+                <button onclick="this.parentElement.remove();" 
+                    class="text-green-700 hover:text-green-900 font-bold text-xl leading-none">&times;</button>
+            </div>';
+            unset($_SESSION['success']);
+        }
+        ?>
 <style>
     html, body {
         height: 100%;
@@ -146,7 +167,7 @@ $degreeOptions = [
 
                 <!-- Name -->
                 <div class="input-group">
-                    <label for="name">Your Name</label>
+                    <label for="name">Doctor Name</label>
                     <input type="text" name="name" id="name" value="<?= $_POST['name'] ?? '' ?>" required>
                     <?php if (isset($data['name-err'])): ?>
                         <p class="error-msg"><?= $data['name-err']; ?></p>
