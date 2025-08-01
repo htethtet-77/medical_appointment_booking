@@ -1,5 +1,6 @@
 <?php require APPROOT . '/views/inc/sidebar.php'; ?>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dash.css">
+
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dashboard.css?v=7">
 
 <div class="dashboard-container">
     <div class="container">
@@ -38,25 +39,39 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>Time</th>
                             <th>Patient Name</th>
+                            <th>Doctor</th>
                             <th>Contact Information</th>
                             <th>Reason</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th class="status">Status</th>
+                           
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($appointments as $appointment): ?>
                             <tr>
-                                <td><?= date('g:i A', strtotime($appointment['start_time'])) ?></td>
-                                <td><?= htmlspecialchars($appointment['patient_name']) ?></td>
+                                <td class="time-cell">
+                                    <?= date('g:i A', strtotime($appointment['appointment_time'])) ?>
+                                    </td>                                
                                 <td>
-                                    <div><?= htmlspecialchars($appointment['patient_email']) ?></div>
-                                    <div><?= htmlspecialchars($appointment['patient_phone']) ?></div>
+                                    <div class="patient-name"><?= htmlspecialchars($appointment['patient_name']) ?></div>
                                 </td>
-                                <td><?= htmlspecialchars($appointment['reason']) ?></td>
                                 <td>
+                                    <div class="patient-name">Dr.<?= htmlspecialchars($appointment['doctor_name']) ?></div>
+                                </td>
+                                <td>
+                                    <div class="contact-item email-item">
+                                        <?= htmlspecialchars($appointment['patient_email']) ?>
+                                    </div>
+                                </td>
+                                <td class="reason-cell">
+                                    <div class="reason-text">
+                                         <?= htmlspecialchars($appointment['reason']) ?>
+                                        </div>
+                                    </td>
+                                    <td>
                                     <?php
                                         $status = $appointment['status_name'] ?? 'Unknown';
                                         $badgeClasses = [
@@ -70,9 +85,7 @@
                                     ?>
                                     <span class="<?= $colorClass ?> status-badge"><?= htmlspecialchars($status) ?></span>
                                 </td>
-                                <td>
-                                 
-                                </td>
+                            
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

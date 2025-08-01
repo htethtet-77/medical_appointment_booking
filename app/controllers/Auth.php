@@ -92,6 +92,7 @@ class Auth extends Controller
 public function login() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['email']) && isset($_POST['password'])) {
+         
             $email = $_POST['email'];
             $password = base64_encode($_POST['password']);  // Note: consider more secure hashing in production
             
@@ -112,7 +113,7 @@ public function login() {
             }
 
             // Credentials are valid, set session and login
-            $_SESSION['current_user'] = $user;
+              $_SESSION['current_user'] =$user;
             $this->db->setLogin($user['id']);
 
             // Redirect by role
@@ -133,6 +134,7 @@ public function login() {
                     break;
 
                 case ROLE_PATIENT:
+                
                     redirect('patient/doctors');
                     break;
 

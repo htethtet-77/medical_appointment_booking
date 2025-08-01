@@ -9,7 +9,7 @@
         <div class="profile-content">
             <div class="profile-sidebar">
                 <div class="profile-picture">
-                    <i class="fas fa-image"></i>
+                <img src="/<?= htmlspecialchars($doctor['profile_image'])?>" alt="Doctor Image" class="w-full h-full object-cover" />
                 </div>
             </div>
             <div class="profile-details">
@@ -19,7 +19,7 @@
                 </div>
                 <div class="detail-row">
                     <label for="specialty">Specialty:</label>
-                    <input type="text" class="readonly-box" value="<?php echo htmlspecialchars(string: $doctor['specialty']); ?>" readonly>
+                    <input type="text" class="readonly-box" value="<?php echo htmlspecialchars( $doctor['specialty']); ?>" readonly>
                 </div>
                 <div class="detail-row">
                     <label for="email">Email:</label>
