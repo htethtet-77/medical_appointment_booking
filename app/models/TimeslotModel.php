@@ -4,14 +4,9 @@ class TimeslotModel {
     private $day;
     private $start_time;
     private $end_time;
-    private $is_booked;
+    // private $is_booked;
     private $user_id;
-    public function setDay($day){
-        $this->day=$day;
-    }
-    public function getDay(){
-        return $this->day;
-    }
+ 
 
     public function setStartTime($start_time)
     {
@@ -31,14 +26,14 @@ class TimeslotModel {
         return $this->end_time;
     }
 
-    public function setIsBooked($is_booked)
-    {
-        $this->is_booked = $is_booked;
-    }
-    public function getIsBooked()
-    {
-        return $this->is_booked;
-    }
+    // public function setIsBooked($is_booked)
+    // {
+    //     $this->is_booked = $is_booked;
+    // }
+    // public function getIsBooked()
+    // {
+    //     return $this->is_booked;
+    // }
 
     public function setUserId($user_id)
     {
@@ -52,10 +47,10 @@ class TimeslotModel {
     public function toArray()
     {
         return [
-            "day"=>$this->getDay(),
+          
             "start_time" => $this->getStartTime(),
             "end_time" => $this->getEndTime(),
-            "is_booked" => $this->getIsBooked(),
+            // "is_booked" => $this->getIsBooked(),
             "user_id" => $this->getUserId()
         ];
     }

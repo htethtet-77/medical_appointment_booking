@@ -1,260 +1,445 @@
 
-        :root {
-            --primary-color: #00796b; /* A teal/cyan color */
-            --secondary-color: #f0f0f0; /* Light grey for backgrounds */
-            --text-color: #333;
-            --light-text-color: #777;
-            --white: #fff;
-            --button-bg: #00796b;
-            --button-hover-bg: #004d40;
-            --delete-button-bg: #d32f2f; /* Red for delete */
-            --delete-button-hover-bg: #b71c1c;
-            --card-bg: #f5f5f5;
-            --border-color: #ddd;
-            --shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+:root {
+    --primary-green: #10B981;
+    --light-green: #D1FAE5;
+    --dark-green: #059669;
+    --green-hover: #047857;
+    --pure-white: #FFFFFF;
+    --light-gray: #F9FAFB;
+    --medium-gray: #9CA3AF;
+    --dark-gray: #374151;
+    --text-primary: #111827;
+    --text-secondary: #6B7280;
+    --border-light: #E5E7EB;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--secondary-color);
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        .doctor-list-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap; /* Allow header items to wrap */
-        }
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--light-gray);
+    min-height: 100vh;
+}
 
-        .doctor-list-header h1 {
-            font-size: 28px;
-            color: var(--primary-color);
-            margin: 0;
-        }
+/* Alert Styles */
+.alert {
+    padding: 1rem 1.25rem;
+    margin: 0 0 1.5rem 0;
+    border-radius: 0.75rem;
+    font-weight: 500;
+    animation: slideDown 0.3s ease;
+    border: 1px solid;
+}
 
-        .search-bar {
-            position: relative;
-            flex-grow: 1;
-            max-width: 400px; /* Limit search bar width */
-            margin-top: 15px; /* Add margin for smaller screens */
-        }
+.alert.error {
+    background-color: #FEF2F2;
+    color: #DC2626;
+    border-color: #FECACA;
+}
 
-        .search-bar input {
-            width: 100%;
-            padding: 12px 15px 12px 45px; /* Adjust padding for icon */
-            border: 1px solid var(--border-color);
-            border-radius: 25px;
-            font-size: 16px;
-            box-sizing: border-box; /* Include padding in width */
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
+.alert.success {
+    background-color: var(--light-green);
+    color: var(--dark-green);
+    border-color: #A7F3D0;
+}
 
-        .search-bar input:focus {
-            border-color: var(--primary-color);
-        }
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-        .search-bar .material-icons {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--light-text-color);
-        }
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--pure-white);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+}
 
-        .doctor-card {
-            display: flex;
-            display: flex;
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-            align-items: center;
-            flex-wrap: wrap; /* Allow card content to wrap */
-        }
+.header h1 {
+    color: var(--text-primary);
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
 
-        .doctor-card .avatar {
-            width: 60px;
-            height: 60px;
-            background-color: #ccc;
-            border-radius: 8px; /* Rounded corners, not circular */
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 20px;
-        }
+.header h1 i {
+    color: var(--primary-green);
+    font-size: 1.2em;
+}
 
-        .doctor-card .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Ensures image fills square without distortion */
-            display: block;
-        }
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
 
-        .doctor-card .info {
-            flex-grow: 1;
-            min-width: 200px; /* Ensure info has a minimum width */
-            margin-right: 20px; /* Space between info and buttons */
-        }
+.search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
 
-        .doctor-card .info h3 {
-            margin: 0 0 8px 0;
-            font-size: 22px;
-            color: var(--text-color);
-        }
+.search-bar i {
+    position: absolute;
+    left: 1rem;
+    color: var(--medium-gray);
+    z-index: 1;
+}
 
-        .doctor-card .info p {
-            margin: 4px 0;
-            font-size: 15px;
-            color: var(--light-text-color);
-        }
+#search-input {
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border: 2px solid var(--border-light);
+    border-radius: 2rem;
+    width: 100%;
+    min-width: 250px;
+    max-width: 350px;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+    background: var(--pure-white);
+}
 
-        .doctor-card .actions {
-            display: flex;
-            gap: 10px;
-            flex-shrink: 0; /* Prevent actions from shrinking */
-            margin-top: 15px; /* Add margin for smaller screens */
-        }
+#search-input:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
 
-        .doctor-card .actions button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 20px;
-            font-size: 15px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            white-space: nowrap; /* Prevent button text from wrapping */
-        }
+.add-btn {
+    background: var(--primary-green);
+    color: var(--pure-white);
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-md);
+    white-space: nowrap;
+}
 
-        .doctor-card .actions .edit-btn {
-            background-color: var(--button-bg);
-            color: var(--white);
-        }
+.add-btn:hover {
+    background: var(--dark-green);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
+}
 
-        .doctor-card .actions .edit-btn:hover {
-            background-color: var(--button-hover-bg);
-        }
+/* Flexible Grid */
+.doctors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    gap: 1.5rem;
+    padding: 0;
+}
 
+.doctor-card {
+    background: var(--pure-white);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-light);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
 
+.doctor-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
 
-        .doctor-card .actions .delete-btn {
-            background-color: var(--delete-button-bg);
-            color: var(--white);
-        }
+.doctor-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-green), var(--dark-green));
+}
 
-        .doctor-card .actions .delete-btn:hover {
-            background-color: var(--delete-button-hover-bg);
-        }
+/* Square Photo */
+.doctor-photo {
+    width: clamp(80px, 15vw, 100px);
+    height: clamp(80px, 15vw, 100px);
+    margin: 0 auto 1.25rem auto;
+    position: relative;
+    flex-shrink: 0;
+}
 
+.doctor-photo img,
+.photo-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.75rem;
+    object-fit: cover;
+    border: 3px solid var(--light-green);
+}
 
+.photo-placeholder {
+    background: linear-gradient(135deg, var(--light-green), #A7F3D0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    color: var(--primary-green);
+}
 
-        .add-doctor-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background-color: var(--primary-color);
-            color: var(--white);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 36px;
-            text-decoration: none;
-            box-shadow: var(--shadow);
-            transition: background-color 0.3s ease;
-            z-index: 1000;
-        }
+.doctor-info {
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
 
-        .add-doctor-btn:hover {
-            background-color: var(--button-hover-bg);
-        }
+.doctor-info h3 {
+    color: var(--text-primary);
+    font-size: clamp(1.1rem, 3vw, 1.25rem);
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+}
 
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    flex: 1;
+}
 
+.info-item {
+    text-align: left;
+    padding: 0.5rem;
+    background: var(--light-gray);
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--primary-green);
+}
 
-            .doctor-list-header {
-                flex-direction: column;
-                align-items: flex-start;
-                margin-bottom: 20px;
-            }
+.info-item .label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+}
 
-            .doctor-list-header h1 {
-                margin-bottom: 15px;
-            }
+.info-item .value {
+    display: block;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.875rem;
+    word-break: break-word;
+}
 
-            .search-bar {
-                width: 100%;
-                max-width: none; /* Remove max-width for full width */
-                margin-top: 0;
-            }
+.location {
+    background: var(--light-green);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    color: var(--dark-green);
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    font-weight: 500;
+}
 
-            .doctor-card {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 15px;
-            }
+.location i {
+    color: var(--primary-green);
+    flex-shrink: 0;
+}
 
-            .doctor-card .avatar {
-                margin-right: 0;
-                margin-bottom: 15px;
-                width: 60px;
-                height: 60px;
-                font-size: 30px;
-            }
+/* Actions */
+.doctor-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: auto;
+    padding-top: 1rem;
+}
 
-            .doctor-card .info {
-                width: 100%;
-                margin-right: 0;
-                margin-bottom: 15px;
-                min-width: unset;
-            }
+.btn {
+    width: clamp(40px, 8vw, 45px);
+    height: clamp(40px, 8vw, 45px);
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
 
-            .doctor-card .info h3 {
-                font-size: 20px;
-            }
+.btn-edit {
+    background: var(--primary-green);
+    color: var(--pure-white);
+}
 
-            .doctor-card .info p {
-                font-size: 14px;
-            }
+.btn-edit:hover {
+    background: var(--dark-green);
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+}
 
-            .doctor-card .actions {
-                width: 100%;
-                justify-content: space-around;
-                margin-top: 0;
-            }
+.btn-delete {
+    background: #DC2626;
+    color: var(--pure-white);
+}
 
-            .doctor-card .actions button {
-                flex: 1; /* Make buttons take equal width */
-                padding: 10px 15px;
-                font-size: 14px;
-            }
+.btn-delete:hover {
+    background: #B91C1C;
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+}
 
-            .add-doctor-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 30px;
-                bottom: 20px;
-                right: 20px;
-            }
-        }
+/* Empty State */
+.empty-state,
+.no-results {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-secondary);
+    background: var(--pure-white);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+}
 
-        @media (max-width: 480px) {
-            .add-doctor-btn {
-                width: 45px;
-                height: 45px;
-                font-size: 28px;
-            }
-        }
-   
+.empty-icon {
+    width: clamp(60px, 12vw, 80px);
+    height: clamp(60px, 12vw, 80px);
+    margin: 0 auto 1.25rem auto;
+    background: var(--light-green);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    color: var(--primary-green);
+}
+
+.empty-state h3,
+.no-results h3 {
+    color: var(--text-primary);
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    margin: 0 0 0.75rem 0;
+    font-weight: 600;
+}
+
+.empty-state p,
+.no-results p {
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    margin: 0 0 1.5rem 0;
+    color: var(--text-secondary);
+}
+
+.btn-primary {
+    background: var(--primary-green);
+    color: var(--pure-white);
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover {
+    background: var(--dark-green);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 0.75rem;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .search-container {
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+    }
+
+    #search-input {
+        min-width: auto;
+        width: 100%;
+    }
+
+    .doctors-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .doctor-actions {
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .doctor-card {
+        padding: 1rem;
+    }
+    
+    .header {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Large screen optimization */
+@media (min-width: 1200px) {
+    .doctors-grid {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem;
+    }
+    
+    .doctor-card {
+        padding: 2rem;
+    }
+}
+
+/* Ultra-wide screen support */
+@media (min-width: 1600px) {
+    .doctors-grid {
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    }
+}
