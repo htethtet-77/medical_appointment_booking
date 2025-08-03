@@ -40,6 +40,7 @@
                     <thead>
                         <tr>
                             <th></th>
+                            <th>Date</th>
                             <th>Time</th>
                             <th>Patient Name</th>
                             <th>Doctor</th>
@@ -52,6 +53,10 @@
                     <tbody>
                         <?php foreach ($appointments as $appointment): ?>
                             <tr>
+                                <td class="📅">
+                                    📅 <?= date('F j, Y', strtotime($appointment['appointment_date'])) ?>
+                                    </td>
+                                                
                                 <td class="time-cell">
                                     <?= date('g:i A', strtotime($appointment['appointment_time'])) ?>
                                     </td>                                

@@ -5,6 +5,8 @@
 <?php require APPROOT . '/views/inc/doctorbar.php'; ?>
 
     <div class="profile-container">
+        <a href="<?php echo URLROOT; ?>/doctor/dash" class="btn back-btn">⬅ Back</a>
+
         <h2>View Profile</h2>
         <div class="profile-content">
             <div class="profile-sidebar">

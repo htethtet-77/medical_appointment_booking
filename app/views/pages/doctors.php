@@ -105,7 +105,6 @@
                     <h3 class="text-xl font-semibold text-gray-800">Dr. ${doc.name}</h3>
                     <p class="text-gray-600">${doc.specialty}(${doc.degree})</p>
                     <p class="text-sm text-gray-500">${doc.experience ?? 'Experience N/A'} Years Experience</p>
-                    <p class="text-sm text-gray-500">${doc.day}</p>
                     <p class="text-sm text-gray-500">${startTime} - ${endTime}</p>
                     <button class="view-profile-btn" data-doctor-id="${doc.user_id}">
                         View Profile

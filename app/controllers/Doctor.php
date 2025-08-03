@@ -26,7 +26,7 @@ class Doctor extends Controller
         
         if (!empty($allAppointments)) {
             foreach ($allAppointments as $appointment) {
-                $appointmentDate = date('Y-m-d', strtotime($appointment['created_at']));
+                $appointmentDate = date('Y-m-d', strtotime($appointment['appointment_date']));
                 
                 if (!isset($appointmentsByDate[$appointmentDate])) {
                     $appointmentsByDate[$appointmentDate] = [];

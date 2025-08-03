@@ -58,7 +58,7 @@ class Admin extends Controller
             $fee = $_POST['fee'];
             $specialty = $_POST['specialty'];
             $address = $_POST['address'];
-            $day = $_POST['availability'];
+            // $day = $_POST['availability'];
             // $date = date('Y-m-d'); // Or $_POST['date'] if you're allowing custom dates
 
             $start_time =  $_POST['start_time'] . ':00';
@@ -142,10 +142,8 @@ class Admin extends Controller
             }
             //Create Doctor Timeslot
             $timeslot=new TimeslotModel();
-            $timeslot->setDay($day);
             $timeslot->setStartTime($start_time);
             $timeslot->setEndTime($end_time);
-            $timeslot->setIsBooked(0);//still not have appointment this time
             $timeslot->setUserId($user_id);
             $timeslot_id = $this->db->create('timeslots', $timeslot->toArray());
 
@@ -246,7 +244,7 @@ class Admin extends Controller
                 $fee = $_POST['fee'];
                 $specialty = $_POST['specialty'];
                 $address = $_POST['address'];
-                $day = $_POST['availability'];
+                // $day = $_POST['availability'];
                 $start_time = $_POST['start_time'] . ':00';
                 $end_time = $_POST['end_time'] . ':00';
 
@@ -293,7 +291,7 @@ class Admin extends Controller
                 $user->setIsActive(1);
                 $user->setIsConfirmed(1);
                 $user->setTypeId(2);
-                $user->setStatusId(2);
+                $user->setStatusId(6);
 
                 $this->db->update('users', $id, $user->toArray());
 
@@ -314,10 +312,10 @@ class Admin extends Controller
                 }
 
                 $timeslot = new TimeslotModel();
-                $timeslot->setDay($day);
+                // $timeslot->setDay($day);
                 $timeslot->setStartTime($start_time);
                 $timeslot->setEndTime($end_time);
-                $timeslot->setIsBooked(0);
+                // $timeslot->setIsBooked(0);
                 $timeslot->setUserId($id);
 
                 $timeslotRow = $this->db->columnFilter('timeslots', 'user_id', $id);
@@ -370,7 +368,7 @@ class Admin extends Controller
 
             if (!empty($appointments)) {
                 foreach ($appointments as $appointment) {
-                    $appointmentDate = date('Y-m-d', strtotime($appointment['appointment_date'] ?? $appointment['created_at']));
+                    $appointmentDate = date('Y-m-d', strtotime($appointment['appointment_date'] ));
 
                     if ($appointmentDate === $dateString) {
                         if (!isset($appointmentsByDate[$appointmentDate])) {

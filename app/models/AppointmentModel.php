@@ -3,10 +3,11 @@
 class AppointmentModel {
     private $doctor_id;
     private $created_at;
-    // private $appointment_fee;
+    private $appointment_date;
+
+    private $appointment_time;
     private $reason;
     private $timeslot_id;
-    private $appointment_time;
     private $user_id;
      private $status_id;
  public function setDoctorId($doctor_id)
@@ -25,6 +26,14 @@ class AppointmentModel {
     public function getCreatedAt()
     {
         return $this->created_at;
+    }
+     public function setAppointmentDate($appointment_date)
+    {
+        $this->appointment_date = $appointment_date;
+    }
+    public function getAppointmentDate()
+    {
+        return $this->appointment_date;
     }
 
     public function setAppointmentTime($appointment_time)
@@ -76,6 +85,7 @@ class AppointmentModel {
         return [
             "doctor_id"    => $this->getDoctorId(),
             "created_at" => $this->getCreatedAt(),
+            "appointment_date" => $this->getAppointmentDate(),
             "appointment_time" => $this->getAppointmentTime(),
             "reason" => $this->getReason(),
             "timeslot_id" => $this->getTimeslotId(),

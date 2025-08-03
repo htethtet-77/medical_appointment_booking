@@ -45,10 +45,13 @@
                      <input type="text" id="doctorFee" name="doctor_fee" value="<?= htmlspecialchars($data['doctor']['fee'] ?? '') ?>" >
                 </div> -->
 
-                <div class="form-group">
-                    <label for="appointmentDate"> Available Day:</label>
-                    <input type="text" id="appointmentDate" name="date" value="<?= htmlspecialchars($data['doctor']['day'] ?? '')?>">
+               <div class="form-group">
+                    <label for="appointmentDate">Appointment Date:</label>
+                    <input type="date" id="appointmentDate" name="appointment_date" 
+                        min="<?= date('Y-m-d'); ?>" required>
                 </div>
+
+
 
                <div class="form-group">
                 <label for="appointmentTime">Doctor's Available Time :</label>
@@ -64,22 +67,39 @@
             </div>
 
 
+                <div class="form-group">
+                    <label for="timeslot">Select Available Timeslot:</label>
+                    <select name="timeslot" id="timeslot" required>
+                        <option value="">-- Select Time --</option>
+                        <?php if (!empty($data['appointment_time'])): ?>
+                            <?php 
+                                $now = new DateTime(); // current time
+                                $hasAvailable = false;
+                            ?>
+                            <?php foreach ($data['appointment_time'] as $slot): ?>
+                                <?php 
+                                    $slotTime = new DateTime($slot); // works for 'HH:MM' or full datetime
+                                    if ($slotTime > $now): // only show future times
+                                        $formatted_slot = $slotTime->format("g:i A");
+                                        $hasAvailable = true;
+                                ?>
+                                        <option value="<?= htmlspecialchars($slot) ?>">
+                                            <?= htmlspecialchars($formatted_slot) ?>
+                                        </option>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
 
-                  <div class="form-group">
-                <label for="timeslot">Select Available Timeslot:</label>
-                <select name="timeslot" id="timeslot" required>
-                    <option value="">-- Select Time --</option>
-                    <?php if (!empty($data['appointment_time'])): ?>
-                        <?php foreach ($data['appointment_time'] as $slot): ?>
-                            <option value="<?= htmlspecialchars($slot) ?>">
-                                <?= htmlspecialchars($slot) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <option disabled>No timeslots available</option>
-                    <?php endif; ?>
-                </select>
-            </div>
+                            <?php if (!$hasAvailable): ?>
+                                <option disabled>No timeslots available</option>
+                            <?php endif; ?>
+
+                        <?php else: ?>
+                            <option disabled>No timeslots available</option>
+                        <?php endif; ?>
+                    </select>
+                </div>
+
+
 
                 <div class="form-group">
                     <label for="reason">Reason for Visit (Symptoms):</label>
