@@ -144,11 +144,7 @@ displayAlert('success', 'success');
                                 <span class="radio-custom"></span>
                                 <i class="fa fa-venus" aria-hidden="true"></i> Female
                             </label>
-                            <label class="radio-option">
-                                <input type="radio" name="gender" value="other" <?= $data['users']['gender'] == 'other' ? 'checked' : '' ?> required>
-                                <span class="radio-custom"></span>
-                                <i class="fa fa-genderless" aria-hidden="true"></i> Other
-                            </label>
+                       
                         </div>
                     </fieldset>
 
@@ -310,7 +306,7 @@ displayAlert('success', 'success');
 
 <style>
 :root {
-    --primary-green: #10B981;
+    --primary-green: #085a5e;
     --light-green: #D1FAE5;
     --dark-green: #059669;
     --green-hover: #047857;
@@ -1051,22 +1047,21 @@ function togglePassword() {
 }
 
 function resetForm() {
-    if (confirm('Are you sure you want to reset all changes? This will restore the original values.')) {
-        const form = document.querySelector('.doctor-form');
-        form.reset();
-        
-        // Reset photo preview
-        resetPhotoPreview();
-        
-        // Reset dropdowns
-        updateDegrees();
-        
-        // Clear validation messages
-        clearValidationMessages();
-        
-        // Show success message
-        showNotification('Form has been reset to original values', 'info');
-    }
+    // Remove the confirm dialog - directly reset the form
+    const form = document.querySelector('.doctor-form');
+    form.reset();
+    
+    // Reset photo preview
+    resetPhotoPreview();
+    
+    // Reset dropdowns
+    updateDegrees();
+    
+    // Clear validation messages
+    clearValidationMessages();
+    
+    // Show success message
+    showNotification('Form has been reset to original values', 'info');
 }
 
 function resetPhotoPreview() {
@@ -1245,12 +1240,12 @@ function handleFormSubmission(e) {
         return;
     }
     
-    // Show loading state
+    // Show loading state - removed any confirmation dialogs
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> Saving...';
     form.classList.add('form-loading');
     
-    // Submit form
+    // Submit form directly
     setTimeout(() => {
         form.submit();
     }, 500);
@@ -1343,25 +1338,6 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// Handle browser back button
-window.addEventListener('beforeunload', function(e) {
-    const form = document.querySelector('.doctor-form');
-    const formData = new FormData(form);
-    
-    // Check if form has been modified
-    let hasChanges = false;
-    for (let [key, value] of formData.entries()) {
-        if (key !== 'csrf_token' && key !== 'id') {
-            // Compare with original values (simplified check)
-            hasChanges = true;
-            break;
-        }
-    }
-    
-    if (hasChanges) {
-        e.preventDefault();
-        e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
-        return e.returnValue;
-    }
-});
+// Completely remove the beforeunload event listener
+// No more "leave site" warnings or confirmations
 </script>
