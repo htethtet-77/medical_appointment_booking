@@ -280,7 +280,7 @@ if (isset($_SESSION['success'])) {
 
 <style>
 :root {
-    --primary-green: #10B981;
+    --primary-green: #085a5e;
     --light-green: #D1FAE5;
     --dark-green: #059669;
     --green-hover: #047857;
@@ -844,30 +844,45 @@ document.getElementById('profile-photo').addEventListener('change', function(e) 
     }
 });
 
-// Auto-hide alerts
-setTimeout(function() {
-    const alerts = document.querySelectorAll('.alert');
-    alerts.forEach(alert => {
-        alert.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        alert.style.opacity = '0';
-        alert.style.transform = 'translateY(-10px)';
-        setTimeout(() => {
-            alert.remove();
-        }, 500);
-    });
-}, 5000);
-
-// Form validation enhancement
+// Form validation enhancement - NO ALERT BOXES
 document.querySelector('.doctor-form').addEventListener('submit', function(e) {
     const startTime = document.getElementById('start-time').value;
     const endTime = document.getElementById('end-time').value;
     
     if (startTime && endTime && startTime >= endTime) {
         e.preventDefault();
-        alert('End time must be after start time.');
+        // Show error message in the form instead of alert
+        showFormError('End time must be after start time.');
         return false;
     }
 });
+
+// Function to show error messages in the form
+function showFormError(message) {
+    // Create error notification
+    const notification = document.createElement('div');
+    notification.className = 'alert alert-error';
+    notification.innerHTML = `
+        <div class="alert-content">
+            <i class="fa fa-exclamation-circle"></i>
+            <span>${message}</span>
+            <button onclick="this.parentElement.parentElement.remove();" class="alert-close">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+    `;
+    
+    // Insert at the top of the form
+    const container = document.querySelector('.page-container');
+    container.insertBefore(notification, container.firstChild);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 5000);
+}
 
 document.addEventListener("DOMContentLoaded", updateDegrees);
 </script>

@@ -12,7 +12,7 @@ class UserModel
     private $is_confirmed;
     private $is_active;
     private $is_login;
-    // private $date;
+
     private $type_id;
     private $status_id;
     

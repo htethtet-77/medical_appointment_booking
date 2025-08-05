@@ -1,7 +1,7 @@
 <?php
 
 class TimeslotModel {
-    private $day;
+    // private $day;
     private $start_time;
     private $end_time;
     // private $is_booked;
