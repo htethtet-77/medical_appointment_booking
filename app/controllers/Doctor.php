@@ -6,6 +6,7 @@ class Doctor extends Controller
 
     public function __construct()
     {
+        
         $this->model('DoctorModel');
         $this->db = new Database();
     }

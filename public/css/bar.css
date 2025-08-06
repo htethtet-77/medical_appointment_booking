@@ -1,66 +1,63 @@
-           body {
+
+        body {
             margin: 0;
             font-family: 'Inter', Arial, sans-serif;
         }
 
         /* Navbar Container */
         .navbar {
-            background-color: #0A7075; /* Dark Teal background */
+            background-color: #0A7075;
             color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.8rem 1.5rem; /* Adjusted padding for better visual balance */
-            flex-wrap: wrap; /* Allows items to wrap on smaller screens */
-            position: relative; /* Needed for absolute positioning of dropdown menu */
-            z-index: 1000; /* Ensure navbar is on top */
+            padding: 0.8rem 1.5rem;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1000;
         }
 
-        /* Logo/Site Title */
         .navbar .logo {
-            font-size: 1.8rem; /* Slightly larger logo */
-            font-weight: 700; /* Bold font for the logo */
+            font-size: 1.8rem;
+            font-weight: 700;
             color: white;
             text-decoration: none;
-            display: flex; /* For aligning icon and text if you add one */
+            display: flex;
             align-items: center;
         }
 
-        /* Navigation Links List */
         .navbar-nav {
             display: flex;
-            list-style: none; /* Remove bullet points */
+            list-style: none;
             margin: 0;
             padding: 0;
-            gap: 2.0rem; /* Space between navigation items */
+            gap: 0.9rem;
         }
 
-        /* Individual Navigation Link */
         .navbar-nav a {
             color: white;
             text-decoration: none;
             font-weight: 500;
             font-size: 1rem;
-            padding: 0.5rem 0; /* Add vertical padding for clickable area */
-            transition: color 0.3s ease;
-            position: relative; /* For potential active/hover line */
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            border-radius: 5px;
         }
 
-        /* Hover effect for links */
         .navbar-nav a:hover {
-            color: #d1d9e0; /* Lighter shade on hover */
-        }
-         /* Active Link Style */
-        .navbar-nav a.active {
-            color: #FFD700;
-            font-weight: 600;
-            border-bottom: 2px solid #FFD700;
+            color: #d1d9e0;
         }
 
-        /* Toggle Button for Mobile */
+        /* Active state - ONLY color change */
+        .navbar-nav a.active {
+            color: #00eaffff !important;
+            font-weight: 700;
+        }
+
         .navbar-toggle {
-            display: none; /* Hidden by default on larger screens */
-            font-size: 2rem; /* Larger hamburger icon */
+            display: none;
+            font-size: 2rem;
             color: white;
             background: none;
             border: none;
@@ -68,111 +65,38 @@
             padding: 0.5rem;
         }
 
-        /* Responsive Styles */
         @media (max-width: 768px) {
             .navbar {
-                flex-wrap: nowrap; /* Prevent wrapping on main navbar elements */
+                flex-wrap: nowrap;
             }
 
             .navbar-toggle {
-                display: block; /* Show toggle button on small screens */
+                display: block;
             }
 
             .navbar-nav {
                 flex-direction: column;
-                align-items: flex-end; /* Align links to the right within the dropdown */
-                background-color: #0A7075; /* Background for dropdown menu */
+                align-items: flex-end;
+                background-color: #0A7075;
                 width: 100%;
                 position: absolute;
-                top: 100%; /* Position right below the navbar */
+                top: 100%;
                 left: 0;
                 padding: 1rem 1.5rem;
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                display: none; /* Hidden by default */
+                display: none;
                 transition: transform 0.3s ease-in-out;
-                transform: translateY(-100%); /* Start off-screen */
+                transform: translateY(-100%);
             }
 
             .navbar-nav.show {
-                display: flex; /* Show when 'show' class is added */
-                transform: translateY(0); /* Slide into view */
+                display: flex;
+                transform: translateY(0);
             }
 
             .navbar-nav li {
-                margin: 0.5rem 0; /* Vertical spacing for list items */
+                margin: 0.5rem 0;
                 width: 100%;
-                text-align: right; /* Align text within each link to the right */
+                text-align: right;
             }
         }
-   * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-    }
-
-    footer {
-      background-color: #fff;
-      padding: 40px 20px;
-      text-align: center;
-    }
-
-    .footer-icons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 200px;
-      margin-bottom: 20px;
-    }
-
-    .footer-box {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: #000;
-    }
-
-    .footer-icon {
-      font-size: 36px;
-      margin-bottom: 8px;
-    }
-
-    .footer-box p {
-      margin: 0;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .trusted-text {
-      font-size: 14px;
-      font-weight: 500;
-      color: #333;
-      margin-bottom: 16px;
-    }
-
-    .social-icons {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-
-    .social-icons a {
-      color: #000;
-      font-size: 18px;
-      text-decoration: none;
-      transition: opacity 0.3s ease;
-    }
-
-    .social-icons a:hover {
-      opacity: 0.7;
-    }
-
-    .copyright-text {
-      font-size: 12px;
-      color: #444;
-    }

@@ -333,14 +333,7 @@ displayAlert('success', 'success');
     box-sizing: border-box;
 }
 
-body {
-    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-    background: var(--light-gray);
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    line-height: 1.6;
-}
+
 
 .page-container {
     max-width: 1200px;
@@ -1037,11 +1030,11 @@ function togglePassword() {
     
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
-        passwordIcon.className = 'fa fa-eye-slash';
+        passwordIcon.className = 'fa fa-eye';
         passwordInput.setAttribute('aria-label', 'Password (visible)');
     } else {
         passwordInput.type = 'password';
-        passwordIcon.className = 'fa fa-eye';
+        passwordIcon.className = 'fa fa-eye-slash';
         passwordInput.setAttribute('aria-label', 'Password (hidden)');
     }
 }

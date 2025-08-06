@@ -161,14 +161,14 @@ public function appointmentform($doctor_id) {
 
         // Create appointment
         $appointment = new AppointmentModel();
-        $appointment->setCreatedAt(date('Y-m-d H:i:s'));
-        $appointment->setReason($reason);
-        $appointment->setTimeslotId($doctor['timeslot_id']);
-        $appointment->setAppointmentDate($appointmentDate);
-        $appointment->setAppointmentTime($timeslot_24h);
-        $appointment->setUserId($patient['id']);  // patient id
-        $appointment->setDoctorId($doctorId);     // doctor id
-        $appointment->setStatusId(2);             // pending
+        $appointment->created_at=date('Y-m-d H:i:s');
+        $appointment->reason=$reason;
+        $appointment->timeslot_id=$doctor['timeslot_id'];
+        $appointment->appointment_date=$appointmentDate;
+        $appointment->appointment_time=$timeslot_24h;
+        $appointment->user_id=$patient['id'];  // patient id
+        $appointment->doctor_id=$doctorId;     // doctor id
+        $appointment->status_id=2;             // pending
 
         $appointment_id = $this->db->create('appointment', $appointment->toArray());
 
@@ -237,14 +237,14 @@ public function appointmentform($doctor_id) {
     // var_dump($id);
     // exit;
             $appointment = new AppointmentModel();
-                $appointment->setCreatedAt($id['created_at']);
-                $appointment->setReason($id['reason']);
-                $appointment->setTimeslotId($id['timeslot_id']);
-                $appointment->setAppointmentDate($id['appointment_date']);
-                $appointment->setAppointmentTime($id['appointment_time']);
-                $appointment->setUserId($id['user_id']);  // patient id
-                $appointment->setDoctorId($id['doctor_id']);      // doctor id
-                $appointment->setStatusId(1);
+                $appointment->created_at=$id['created_at'];
+                $appointment->reason=$id['reason'];
+                $appointment->timeslot_id=$id['timeslot_id'];
+                $appointment->appointment_date=$id['appointment_date'];
+                $appointment->appointment_time=$id['appointment_time'];
+                $appointment->user_id=$id['user_id'];  // patient id
+                $appointment->doctor_id=$id['doctor_id'];      // doctor id
+                $appointment->status_id=1;
             $updated= $this->db->update('appointment',$id['id'],$appointment->toArray());
                 if(!$updated){
                     setMessage('error','Something Wrong');
@@ -259,14 +259,14 @@ public function appointmentform($doctor_id) {
         public function  reject($appointment_id){
             $id=$this->db->columnFilter('appointment','id', $appointment_id);
             $appointment = new AppointmentModel();
-                $appointment->setCreatedAt($id['created_at']);
-                $appointment->setReason($id['reason']);
-                $appointment->setTimeslotId($id['timeslot_id']);
-                $appointment->setAppointmentDate($id['appointment_date']);
-                $appointment->setAppointmentTime($id['appointment_time']);
-                $appointment->setUserId($id['user_id']);  // patient id
-                $appointment->setDoctorId($id['doctor_id']);      // doctor id
-                $appointment->setStatusId(3);
+                $appointment->created_at=$id['created_at'];
+                $appointment->reason=$id['reason'];
+                $appointment->timeslot_id=$id['timeslot_id'];
+                $appointment->appointment_date=$id['appointment_date'];
+                $appointment->appointment_time=$id['appointment_time'];
+                $appointment->user_id=$id['user_id'];  // patient id
+                $appointment->doctor_id=$id['doctor_id'];      // doctor id
+                $appointment->status_id=3;
                 $updated= $this->db->update('appointment',$id['id'],$appointment->toArray());
                 if(!$updated){
                     setMessage('error','Something Wrong');

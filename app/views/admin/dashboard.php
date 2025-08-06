@@ -1,6 +1,6 @@
 <?php require APPROOT . '/views/inc/sidebar.php'; ?>
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dashboard.css?v=7">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dashboard.css">
 
 <div class="dashboard-container">
     <div class="container">

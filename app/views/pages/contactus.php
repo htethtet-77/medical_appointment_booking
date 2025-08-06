@@ -66,7 +66,7 @@
                             <i class="fa-solid fa-map-marker-alt contact-info-icon"></i>
                             <div class="contact-info-text">
                                 <strong>Address</strong>
-                                <span>123 Main Street, NY</span>
+                                <span>123 Main Street, Yangon</span>
                             </div>
                         </div>
                     </div>

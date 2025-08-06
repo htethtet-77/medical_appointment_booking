@@ -57,15 +57,15 @@
                 </div>
                 <div class="doctor-card">
                     <div class="doctor-image-container">
-                        <img src="https://placehold.co/128x128/059669/ffffff?text=DR" alt="Dr. Sarah Johnson">
+                        <img src="https://plus.unsplash.com/premium_photo-1661580574627-9211124e5c3f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8ZG9jdG9yfGVufDB8fDB8fHww" alt="Dr. Sarah Johnson">
                     </div>
                     <h3>Dr. Sarah Johnson</h3>
-                    <p>Cardiologist</p>
+                    <p>Pediatrician</p>
                    
                 </div>
                 <div class="doctor-card">
                     <div class="doctor-image-container">
-                        <img src="https://placehold.co/128x128/dc2626/ffffff?text=DR" alt="Dr. Michael Chen">
+                        <img src="https://media.istockphoto.com/id/2158610739/photo/handsome-male-doctor-with-stethoscope-over-neck-working-while-looking-at-camera-in-the.webp?a=1&b=1&s=612x612&w=0&k=20&c=dELGikTuQn2AvwjAywyFQcGIPHt-0R9BUUie-q5dPBc=" alt="Dr. Michael Chen">
                     </div>
                     <h3>Dr. Michael Chen</h3>
                     <p>Pediatrician</p>
@@ -73,7 +73,7 @@
                 </div>
                 <div class="doctor-card">
                     <div class="doctor-image-container">
-                        <img src="https://placehold.co/128x128/7c3aed/ffffff?text=DR" alt="Dr. Emily Davis">
+                        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGRvY3RvcnxlbnwwfHwwfHx8MA%3D%3D" alt="Dr. Emily Davis">
                     </div>
                     <h3>Dr. Emily Davis</h3>
                     <p>Dermatologist</p>
@@ -81,18 +81,18 @@
                 </div>
                 <div class="doctor-card">
                     <div class="doctor-image-container">
-                        <img src="https://placehold.co/128x128/059669/ffffff?text=DR" alt="Dr. James Wilson">
+                        <img src="https://plus.unsplash.com/premium_photo-1658506671316-0b293df7c72b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZG9jdG9yfGVufDB8fDB8fHww" alt="Dr. James Wilson">
                     </div>
                     <h3>Dr. James Wilson</h3>
-                    <p>Family Medicine</p>
+                    <p>Dermatologist</p>
                     
                 </div>
                 <div class="doctor-card">
                     <div class="doctor-image-container">
-                        <img src="https://placehold.co/128x128/dc2626/ffffff?text=DR" alt="Dr. Lisa Brown">
+                        <img src="https://images.unsplash.com/photo-1638202993928-7267aad84c31?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZG9jdG9yfGVufDB8fDB8fHww" alt="Dr. Lisa Brown">
                     </div>
                     <h3>Dr. Lisa Brown</h3>
-                    <p>Psychiatrist</p>
+                    <p>Dentist</p>
                    
                 </div>
             </div>

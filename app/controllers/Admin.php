@@ -6,6 +6,11 @@ class Admin extends Controller
     private $db;
     public function __construct()
     {
+         if (!isset($_SESSION['current_user']) || $_SESSION['current_user']['type_id'] != ROLE_ADMIN) {
+            setMessage('error', 'Access denied. Admins only!');
+            redirect('pages/login');
+            exit;
+        }
         $this->model("DoctorModel");
         $this->model("UserModel"); 
         $this->model("TimeslotModel");
@@ -95,17 +100,17 @@ class Admin extends Controller
 
             // Create user
             $user = new UserModel();
-            $user->setName($name);
-            $user->setEmail($email);
-            $user->setPhone($phone);
-            $user->setGender($gender);
-            $user->setPassword($encodedPassword);
-            $user->setProfileImage($imagePath);
-            $user->setIsLogin(0);
-            $user->setIsActive(0);
-            $user->setIsConfirmed(0);
-            $user->setTypeId(2); // 2 = doctor
-            $user->setStatusId(2);
+            $user->name=$name;
+            $user->email=$email;
+            $user->phone=$phone;
+            $user->gender=$gender;
+            $user->password=$encodedPassword;
+            $user->profile_image=$imagePath;
+            $user->is_login=0;
+            $user->is_active=0;
+            $user->is_confirmed=0;
+            $user->type_id=2; // 2 = doctor
+            $user->status_id=6;
 
             $user_id = $this->db->create('users', $user->toArray());
 
@@ -118,13 +123,13 @@ class Admin extends Controller
             // Create doctor profile
             $doctor = new DoctorModel();
             // $doctor=setId($id);
-            $doctor->setDegree($degree);
-            $doctor->setExperience($experience);
-            $doctor->setBio($bio);
-            $doctor->setFee($fee);
-            $doctor->setSpecialty($specialty);
-            $doctor->setAddress($address);
-            $doctor->setUserId($user_id);
+            $doctor->degree=$degree;
+            $doctor->experience=$experience;
+            $doctor->bio=$bio;
+            $doctor->fee=$fee;
+            $doctor->specialty=$specialty;
+            $doctor->address=$address;
+            $doctor->user_id=$user_id;
 
             $doctor_id = $this->db->create('doctorprofile', $doctor->toArray());
     // var_dump($doctorCreated);
@@ -142,9 +147,9 @@ class Admin extends Controller
             }
             //Create Doctor Timeslot
             $timeslot=new TimeslotModel();
-            $timeslot->setStartTime($start_time);
-            $timeslot->setEndTime($end_time);
-            $timeslot->setUserId($user_id);
+            $timeslot->start_time=$start_time;
+            $timeslot->end_time=$end_time;
+            $timeslot->user_id=$user_id;
             $timeslot_id = $this->db->create('timeslots', $timeslot->toArray());
 
             if (!$timeslot_id) {
@@ -281,28 +286,28 @@ class Admin extends Controller
                 $finalPassword = !empty($password) ? base64_encode($password) : $existingUser['password'];
 
                 $user = new UserModel();
-                $user->setName($name);
-                $user->setEmail($email);
-                $user->setPhone($phone);
-                $user->setGender($gender);
-                $user->setPassword($finalPassword);
-                $user->setProfileImage($imagePath);
-                $user->setIsLogin(0);
-                $user->setIsActive(1);
-                $user->setIsConfirmed(1);
-                $user->setTypeId(2);
-                $user->setStatusId(6);
+                $user->name=$name;
+                $user->email=$email;
+                $user->phone=$phone;
+                $user->gender=$gender;
+                $user->password=$finalPassword;
+                $user->profile_image=$imagePath;
+                $user->is_login=0;
+                $user->is_active=1;
+                $user->is_confirmed=1;
+                $user->type_id=2;
+                $user->status_id=6;
 
                 $this->db->update('users', $id, $user->toArray());
 
                 $doctor = new DoctorModel();
-                $doctor->setDegree($degree);
-                $doctor->setExperience($experience);
-                $doctor->setBio($bio);
-                $doctor->setFee($fee);
-                $doctor->setSpecialty($specialty);
-                $doctor->setAddress($address);
-                $doctor->setUserId($id);
+                $doctor->degree=$degree;
+                $doctor->experience=$experience;
+                $doctor->bio=$bio;
+                $doctor->fee=$fee;
+                $doctor->specialty=$specialty;
+                $doctor->address=$address;
+                $doctor->user_id=$id;
 
                 $existingDoctor = $this->db->columnFilter('doctorprofile', 'user_id', $id);
                 if ($existingDoctor && isset($existingDoctor['id'])) {
@@ -312,11 +317,9 @@ class Admin extends Controller
                 }
 
                 $timeslot = new TimeslotModel();
-                // $timeslot->setDay($day);
-                $timeslot->setStartTime($start_time);
-                $timeslot->setEndTime($end_time);
-                // $timeslot->setIsBooked(0);
-                $timeslot->setUserId($id);
+                $timeslot->start_time=$start_time;
+                $timeslot->end_time=$end_time;
+                $timeslot->user_id=$id;
 
                 $timeslotRow = $this->db->columnFilter('timeslots', 'user_id', $id);
                 if ($timeslotRow && isset($timeslotRow['id'])) {
