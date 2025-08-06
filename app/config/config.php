@@ -4,7 +4,7 @@
 define('DB_HOST', 'db');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'mvcoop');
+define('DB_NAME', 'medical');
 
 // Define App Root
 define ('APPROOT', dirname(dirname(__FILE__)));

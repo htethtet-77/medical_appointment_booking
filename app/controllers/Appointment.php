@@ -1,4 +1,6 @@
 <?php
+// require_once 'helpers/appointment_helper.php';
+
 class Appointment extends Controller
 {
 
@@ -10,182 +12,102 @@ class Appointment extends Controller
         $this->db = new Database();
     }
     // Main form loader - loads initial page and slots for default or given date
-public function appointmentform($doctor_id) {
-    date_default_timezone_set('Asia/Yangon');  // Make sure timezone is set
+    public function appointmentform($doctor_id) {
+        date_default_timezone_set('Asia/Yangon');
+        require_once APPROOT .'/helpers/appointment_helper.php';
 
-    $user = $_SESSION['current_user'] ?? null;
-
-    if (!$user) {
-        setMessage('error',"You need to register first");
-        redirect("pages/register");
-    }
-
-    $doctor = $this->db->columnFilter('doctor_view', 'user_id', $doctor_id);
-    if (!$doctor) {
-        die('Doctor not found');
-    }
-
-    $time = $this->db->columnFilter('timeslots', 'user_id', $doctor_id);
-    if (!$time) {
-        die('Doctor timeslot not found');
-    }
-
-    // Selected date (default: today)
-    $selectedDate = $_GET['date'] ?? date('Y-m-d');
-
-    // Generate available slots (in 24h H:i:s format)
-    $slots = [];
-    $current = strtotime($time['start_time']);
-    $endTime = strtotime($time['end_time']);
-    $slotDuration = 20 * 60; // 20 minutes in seconds
-    $lastStartTime = $endTime - $slotDuration;
-
-    while ($current <= $lastStartTime) {
-        $slots[] = date("H:i:s", $current);
-        $current = strtotime("+20 minutes", $current);
-    }
-
-    // Get booked slots for the selected date
-    $booked = $this->db->columnFilterAll('appointment', 'doctor_id', $doctor_id);
-
-    $bookedTimes = [];
-    if (!empty($booked)) {
-        foreach ($booked as $appointment) {
-            $appointmentDate = date('Y-m-d', strtotime($appointment['appointment_date']));
-            if ($appointmentDate === $selectedDate) {
-                $bookedTimes[] = $appointment['appointment_time'];
-            }
-        }
-    }
-
-    // Filter available slots: exclude past timeslots if date is today and booked slots
-    $availableSlots = [];
-    $now = new DateTime('now', new DateTimeZone('Asia/Yangon'));
-    $selectedDateObj = new DateTime($selectedDate, new DateTimeZone('Asia/Yangon'));
-
-    foreach ($slots as $slot) {
-        $slotDateTime = DateTime::createFromFormat('Y-m-d H:i:s', "$selectedDate $slot", new DateTimeZone('Asia/Yangon'));
-        if (!$slotDateTime) {
-            $slotDateTime = new DateTime("$selectedDate $slot", new DateTimeZone('Asia/Yangon'));
+        $user = $_SESSION['current_user'] ?? null;
+        if (!$user) {
+            setMessage('error', "You need to register first");
+            return redirect("pages/register");
         }
 
-        // Skip past slots if selected date is today
-        if ($selectedDateObj->format('Y-m-d') === $now->format('Y-m-d') && $slotDateTime <= $now) {
-            continue;
-        }
+        $doctor = $this->db->columnFilter('doctor_view', 'user_id', $doctor_id) ?? die('Doctor not found');
+        $time = $this->db->columnFilter('timeslots', 'user_id', $doctor_id) ?? die('Doctor timeslot not found');
 
-        // Skip booked slots
-        if (in_array($slot, $bookedTimes)) {
-            continue;
-        }
+        $selectedDate = $_GET['date'] ?? date('Y-m-d');
 
-        // Add slot (in 24-hour format for form submission, or you can format it later)
-        $availableSlots[] = $slot;  // keep as H:i:s, format in view
+        $slots = getAvailableSlots($time['start_time'], $time['end_time']);
+        $appointments = $this->db->columnFilterAll('appointment', 'doctor_id', $doctor_id) ?? [];
+        $bookedTimes = getBookedTimes($appointments, $selectedDate);
+        $availableSlots = filterFutureAvailableSlots($slots, $bookedTimes, $selectedDate);
+
+        $this->view('pages/appointmentform', [
+            'doctor' => $doctor,
+            'user' => $user,
+            'appointment_time' => $availableSlots,
+            'selected_date' => $selectedDate
+        ]);
     }
 
-    $data = [
-        'doctor' => $doctor,
-        'user' => $user,
-        'appointment_time' => $availableSlots,
-        'selected_date' => $selectedDate
-    ];
-
-    $this->view('pages/appointmentform', $data);
-}
 
 
+        public function book() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return redirect('pages/home');
+        }
 
-    public function book() {
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $doctorId       = $_POST['doctor_id'] ?? null;
-        $patientEmail   = $_POST['email'] ?? null;
-        $reason         = trim($_POST['reason'] ?? '');
-        $timeslot       = $_POST['timeslot'] ?? '';
-        $date           = $_POST['appointment_date'] ?? null;
+        // Sanitize and assign POST data
+        $doctorId     = $_POST['doctor_id'] ?? null;
+        $email        = $_POST['email'] ?? null;
+        $reason       = trim($_POST['reason'] ?? '');
+        $timeslot     = $_POST['timeslot'] ?? '';
+        $date         = $_POST['appointment_date'] ?? null;
 
-        // Convert to proper DB formats
-        $appointmentDate = date("Y-m-d", strtotime($date)); 
-        $timeslot_24h    = date("H:i:s", strtotime($timeslot));
+        // Format inputs
+        $appointmentDate = $date ? date("Y-m-d", strtotime($date)) : null;
+        $appointmentTime = $timeslot ? date("H:i:s", strtotime($timeslot)) : null;
 
         // Validate required fields
-        if (!$doctorId || !$appointmentDate || !$timeslot_24h || empty($reason)) {
+        if (!$doctorId || !$appointmentDate || !$appointmentTime || empty($reason)) {
             setMessage('error', 'Please fill in all required fields.');
-            redirect("appointment/appointmentform/$doctorId");
-            return;
+            return redirect("appointment/appointmentform/$doctorId");
         }
 
-        // Get doctor details
-        $doctor = $this->db->columnFilter('doctor_view', 'user_id', $doctorId);
-        if (!$doctor) {
-            setMessage('error', 'Doctor not found.');
-            redirect("appointment/appointmentform/$doctorId");
-            return;
-        }
-
-        // Check user login
+        // Check user session
         $user = $_SESSION['current_user'] ?? null;
         if (!$user) {
             setMessage('error', 'Please log in to book an appointment.');
-            redirect("pages/login");
-            return;
+            return redirect('pages/login');
         }
 
+        // Fetch doctor and patient data
+        $doctor = $this->db->columnFilter('doctor_view', 'user_id', $doctorId);
         $patient = $this->db->columnFilter('users', 'id', $user['id']);
-        if (!$patient) {
-            setMessage('error', 'Patient not found.');
-            redirect("appointment/appointmentform/$doctorId");
-            return;
+
+        if (!$doctor || !$patient) {
+            setMessage('error', 'Doctor or patient not found.');
+            return redirect("appointment/appointmentform/$doctorId");
         }
 
-        // Check if slot already booked for this doctor on selected date
-        $booked = $this->db->columnFilterAll('appointment', 'doctor_id', $doctorId);
-
-        $isAlreadyBooked = false;
-        if (!empty($booked)) {
-            foreach ($booked as $appointment) {
-                if (
-                    $appointment['appointment_date'] === $appointmentDate &&
-                    $appointment['appointment_time'] === $timeslot_24h
-                ) {
-                    $isAlreadyBooked = true;
-                    break;
-                }
+        // Check for duplicate booking
+        $appointments = $this->db->columnFilterAll('appointment', 'doctor_id', $doctorId);
+        foreach ($appointments as $a) {
+            if ($a['appointment_date'] === $appointmentDate && $a['appointment_time'] === $appointmentTime) {
+                setMessage('error', 'This timeslot is already booked. Please choose another.');
+                return redirect("appointment/appointmentform/$doctorId");
             }
         }
 
-        if ($isAlreadyBooked) {
-            setMessage('error', 'This timeslot is already booked. Please choose another.');
-            redirect("appointment/appointmentform/$doctorId");
-            exit;
-        }
+        // Call stored procedure to create appointment
+        $success = $this->db->callProcedure('book_appointment', [
+            $doctorId,
+            $patient['id'],
+            $doctor['timeslot_id'],
+            $appointmentDate,
+            $appointmentTime,
+            $reason,
+            2 // status_id: pending
+        ]);
 
-        // Create appointment
-        $appointment = new AppointmentModel();
-        $appointment->created_at=date('Y-m-d H:i:s');
-        $appointment->reason=$reason;
-        $appointment->timeslot_id=$doctor['timeslot_id'];
-        $appointment->appointment_date=$appointmentDate;
-        $appointment->appointment_time=$timeslot_24h;
-        $appointment->user_id=$patient['id'];  // patient id
-        $appointment->doctor_id=$doctorId;     // doctor id
-        $appointment->status_id=2;             // pending
-
-        $appointment_id = $this->db->create('appointment', $appointment->toArray());
-
-        if (!$appointment_id) {
+        if (!$success) {
             setMessage('error', 'Failed to create appointment.');
-            redirect("appointment/appointmentform/$doctorId");
-            return;
+            return redirect("appointment/appointmentform/$doctorId");
         }
 
         setMessage('success', 'Appointment booked successfully.');
-        redirect("appointment/appointmentlist");
-
-    } else {
-        // If not POST request
-        redirect('pages/home');
+        return redirect('appointment/appointmentlist');
     }
-}
 
 
        public function appointmentlist() {
@@ -207,35 +129,36 @@ public function appointmentform($doctor_id) {
         }
 
 //patient appointment cancel
-        public function delete($id){
-            $appointment=$this->db->columnFilter('appointment','id',$id);
-            if($appointment['status_id']===1){
-                setMessage('error',"Appointment Already Confirmed");
-                redirect("appointment/appointmentlist");
-                return;
+        public function delete($id) 
+        {
+            $appointment = $this->db->columnFilter('appointment', 'id', $id);
+
+            if (!$appointment) {
+                setMessage('error', 'Appointment not found.');
+                return redirect('appointment/appointmentlist');
             }
-            elseif($appointment['status_id']===3){
-                setMessage('error',"Appointment Already Rejected by doctor");
-                redirect("appointment/appointmentlist");
-                return;
-            }else{
-            $deleted=$this->db->delete('appointment',$appointment['id']);
-             if ($deleted) {
-                setMessage('success', 'Appointment cancelled successfully.');
-            } else {
-                setMessage('error', 'Failed to cancel appointment.');
+
+            if ($appointment['status_id'] === 1) {
+                setMessage('error', 'Appointment already confirmed.');
+                return redirect('appointment/appointmentlist');
             }
-        }
-            
+
+            if ($appointment['status_id'] === 3) {
+                setMessage('error', 'Appointment already rejected by doctor.');
+                return redirect('appointment/appointmentlist');
+            }
+
+            // 🔁 Call stored procedure instead of direct delete
+            $deleted = $this->db->callProcedure('delete_appointment', [$id]);
+
+            setMessage($deleted ? 'success' : 'error', $deleted ? 'Appointment cancelled successfully.' : 'Failed to cancel appointment.');
             redirect('appointment/appointmentlist');
-
-
         }
-    //doctor appointment confirm
+
+    //appointment confirm by doctor
         public function confirm($appointment_id){
             $id=$this->db->columnFilter('appointment','id',$appointment_id);
-    // var_dump($id);
-    // exit;
+  
             $appointment = new AppointmentModel();
                 $appointment->created_at=$id['created_at'];
                 $appointment->reason=$id['reason'];
@@ -250,12 +173,10 @@ public function appointmentform($doctor_id) {
                     setMessage('error','Something Wrong');
                     return;
                 }
-                // var_dump($updated);
-                // exit;
                 setMessage('success','Appointment confirmed successfully');
                 redirect("doctor/dash");
         }
-        //doctor appointment reject
+        //appointment reject by doctor
         public function  reject($appointment_id){
             $id=$this->db->columnFilter('appointment','id', $appointment_id);
             $appointment = new AppointmentModel();
@@ -272,8 +193,6 @@ public function appointmentform($doctor_id) {
                     setMessage('error','Something Wrong');
                     return;
                 }
-                // var_dump($updated);
-                // exit;
                 setMessage('success','Appointment reject successfully');
                 redirect("doctor/dash");
 

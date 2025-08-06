@@ -330,6 +330,23 @@ class Database
             echo($e);
         }
     }
+    public function callProcedure($procedureName, $params = [])
+    {
+        $placeholders = implode(',', array_fill(0, count($params), '?'));
+        $stmt = $this->pdo->prepare("CALL $procedureName($placeholders)");
+        return $stmt->execute($params);
+    }
+    
+    public function adddoctor($procedureName, $params = [])
+    {
+        $placeholders = implode(',', array_fill(0, count($params), '?'));
+        $sql = "CALL {$procedureName}({$placeholders})";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt;
+    }
+
+
 
 }
 

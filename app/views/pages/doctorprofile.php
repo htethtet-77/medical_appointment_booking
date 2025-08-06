@@ -80,7 +80,7 @@
                 ?>
             </div>
 
-            <h3 class="text-xl font-bold text-gray-700 mb-4">Select Appointment Date</h3>
+            <h3 class="text-xl font-bold text-gray-700 mb-4">Available Time Slot by Date</h3>
             <form method="GET" class="mb-6">
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($data['doctor']['user_id']); ?>">
                 <input type="date" name="date" value="<?php echo htmlspecialchars($data['selected_date']); ?>" 
@@ -91,7 +91,8 @@
                 </button>
             </form>
 
-          <?php $doctor_id = htmlspecialchars($data['doctor']['user_id']); ?>
+          <?php 
+          $doctor_id = htmlspecialchars($data['doctor']['user_id']); ?>
             <div class="flex flex-wrap gap-3">
                <?php
             $selectedDate = $data['selected_date'] ?? date('Y-m-d');
@@ -159,10 +160,13 @@
                 </div>
             </div>
         </div>
-<a href="<?php echo URLROOT; ?>/patient/doctors" 
-   class="inline-block w-fit px-3 py-1.5 rounded-md bg-green-600 hover:bg-green-700 text-white font-medium transition">
-   ⬅ Back
-</a>
+    <!-- Back Button -->
+    <div class="md:col-span-2">
+      <a href="<?= URLROOT ?>/patient/doctors/<?= htmlspecialchars($doctor_id) ?>" 
+         class="inline-block px-4 py-2 mt-4 rounded-md bg-green-600 hover:bg-green-700 text-white font-medium transition">
+        ⬅ Back
+      </a>
+    </div>
 
     </div>
 </section>

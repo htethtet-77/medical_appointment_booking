@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db:3306
--- Generation Time: Aug 05, 2025 at 03:29 PM
+-- Generation Time: Aug 06, 2025 at 05:13 AM
 -- Server version: 8.0.42
 -- PHP Version: 8.2.27
 
@@ -50,7 +50,9 @@ INSERT INTO `appointment` (`id`, `created_at`, `appointment_date`, `appointment_
 (17, '2025-08-04 16:48:20', '2025-08-05', '09:00:00', 'xxxx', 4, 19, 90, 1),
 (18, '2025-08-05 02:48:23', '2025-08-05', '09:20:00', 'wwww', 4, 19, 90, 2),
 (19, '2025-08-05 05:45:23', '2025-08-06', '08:30:00', 'headache', 64, 19, 62, 2),
-(21, '2025-08-05 05:48:40', '2025-08-06', '10:00:00', 'headache', 4, 19, 90, 1);
+(21, '2025-08-05 05:48:40', '2025-08-06', '10:00:00', 'headache', 4, 19, 90, 1),
+(22, '2025-08-05 16:44:55', '2025-08-06', '07:50:00', 'test', 64, 19, 62, 2),
+(23, '2025-08-06 05:07:02', '2025-08-06', '12:10:00', 'testing', 74, 19, 130, 2);
 
 -- --------------------------------------------------------
 
@@ -135,16 +137,20 @@ CREATE TABLE `doctorprofile` (
 --
 
 INSERT INTO `doctorprofile` (`id`, `degree`, `experience`, `bio`, `fee`, `specialty`, `address`, `user_id`) VALUES
-(24, 'MD Pediatrics', 2, 'Dr. Min Thu is a compassionate and knowledgeable pediatrician committed to the health and development of children from infancy through adolescence. With a gentle bedside manner and years of experience in child healthcare, Dr. Min Thu is dedicated to providing comprehensive, family-centered care that supports both the physical and emotional well-being of young patients.  After graduating from [Medical School Name], Dr. Min Thu completed specialized training in pediatrics and has since helped countless families navigate childhood illnesses, growth milestones, and preventive health. ', 20000, 'Pediatrician', 'Putaoh', 59),
-(27, 'MDS', 3, 'Dr. Mi Mi Khaing Lin is a compassionate and skilled dentist dedicated to providing high-quality dental care with a gentle and personalized approach. With years of experience in both general and cosmetic dentistry, Dr. Lin is committed to helping patients achieve and maintain healthy, beautiful smiles.  Graduating from [Dental School Name], Dr. Lin continually updates her knowledge and skills through advanced training and education, ensuring that her patients benefit from the latest dental techniques and technologies. Whether you need routine cleanings, restorative treatments, or cosmetic enhancements, Dr. Lin creates customized treatment plans tailored to each patient’s unique needs.  Dr. Lin values building trusting relationships with her patients, focusing on comfort, education, and long-term oral health. Outside the clinic, she enjoys [your hobbies or interests, e.g., community work, reading, or spending time with family].  ', 20000, 'Dentist', 'Ygn', 62),
-(29, 'BDS', 10, 'Dr. Paing Kyaw Moe is a compassionate and skilled dentist dedicated to providing high-quality dental care with a gentle and personalized approach. With years of experience in both general and cosmetic dentistry, Dr. Moe is committed to helping patients achieve and maintain healthy, beautiful smiles.  Graduating from [Dental School Name], Dr. Moe continually updates his knowledge and skills through advanced training and education, ensuring that his patients benefit from the latest dental techniques and technologies.', 15000, 'Dentist', 'Meiktila', 64),
-(55, 'MD', 3, 'Dr. Wai Yan  is a dedicated general physician known for his compassionate care and commitment to improving the overall well-being of his patients. With a strong background in internal medicine and primary care, Dr. Hein provides comprehensive medical services to individuals and families across all age groups.  After earning his medical degree from [Medical School Name], Dr. Hein has continued to expand his knowledge through ongoing medical education and clinical experience. He is skilled in diagnosing and managing a wide range of health conditions — from common illnesses to chronic diseases such as hypertension, diabetes, and heart disease.  Dr. Hein believes in a patient-centered approach, taking the time to listen carefully, explain clearly, and involve patients in every step of their care. His calm demeanor and thorough examinations help patients feel confident and supported throughout their health journey.  Outside of his practice, Dr. Hein is passionate about [optional: health education, community ou', 150000, 'General Physician', 'Nay Pyi Taw', 90),
-(62, 'MBBS', 3, 'Dr. Mi Mi Khaing Lin is a compassionate and skilled dentist dedicated to providing high-quality dental care with a gentle and personalized approach. With years of experience in both general and cosmetic dentistry, Dr. Lin is committed to helping patients achieve and maintain healthy, beautiful smiles.  Graduating from [Dental School Name], Dr. Lin continually updates her knowledge and skills through advanced training and education, ensuring that her patients benefit from the latest dental techniques and technologies. Whether you need routine cleanings, restorative treatments, or cosmetic enhancements, Dr. Lin creates customized treatment plans tailored to each patient’s unique needs.  ', 150000, 'General Physician', 'NY', 97),
-(63, 'MD Pediatrics', 10, 'Dr. Htet Htet Win is a compassionate and experienced pediatrician dedicated to the health and well-being of children from birth through adolescence. With a gentle approach and a deep understanding of child development, Dr. Win provides high-quality, family-centered care that supports every stage of a child’s growth.  After earning her medical degree from [Medical School Name], Dr. Win completed specialized training in pediatrics, gaining expertise in diagnosing and managing a wide range of childhood conditions — from common illnesses to complex developmental concerns. She is passionate about preventive care, early diagnosis, and building lasting relationships with families.  Dr. Win is known for her warm demeanor, clear communication, and commitment to making each young patient feel comfortable and safe during every visit. She works closely with parents to ensure they feel informed and supported in all aspects of their child’s health — physical, emotional, and behavioral.  Outside of her practice, Dr. Htet Htet Win enjoys [insert personal interests, e.g., reading, spending time with family, or participating in child health education programs].  With Dr. Htet Htet Win, your child is in caring and capable hands.', 15000, 'Pediatrician', 'Mandalay', 98),
-(68, 'MD Dermatology', 10, 'Senior Doctor', 150000, 'Dermatologist', 'Yangon', 103),
-(72, 'MBBS', 10, ' Junior doctor', 30000, 'General Physician', 'NY', 107),
+(24, 'MD Pediatrics', 2, 'Dr. Min Thu is a compassionate and knowledgeable pediatrician committed to the health and development of children from infancy through adolescence. With a gentle bedside manner and years of experience in child healthcare, Dr. Min Thu is dedicated to providing comprehensive, family-centered care that supports both the physical and emotional well-being of young patients.  ', 20000, 'Pediatrician', '123 Main Street,Yangon', 59),
+(27, 'MDS', 3, 'Dr. Mi Mi Khaing Lin is a compassionate and skilled dentist dedicated to providing high-quality dental care with a gentle and personalized approach. With years of experience in both general and cosmetic dentistry, Dr. Lin is committed to helping patients achieve and maintain healthy, beautiful smiles.  Graduating from [Dental School Name], Dr. Lin continually updates her knowledge and skills through advanced training and education, ensuring that her patients benefit from the latest dental techniques and technologies. Whether you need routine cleanings, restorative treatments, or cosmetic enhancements, Dr. Lin creates customized treatment plans tailored to each patient’s unique needs.  Dr. Lin values building trusting relationships with her patients, focusing on comfort, education, and long-term oral health. Outside the clinic, she enjoys [your hobbies or interests, e.g., community work, reading, or spending time with family].  ', 20000, 'Dentist', '123 Main Street,Yangon', 62),
+(29, 'BDS', 10, 'Dr. Paing Kyaw Moe is a compassionate and skilled dentist dedicated to providing high-quality dental care with a gentle and personalized approach. With years of experience in both general and cosmetic dentistry, Dr. Moe is committed to helping patients achieve and maintain healthy, beautiful smiles.  ', 15000, 'Dentist', '123 Main Street,Yangon', 64),
+(55, 'MD', 3, 'Dr. Wai Yan  is a dedicated general physician known for his compassionate care and commitment to improving the overall well-being of his patients. With a strong background in internal medicine and primary care, Dr. Hein provides comprehensive medical services to individuals and families across all age groups.  After earning his medical degree from [Medical School Name], Dr. Hein has continued to expand his knowledge through ongoing medical education and clinical experience. He is skilled in diagnosing and managing a wide range of health conditions — from common illnesses to chronic diseases such as hypertension, diabetes, and heart disease.  Dr. Hein believes in a patient-centered approach, taking the time to listen carefully, explain clearly, and involve patients in every step of their care. His calm demeanor and thorough examinations help patients feel confident and supported throughout their health journey. ', 150000, 'General Physician', '123 Main Street,Yangon', 90),
+(62, 'MBBS', 3, 'Dr. Mi Mi Khaing Lin is a compassionate and skilled dentist dedicated to providing high-quality dental care with a gentle and personalized approach. With years of experience in both general and cosmetic dentistry, Dr. Lin is committed to helping patients achieve and maintain healthy, beautiful smiles.   ', 150000, 'General Physician', '123 Main Street,Yangon', 97),
+(63, 'MD Pediatrics', 10, 'Dr. Htet Htet Win is a compassionate and experienced pediatrician dedicated to the health and well-being of children from birth through adolescence. With a gentle approach and a deep understanding of child development, Dr. Win provides high-quality, family-centered care that supports every stage of a child’s growth.  After earning her medical degree from [Medical School Name], Dr. Win completed specialized training in pediatrics, gaining expertise in diagnosing and managing a wide range of childhood conditions — from common illnesses to complex developmental concerns. She is passionate about preventive care, early diagnosis, and building lasting relationships with families.  Dr. Win is known for her warm demeanor, clear communication, and commitment to making each young patient feel comfortable and safe during every visit. ', 15000, 'Pediatrician', '123 Main Street,Yangon', 98),
+(68, 'MD Dermatology', 10, 'Senior Doctor', 150000, 'Dermatologist', '123 Main Street,Yangon', 103),
+(72, 'MBBS', 10, 'Dr. Wai Yan is a general physician with over 8 years of experience in treating common illnesses, performing routine checkups, and providing preventive care for patients of all ages.', 15000, 'General Physician', '123 Main Street,Yangon', 107),
 (77, 'MBBS', 3, 'shfkjsjkahjkhhkjfhkfdk', 20000, 'General Physician', '123 street, Yangon', 124),
-(78, 'MD Dermatology', 10, 'Dr. Daniel Smith is a board-certified dermatologist specializing in the diagnosis and treatment of skin cancer, acne, psoriasis, eczema, rosacea, and other skin conditions. He practices at the Dermatology Group of Arkansas in Little Rock and teaches as adjunct faculty at UAMS.', 20000, 'Dermatologist', '123 Street,Yangon', 125);
+(78, 'MD Dermatology', 10, 'Dr. Daniel Smith is a board-certified dermatologist specializing in the diagnosis and treatment of skin cancer, acne, psoriasis, eczema, rosacea, and other skin conditions. He practices at the Dermatology Group of Arkansas in Little Rock and teaches as adjunct faculty at UAMS.', 20000, 'Dermatologist', '123 Street,Yangon', 125),
+(79, 'MD Pediatrics', 8, 'Dr. Michael Chen specializes in pediatric care and has 5 years of experience managing the health of infants, children, and adolescents. She is passionate about child wellness and early diagnosis.', 18000, 'Pediatrician', '123 Main Street, Yangon', 127),
+(80, 'MBBS', 7, 'Dr.Emily Davis is a certified dermatologist with 7 years of experience treating skin, hair, and nail conditions. He also provides cosmetic skin consultations and treatments.', 25000, 'Dermatologist', '123 Main Street,Yangon', 128),
+(81, 'DDVL', 7, 'Dr. James Wilson is a certified dermatologist with 7 years of experience treating skin, hair, and nail conditions. He also provides cosmetic skin consultations and treatments.\r\n\r\n', 25000, 'Dermatologist', '123 Main Street,Yangon', 129),
+(82, 'MDS', 6, 'Dr. Lisa Brown is a skilled dentist with 6 years of clinical practice in dental care, including cleanings, fillings, extractions, and cosmetic procedures. She aims to make every visit comfortable for her patients.\r\n\r\n', 20000, 'Dentist', '123 Main Street,Yangon', 130);
 
 -- --------------------------------------------------------
 
@@ -273,7 +279,12 @@ INSERT INTO `timeslots` (`id`, `start_time`, `end_time`, `user_id`) VALUES
 (66, '05:30:00', '08:30:00', 97),
 (67, '16:30:00', '19:30:00', 103),
 (68, '07:00:00', '10:00:00', 124),
-(69, '12:00:00', '16:00:00', 125);
+(69, '12:00:00', '16:00:00', 125),
+(70, '09:00:00', '17:00:00', 127),
+(71, '12:00:00', '15:00:00', 107),
+(72, '11:00:00', '18:00:00', 128),
+(73, '06:00:00', '11:00:00', 129),
+(74, '08:30:00', '13:00:00', 130);
 
 -- --------------------------------------------------------
 
@@ -345,11 +356,11 @@ INSERT INTO `users` (`id`, `name`, `gender`, `email`, `phone`, `password`, `prof
 (59, 'Min Thu', 'male', 'min@gmail.com', '09955078900', 'VkZkc2RXUkhhREZSUkVWNA==', 'public/image/book_6885eb0869882_book_68834e7f82beb_premium_photo-1658506671316-0b293df7c72b.avif', 1, 1, 0, 2, 6),
 (62, 'Mi Mi Khaing Lin', 'female', 'mimikhainglin770@gmail.com', '09441386935', 'VkZkc2RHRlhkRzlaVjJ4MVdqSjRjR0pxWXpOTlJVRTk=', 'public/image/book_68835428ecffa_photo-1638202993928-7267aad84c31.avif', 1, 1, 0, 2, 6),
 (64, 'Paing Kyaw Moe', 'male', 'paingkyawmoe33@gmail.com', '09665554897', 'UGFpbmdreWF3bW9lMzNA', 'public/image/book_68835f89c3204_book_68835428ecffa_photo-1638202993928-7267aad84c31.avif', 1, 1, 0, 2, 6),
-(90, 'Wai  Yan', 'male', 'waiyan772@gmail.com', '09955078924', 'V2FpeWFuNzcyQA==', 'public/image/book_6884b2a7a82cf_book_6884941ae387a_book_6884919cf3c14_book_68846740c8465_doctor.jpg', 0, 0, 1, 2, 2),
+(90, 'Wai  Yan', 'male', 'waiyan772@gmail.com', '09955078924', 'V2FpeWFuNzcyQA==', 'public/image/book_6884b2a7a82cf_book_6884941ae387a_book_6884919cf3c14_book_68846740c8465_doctor.jpg', 1, 1, 0, 2, 6),
 (97, 'Mi Mi ', 'female', 'mimikhainglin990@gmail.com', '09441386275', 'TWltaWtoYWluZ2xpbjkwQA==', 'public/image/book_6884b7d2cce52_book_688488792bccb_book_68846740c8465_doctor.jpg', 1, 1, 0, 2, 6),
 (98, 'Htet Htet Win', 'female', 'htet050522@gmail.com', '0995507845', 'VTBoU2JHUkVRVEZOUkZWNVVVRTlQUT09', 'public/image/book_6885e10f28d33_doctor_6885d812f2fc8_doctor_6885d77b6f05e_doctor_6885d768dc8cb_book_68835428ecffa_photo-1638202993928-7267aad84c31.avif', 1, 1, 0, 2, 6),
 (103, 'Phue Phue', 'female', 'phuephue11@gmail.com', '09955077826', 'UGh1ZXBodWUxMUA=', 'public/image/doctor_68870b1fb9091_doctor_688708e9ba8e9_doctor_6887067b660f8_doctor_6885d768dc8cb_book_68835428ecffa_photo-1638202993928-7267aad84c31.avif', 1, 1, 0, 2, 6),
-(107, 'Wai  Yan', 'male', 'waiyan45@gmail.com', '09955078928', 'VmpKR2NHVlhSblZOVlVFOQ==', 'public/image/doctor_68872314362d1_book_68834e7f82beb_premium_photo-1658506671316-0b293df7c72b.avif', 0, 0, 0, 2, 2),
+(107, 'Wai  Yan', 'male', 'waiyan45@gmail.com', '09955078928', 'VmpKR2NHVlhSblZOVlVFOQ==', 'public/image/doctor_68872314362d1_book_68834e7f82beb_premium_photo-1658506671316-0b293df7c72b.avif', 1, 1, 0, 2, 6),
 (108, 'Htet Htet Win', 'female', 'htethtetwin654@gmail.com', '09771223456', 'SHRldGh0ZXR3aW42NTRA', 'default_profile.jpg', 0, 0, 1, 3, 6),
 (109, 'Mi Mi ', 'female', 'mimikhainglin80@gmail.com', '0955664412', 'TWltaWtoYWluZ2xpbjgwQA==', 'default_profile.jpg', 0, 0, 1, 3, 6),
 (110, 'Mi Mi ', 'female', 'mimikhainglin90@gmail.com', '0955664417', 'TWltaWtoYWluZ2xpbjkwQA==', 'default_profile.jpg', 0, 0, 0, 3, 6),
@@ -363,7 +374,12 @@ INSERT INTO `users` (`id`, `name`, `gender`, `email`, `phone`, `password`, `prof
 (118, 'Htet Kyaw Win', 'male', 'htetkyawwin25@gmail.com', '09441386925', 'SHRldGt5YXd3aW4yNUA=', 'default_profile.jpg', 0, 0, 1, 3, 6),
 (119, 'Jo Jo', 'male', 'jojo500@gmail.com', '0945632477', 'Sm9qbzUwMEA=', 'default_profile.jpg', 0, 0, 1, 3, 6),
 (124, 'Jo O', 'female', 'jojo112@gmail.com', '09760585356', 'Sm9qbzExMkA=', 'public/image/doctor_6891524c028b6_book_68835f89c3204_book_68835428ecffa_photo-1638202993928-7267aad84c31.avif', 0, 0, 0, 2, 2),
-(125, 'Daniel Smith', 'male', 'danielsmith55@gmail.com', '0978456321', 'RGFuaWVsc21pdGg1NUA=', 'public/image/doctor_68918fdab76b4_istockphoto-2158610739-612x612.webp', 1, 1, 0, 2, 6);
+(125, 'Daniel Smith', 'male', 'danielsmith55@gmail.com', '0978456321', 'RGFuaWVsc21pdGg1NUA=', 'public/image/doctor_68918fdab76b4_istockphoto-2158610739-612x612.webp', 1, 1, 0, 2, 6),
+(126, 'Htet Kyaw Lin', 'male', 'htetkyawlin12@gmail.com', '09756123365', 'SHRldGt5YXdsaW4xMkA=', 'default_profile.jpg', 0, 0, 0, 3, 6),
+(127, 'Michael Chen', 'male', 'michaelchen3@gmail.com', '09988812345', 'TWljaGFlbGNoZW4zQA==', 'public/image/doctor_6892dcbd7e7f7_doctor_68870527adb72_doctor_6886ff2ee39f4_istockphoto-2158610739-612x612.webp', 1, 1, 0, 2, 6),
+(128, 'Emily Davis', 'female', 'emilydavis4@gmail.com', '09455671234', 'RW1pbHlkYXZpczRA', 'public/image/doctor_6892df64cd23d_humberto-chavez-FVh_yqLR9eA-unsplash.jpg', 0, 0, 0, 2, 6),
+(129, 'James Wilson', 'male', 'jameswilson5@gmail.com', '09898765432', 'SmFtZXN3aWxzb241QA==', 'public/image/doctor_6892e052c9ecb_doctor_68872314362d1_book_68834e7f82beb_premium_photo-1658506671316-0b293df7c72b.avif', 0, 0, 0, 2, 6),
+(130, 'Lisa Brown', 'female', 'lisabrown6@gmail.com', '09771234567', 'TGlzYWJyb3duNkA=', 'public/image/doctor_6892e0f7a27cf_premium_photo-1673953510197-0950d951c6d9.avif', 0, 0, 0, 2, 6);
 
 -- --------------------------------------------------------
 
@@ -479,7 +495,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `appointment`
 --
 ALTER TABLE `appointment`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -491,7 +507,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `doctorprofile`
 --
 ALTER TABLE `doctorprofile`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `expenses`
@@ -515,7 +531,7 @@ ALTER TABLE `status`
 -- AUTO_INCREMENT for table `timeslots`
 --
 ALTER TABLE `timeslots`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT for table `transaction`
@@ -533,7 +549,7 @@ ALTER TABLE `types`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
 
 -- --------------------------------------------------------
 

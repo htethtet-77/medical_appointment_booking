@@ -146,24 +146,24 @@
         }
 
         /* Warning Message */
-        .warning-message {
+        /* .warning-message {
             display: flex;
             align-items: flex-start;
-            background-color: #fff3cd; /* Light yellow */
-            color: #856404; /* Dark yellow text */
+            background-color: #fff3cd; 
+            color: #856404; 
             border: 1px solid #ffeeba;
             border-radius: 5px;
             padding: 15px;
             font-size: 14px;
             line-height: 1.5;
-        }
+        } */
 
-        .warning-message i {
-            color: #dc3545; /* Red icon */
+        /* .warning-message i {
+            color: #dc3545; 
             margin-right: 10px;
             font-size: 20px;
-            flex-shrink: 0; /* Prevent icon from shrinking */
-        }
+            flex-shrink: 0;
+        } */
 
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -207,7 +207,7 @@
                 margin-bottom: 10px; /* Add space between stacked buttons */
             }
 
-            .warning-message {
+            /* .warning-message {
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
@@ -216,7 +216,7 @@
             .warning-message i {
                 margin-right: 0;
                 margin-bottom: 10px;
-            }
+            } */
         }
 
         @media (max-width: 480px) {
