@@ -5,7 +5,6 @@
 <?php require APPROOT . '/views/inc/doctorbar.php'; ?>
 
     <div class="profile-container">
-        <a href="<?php echo URLROOT; ?>/doctor/dash" class="btn back-btn">⬅ Back</a>
 
         <h2>View Profile</h2>
         <div class="profile-content">
@@ -45,10 +44,8 @@
              <a href="<?php echo URLROOT; ?>/auth/logout" class="btn logout-btn">Logout</a>
 
         </div>
-        <div class="warning-message">
-            <i class="fas fa-exclamation-triangle"></i>
-            <span>Warning: Deleting your profile will permanently remove your account, cancel all future appointments, and erase your data from the system. This action cannot be undone.</span>
-        </div>
+        <a href="<?php echo URLROOT; ?>/doctor/dash" class="btn back-btn">⬅ Back</a>
+
     </div>
     
 </body>

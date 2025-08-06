@@ -1,4 +1,5 @@
 <?php
+require_once APPROOT . '/middleware/authMiddleware.php';
 
 class Doctor extends Controller
 {
@@ -6,7 +7,7 @@ class Doctor extends Controller
 
     public function __construct()
     {
-        
+        AuthMiddleware::doctorOnly();
         $this->model('DoctorModel');
         $this->db = new Database();
     }

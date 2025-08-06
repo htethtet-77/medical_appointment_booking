@@ -1,10 +1,12 @@
 <?php
+require_once APPROOT . '/middleware/authMiddleware.php';
+
 class Patient extends Controller
 {
     private $db;
     public function __construct()
     {
- 
+        AuthMiddleware::patientOnly();
         $this->model('UserModel');
         $this->db = new Database();
     }
@@ -14,155 +16,41 @@ class Patient extends Controller
         $this->view('pages/home');
     }
 
-//     public function doctorprofile($id) {
-//     $user = $_SESSION['current_user'] ?? null;
+    public function doctorprofile($id)
+    {
+        date_default_timezone_set('Asia/Yangon');
+        require_once APPROOT .'/helpers/appointment_helper.php';
 
-//     if (!$user) {
-//         setMessage('error', "You need to register first");
-//         redirect("pages/register");
-//     }
-
-//     $doctor = $this->db->columnFilter('doctor_view', 'user_id', $id);
-//     if (!$doctor) {
-//         die('Doctor not found');
-//     }
-
-//     $time = $this->db->columnFilter('timeslots', 'user_id', $id);
-//     if (!$time) {
-//         die('Doctor timeslot not found');
-//     }
-
-//     // Selected date (default: today)
-//     $selectedDate = $_GET['date'] ?? date('Y-m-d');
-
-//     // Generate all slots from doctor's start to end time (20 min intervals)
-//     $slots = [];
-//     $current = strtotime($time['start_time']);
-//     $endTime = strtotime($time['end_time']);
-
-//     while ($current < $endTime) {
-//         $slots[] = date("H:i:s", $current);
-//         $current = strtotime("+20 minutes", $current);
-//     }
-
-//     // Get booked slots for this timeslot_id
-//     $booked = $this->db->columnFilterAll('appointment', 'timeslot_id', $time['id']);
-
-//     $bookedTimes = [];
-//     if (!empty($booked)) {
-//         foreach ($booked as $appointment) {
-//             $appointmentDate = date('Y-m-d', strtotime($appointment['appointment_date']));
-//             if ($appointmentDate === $selectedDate) {
-//                 $bookedTimes[] = $appointment['appointment_time'];
-//             }
-//         }
-//     }
-
-//     $availableSlots = [];
-//     $now = time();
-//     foreach ($slots as $slot) {
-//         $slotDateTime = strtotime("$selectedDate $slot");
-        
-//         // Skip if slot is in the past or now OR if booked
-//         if ($slotDateTime <= $now || in_array($slot, $bookedTimes)) {
-//             continue;
-//         }
-        
-//         $availableSlots[] = date("h:i A", strtotime($slot));
-//     }
-
-//     $data = [
-//         'doctor' => $doctor,
-//         'user' => $user,
-//         'appointment_time' => $availableSlots,
-//         'selected_date' => $selectedDate
-//     ];
-
-//     $this->view('pages/doctorprofile', $data);
-// }
-
-public function doctorprofile($id) {
-    date_default_timezone_set('Asia/Yangon');  // Set timezone here
-
-    $user = $_SESSION['current_user'] ?? null;
-
-    if (!$user) {
-        setMessage('error',"You need to register first");
-        redirect("pages/register");
-    }
-
-    $doctor = $this->db->columnFilter('doctor_view', 'user_id', $id);
-    if (!$doctor) {
-        die('Doctor not found');
-    }
-
-    $time = $this->db->columnFilter('timeslots', 'user_id', $id);
-    if (!$time) {
-        die('Doctor timeslot not found');
-    }
-
-    // Selected date (default: today)
-    $selectedDate = $_GET['date'] ?? date('Y-m-d');
-
-    // Generate available slots
-    $slots = [];
-    $current = strtotime($time['start_time']);
-    $endTime = strtotime($time['end_time']);
-    $slotDuration = 20 * 60; // 20 minutes in seconds
-    $lastStartTime = $endTime - $slotDuration;
-
-    while ($current <= $lastStartTime) {
-        $slots[] = date("H:i:s", $current);
-        $current = strtotime("+20 minutes", $current);
-    }
-
-    // Get booked slots for the selected date
-    $booked = $this->db->columnFilterAll('appointment', 'timeslot_id', $time['id']);
-
-    $bookedTimes = [];
-    if (!empty($booked)) {
-        foreach ($booked as $appointment) {
-            $appointmentDate = date('Y-m-d', strtotime($appointment['appointment_date']));
-            if ($appointmentDate === $selectedDate) {
-                $bookedTimes[] = $appointment['appointment_time'];
-            }
-        }
-    }
-
-    // Filter available slots
-    $availableSlots = [];
-    $now = new DateTime();
-    $selectedDateObj = new DateTime($selectedDate);
-
-    foreach ($slots as $slot) {
-        $slotDateTime = DateTime::createFromFormat('Y-m-d H:i:s', $selectedDate . ' ' . $slot);
-
-        if (!$slotDateTime) {
-            $slotDateTime = new DateTime($selectedDate . ' ' . $slot);
+        $user = $_SESSION['current_user'] ?? null;
+        if (!$user) {
+            setMessage('error', "You need to register first");
+            return redirect("pages/register");
         }
 
-        // Skip past slots if selected date is today
-        if ($selectedDateObj->format('Y-m-d') === $now->format('Y-m-d') && $slotDateTime <= $now) {
-            continue;
-        }
+        $doctor = $this->db->columnFilter('doctor_view', 'user_id', $id);
+        if (!$doctor) die('Doctor not found');
 
-        // Skip booked slots
-        if (in_array($slot, $bookedTimes)) {
-            continue;
-        }
+        $time = $this->db->columnFilter('timeslots', 'user_id', $id);
+        if (!$time) die('Doctor timeslot not found');
 
-        $availableSlots[] = $slotDateTime->format("h:i A");
+        $selectedDate = $_GET['date'] ?? date('Y-m-d');
+
+        $allAppointments = $this->db->columnFilterAll('appointment', 'timeslot_id', $time['id']) ?? [];
+
+        $slots = getAvailableSlots($time['start_time'], $time['end_time']);
+        $bookedTimes = getBookedTimes($allAppointments, $selectedDate);
+        $availableSlots = array_map(function ($s) {
+            return DateTime::createFromFormat('H:i:s', $s)->format('h:i A');
+        }, filterFutureAvailableSlots($slots, $bookedTimes, $selectedDate));
+
+        $this->view('pages/doctorprofile', [
+            'doctor' => $doctor,
+            'user' => $user,
+            'appointment_time' => $availableSlots,
+            'selected_date' => $selectedDate
+        ]);
     }
 
-    $data = [
-        'doctor' => $doctor,
-        'user' => $user,
-        'appointment_time' => $availableSlots,
-        'selected_date' => $selectedDate
-    ];
-
-    $this->view('pages/doctorprofile', $data);
-}
 
       public function doctors()
     {

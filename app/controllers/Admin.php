@@ -1,16 +1,12 @@
 <?php
-
+require_once APPROOT . '/middleware/authMiddleware.php';
 class Admin extends Controller
 {
 
     private $db;
     public function __construct()
     {
-         if (!isset($_SESSION['current_user']) || $_SESSION['current_user']['type_id'] != ROLE_ADMIN) {
-            setMessage('error', 'Access denied. Admins only!');
-            redirect('pages/login');
-            exit;
-        }
+        AuthMiddleware::adminOnly();
         $this->model("DoctorModel");
         $this->model("UserModel"); 
         $this->model("TimeslotModel");
@@ -22,151 +18,100 @@ class Admin extends Controller
         $this->view('admin/dashboard');
     }
 
-    public function adddoctor()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'];
-
-            // Check if email exists in users table (covers patients and doctors)
-            $isUserExist = $this->db->columnFilter('users', 'email', $email);
-            if ($isUserExist) {
-                setMessage('error', 'This email is already registered!');
-                redirect('admin/adddoctor');
-                return;  // stop execution after redirect
-            }
-
-            // Validate form data
-            $validation = new UserValidator($_POST);
-            $data = $validation->validateForm();
-            if (count($data) > 0) {
-                $this->view('admin/adddoctor', $data);
-                return;
-            }
-
-            $phone = $_POST['phone'];
-
-            // Check if phone number exists
-            $phonecheck = $this->db->columnFilter('users', 'phone', $phone);
-            if ($phonecheck) {
-                setMessage('error', 'Phone number already exists!');
-                redirect('admin/adddoctor');
-                return;  // stop execution after redirect
-            }
-
-            // Collect form data
-            $name = $_POST['name'];
-            $password = $_POST['password'];
-            $gender = $_POST['gender'];
-            $degree = $_POST['degree'];
-            $experience = (int) $_POST['experience']; // ensure integer
-            $bio = $_POST['bio'];
-            $fee = $_POST['fee'];
-            $specialty = $_POST['specialty'];
-            $address = $_POST['address'];
-            // $day = $_POST['availability'];
-            // $date = date('Y-m-d'); // Or $_POST['date'] if you're allowing custom dates
-
-            $start_time =  $_POST['start_time'] . ':00';
-            $end_time =  $_POST['end_time'] . ':00';
-            
-
-            // $photo = $_POST['photo'];
-
-            $encodedPassword = base64_encode($password);
-            $imagePath = null;
-
-            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                $uploadDir = 'public/image/';
-                $originalName = basename($_FILES['image']['name']);
-                $imageName = uniqid('doctor_') . '_' . $originalName;
-                $targetPath = $uploadDir . $imageName;
-
-
-                if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0755, true);
-                }
-
-                
-                if (move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
-                    $imagePath = $targetPath;
-                } else {
-                    setMessage('error', ' Failed to move uploaded file.');
-                    return;
-                }
-            } else {
-                setMessage('error', ' Image not uploaded or error occurred.');
-                return;
-            }
-
-            // Create user
-            $user = new UserModel();
-            $user->name=$name;
-            $user->email=$email;
-            $user->phone=$phone;
-            $user->gender=$gender;
-            $user->password=$encodedPassword;
-            $user->profile_image=$imagePath;
-            $user->is_login=0;
-            $user->is_active=0;
-            $user->is_confirmed=0;
-            $user->type_id=2; // 2 = doctor
-            $user->status_id=6;
-
-            $user_id = $this->db->create('users', $user->toArray());
-
-            if (!$user_id) {
-                setMessage('error', 'Failed to create user.');
-                redirect('admin/adddoctor');
-                return;
-            }
-
-            // Create doctor profile
-            $doctor = new DoctorModel();
-            // $doctor=setId($id);
-            $doctor->degree=$degree;
-            $doctor->experience=$experience;
-            $doctor->bio=$bio;
-            $doctor->fee=$fee;
-            $doctor->specialty=$specialty;
-            $doctor->address=$address;
-            $doctor->user_id=$user_id;
-
-            $doctor_id = $this->db->create('doctorprofile', $doctor->toArray());
-    // var_dump($doctorCreated);
-    // exit;
-            if (!$doctor_id) {
-            setMessage('error', 'Failed to create doctor.');
-            redirect('admin/adddoctor');
-                return;
-            } 
-
-            if (strtotime($start_time) >= strtotime($end_time)) {
-                setMessage('error', 'Start time must be before end time.');
-                redirect('admin/adddoctor');
-                return;
-            }
-            //Create Doctor Timeslot
-            $timeslot=new TimeslotModel();
-            $timeslot->start_time=$start_time;
-            $timeslot->end_time=$end_time;
-            $timeslot->user_id=$user_id;
-            $timeslot_id = $this->db->create('timeslots', $timeslot->toArray());
-
-            if (!$timeslot_id) {
-                setMessage('error', 'Failed to create timeslot.');
-                redirect('admin/adddoctor');
-                return;
-            }
-
-            
-            setMessage('success', 'Doctor added successfully!');
-            redirect('admin/doctorlist');
-
-        } else {
-            $this->view('admin/adddoctor');
+   public function adddoctor() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return $this->view('admin/adddoctor');
         }
-    }
 
+        $email = $_POST['email'] ?? '';
+        $phone = $_POST['phone'] ?? '';
+
+        // Check duplicates
+        if ($this->db->columnFilter('users', 'email', $email)) {
+            setMessage('error', 'This email is already registered!');
+            return redirect('admin/adddoctor');
+        }
+        if ($this->db->columnFilter('users', 'phone', $phone)) {
+            setMessage('error', 'Phone number already exists!');
+            return redirect('admin/adddoctor');
+        }
+
+        // Validate form
+        $validation = new UserValidator($_POST);
+        $errors = $validation->validateForm();
+        if (!empty($errors)) {
+            return $this->view('admin/adddoctor', $errors);
+        }
+
+        // Collect form data
+        $name = $_POST['name'] ?? '';
+        $password = $_POST['password'] ?? '';
+        $gender = $_POST['gender'] ?? '';
+        $degree = $_POST['degree'] ?? '';
+        $experience = (int)($_POST['experience'] ?? 0);
+        $bio = $_POST['bio'] ?? '';
+        $fee = $_POST['fee'] ?? '';
+        $specialty = $_POST['specialty'] ?? '';
+        $address = $_POST['address'] ?? '';
+        $start_time = ($_POST['start_time'] ?? '') . ':00';
+        $end_time = ($_POST['end_time'] ?? '') . ':00';
+
+        if (strtotime($start_time) >= strtotime($end_time)) {
+            setMessage('error', 'Start time must be before end time.');
+            return redirect('admin/adddoctor');
+        }
+
+        // Handle image upload
+        $imagePath = null;
+        if (!empty($_FILES['image']['tmp_name']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = 'public/image/';
+            if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+
+            $imageName = uniqid('doctor_') . '_' . basename($_FILES['image']['name']);
+            $targetPath = $uploadDir . $imageName;
+
+            if (!move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
+                setMessage('error', 'Failed to move uploaded file.');
+                return redirect('admin/adddoctor');
+            }
+            $imagePath = $targetPath;
+        } else {
+            setMessage('error', 'Image not uploaded or error occurred.');
+            return redirect('admin/adddoctor');
+        }
+
+        // Encode password (better to use password_hash() for real apps)
+        $encodedPassword = base64_encode($password);
+
+        // Call stored procedure
+        $user_id = $this->db->callProcedure('add_doctor', [
+            $name,
+            $email,
+            $phone,
+            $gender,
+            $encodedPassword,
+            $imagePath,
+            $degree,
+            $experience,
+            $bio,
+            $fee,
+            $specialty,
+            $address,
+            $start_time,
+            $end_time
+        ]);
+
+        if (!$user_id) {
+            setMessage('error', 'Failed to add doctor.');
+            redirect('admin/adddoctor');
+            return;
+        }
+        
+
+        setMessage('success', 'Doctor added successfully!');
+        redirect('admin/doctorlist');
+
+    }
 
         public function doctorlist()
         {
@@ -235,7 +180,9 @@ class Admin extends Controller
             ];
             $this->view('admin/editdoctor',$data);
         }
-        public function updatedoctor() {
+        
+        public function updatedoctor() 
+        {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $id = $_POST['id'];
                 $name = $_POST['name'];
@@ -249,7 +196,6 @@ class Admin extends Controller
                 $fee = $_POST['fee'];
                 $specialty = $_POST['specialty'];
                 $address = $_POST['address'];
-                // $day = $_POST['availability'];
                 $start_time = $_POST['start_time'] . ':00';
                 $end_time = $_POST['end_time'] . ':00';
 
@@ -260,7 +206,7 @@ class Admin extends Controller
                     return;
                 }
 
-                // Use old image unless a new one is uploaded
+                // Default to existing image
                 $imagePath = $existingUser['profile_image'];
 
                 if (!empty($_FILES['image']['name'])) {
@@ -277,72 +223,52 @@ class Admin extends Controller
                         $imagePath = $targetPath;
                     } else {
                         setMessage('error', 'Image upload failed.');
-                        redirect('admin/editdoctor/'.$id);
+                        redirect('admin/editdoctor/' . $id);
                         return;
                     }
                 }
 
-                // Only encode password if new one entered
+                // Encode password only if new one is entered
                 $finalPassword = !empty($password) ? base64_encode($password) : $existingUser['password'];
 
-                $user = new UserModel();
-                $user->name=$name;
-                $user->email=$email;
-                $user->phone=$phone;
-                $user->gender=$gender;
-                $user->password=$finalPassword;
-                $user->profile_image=$imagePath;
-                $user->is_login=0;
-                $user->is_active=1;
-                $user->is_confirmed=1;
-                $user->type_id=2;
-                $user->status_id=6;
+                try {
+                    // Call the stored procedure to update everything at once
+                    $this->db->callProcedure('update_doctor', [
+                        $id,
+                        $name,
+                        $email,
+                        $phone,
+                        $gender,
+                        $finalPassword,
+                        $imagePath,
+                        $degree,
+                        $experience,
+                        $bio,
+                        $fee,
+                        $specialty,
+                        $address,
+                        $start_time,
+                        $end_time
+                    ]);
 
-                $this->db->update('users', $id, $user->toArray());
-
-                $doctor = new DoctorModel();
-                $doctor->degree=$degree;
-                $doctor->experience=$experience;
-                $doctor->bio=$bio;
-                $doctor->fee=$fee;
-                $doctor->specialty=$specialty;
-                $doctor->address=$address;
-                $doctor->user_id=$id;
-
-                $existingDoctor = $this->db->columnFilter('doctorprofile', 'user_id', $id);
-                if ($existingDoctor && isset($existingDoctor['id'])) {
-                    $this->db->update('doctorprofile', $existingDoctor['id'], $doctor->toArray());
-                } else {
-                    $this->db->create('doctorprofile', $doctor->toArray());
+                    setMessage('success', 'Doctor updated successfully!');
+                } catch (Exception $e) {
+                    setMessage('error', 'Failed to update doctor: ' . $e->getMessage());
                 }
 
-                $timeslot = new TimeslotModel();
-                $timeslot->start_time=$start_time;
-                $timeslot->end_time=$end_time;
-                $timeslot->user_id=$id;
-
-                $timeslotRow = $this->db->columnFilter('timeslots', 'user_id', $id);
-                if ($timeslotRow && isset($timeslotRow['id'])) {
-                    $this->db->update('timeslots', $timeslotRow['id'], $timeslot->toArray());
-                } else {
-                    $this->db->create('timeslots', $timeslot->toArray());
-                }
-
-                setMessage('success', 'Doctor updated successfully!');
                 redirect('admin/doctorlist');
             } else {
                 setMessage('error', 'Invalid request.');
                 redirect('admin/doctorlist');
             }
-    }
-
+        }
 
     
 
  
         public function patientlist()
         {
-            $patient=$this->db->readAll("users");
+            $patient=$this->db->columnFilterAll('users','type_id',3);
             $data=[
                 'user'=>$patient
             ];

@@ -1,6 +1,6 @@
 <title><?php echo SITENAME; ?></title>
 <?php require APPROOT . '/views/inc/navbar.php'; ?>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/appointmentform.css?v=2">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/appointmentform.css">
 
 <div class="appointmentform-container">
     <h2>Book Your Appointment</h2>
@@ -92,6 +92,13 @@
 
         <button type="submit" class="submit-btn">Book Appointment</button>
     </form>
+<div class="back-button-container">
+  <a href="<?= URLROOT ?>/patient/doctorprofile/<?= htmlspecialchars($data['doctor']['user_id']) ?>" 
+     class="back-button" role="button" tabindex="0">
+    ⬅ Back to Profile
+  </a>
+</div>
+
 </div>
 </body>
 </html>
