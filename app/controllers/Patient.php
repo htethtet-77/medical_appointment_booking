@@ -4,6 +4,7 @@ class Patient extends Controller
     private $db;
     public function __construct()
     {
+ 
         $this->model('UserModel');
         $this->db = new Database();
     }

@@ -58,17 +58,17 @@ class Auth extends Controller
         $profile_image = 'default_profile.jpg';
 
         $user = new UserModel();
-        $user->setName($name);
-        $user->setEmail($email);
-        $user->setGender($gender);
-        $user->setPhone($phone);
-        $user->setPassword($password);
-        $user->setProfileImage($profile_image);
-        $user->setIsLogin(0);
-        $user->setIsActive(0);
-        $user->setIsConfirmed(0);
-        $user->setTypeId(3);
-        $user->setStatusId(6);
+        $user->name=$name;
+        $user->email=$email;
+        $user->gender=$gender;
+        $user->phone=$phone;
+        $user->password=$password;
+        $user->profile_image=$profile_image;
+        $user->is_login=0;
+        $user->is_active=0;
+        $user->is_confirmed=0;
+        $user->type_id=3;
+        $user->status_id=6;
 
         $userCreated = $this->db->create('users', $user->toArray());
 

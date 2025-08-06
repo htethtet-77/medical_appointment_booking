@@ -64,7 +64,7 @@ if (isset($_SESSION['success'])) {
                             <?php if (!empty($doctor['fee'])) : ?>
                                 <div class="info-item">
                                     <span class="label">Fee</span>
-                                    <span class="value">$<?php echo htmlspecialchars($doctor['fee']); ?></span>
+                                    <span class="value"><?php echo htmlspecialchars($doctor['fee']); ?>kyat</span>
                                 </div>
                             <?php endif; ?>
                             

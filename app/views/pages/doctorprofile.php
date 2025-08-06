@@ -94,41 +94,41 @@
           <?php $doctor_id = htmlspecialchars($data['doctor']['user_id']); ?>
             <div class="flex flex-wrap gap-3">
                <?php
-$selectedDate = $data['selected_date'] ?? date('Y-m-d');
-$now = new DateTime();
-$today = $now->format('Y-m-d');
-?>
-
-<?php if (!empty($data['appointment_time'])): ?>
-    <?php
-    $hasAvailableSlots = false;
-    foreach ($data['appointment_time'] as $slot):
-        // Combine date and time for comparison
-        $slotDateTime = DateTime::createFromFormat('Y-m-d H:i:s', $selectedDate . ' ' . $slot);
-        if (!$slotDateTime) {
-            $slotDateTime = new DateTime($selectedDate . ' ' . $slot);
-        }
-
-        // Show slot only if in future OR selected date is in future
-        if ($selectedDate > $today || ($selectedDate == $today && $slotDateTime > $now)):
-            $hasAvailableSlots = true;
+            $selectedDate = $data['selected_date'] ?? date('Y-m-d');
+            $now = new DateTime();
+            $today = $now->format('Y-m-d');
             ?>
-            <span class="bg-teal-100 text-teal-800 rounded-lg p-3 text-center font-medium">
-                <?php echo htmlspecialchars(date("h:i A", strtotime($slot))); ?>
-            </span>
-        <?php
-        endif;
-    endforeach;
 
-    if (!$hasAvailableSlots) {
-        echo '<span class="text-gray-500">No timeslots available</span>';
-    }
-    ?>
-<?php else: ?>
-    <span class="text-gray-500">No timeslots available</span>
-<?php endif; ?>
+            <?php if (!empty($data['appointment_time'])): ?>
+                <?php
+                $hasAvailableSlots = false;
+                foreach ($data['appointment_time'] as $slot):
+                    // Combine date and time for comparison
+                    $slotDateTime = DateTime::createFromFormat('Y-m-d H:i:s', $selectedDate . ' ' . $slot);
+                    if (!$slotDateTime) {
+                        $slotDateTime = new DateTime($selectedDate . ' ' . $slot);
+                    }
 
-            </div>
+                    // Show slot only if in future OR selected date is in future
+                    if ($selectedDate > $today || ($selectedDate == $today && $slotDateTime > $now)):
+                        $hasAvailableSlots = true;
+                        ?>
+                        <span class="bg-teal-100 text-teal-800 rounded-lg p-3 text-center font-medium">
+                            <?php echo htmlspecialchars(date("h:i A", strtotime($slot))); ?>
+                        </span>
+                    <?php
+                    endif;
+                endforeach;
+
+                if (!$hasAvailableSlots) {
+                    echo '<span class="text-gray-500">No timeslots available</span>';
+                }
+                ?>
+            <?php else: ?>
+                <span class="text-gray-500">No timeslots available</span>
+            <?php endif; ?>
+
+                        </div>
 
 
             <a href="<?php echo URLROOT; ?>/appointment/appointmentform/<?php echo $doctor_id; ?>"
@@ -159,6 +159,10 @@ $today = $now->format('Y-m-d');
                 </div>
             </div>
         </div>
+<a href="<?php echo URLROOT; ?>/patient/doctors" 
+   class="inline-block w-fit px-3 py-1.5 rounded-md bg-green-600 hover:bg-green-700 text-white font-medium transition">
+   ⬅ Back
+</a>
 
     </div>
 </section>

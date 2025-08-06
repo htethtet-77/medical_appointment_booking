@@ -221,7 +221,7 @@ if (isset($_SESSION['success'])) {
                             Consultation Fee
                         </label>
                         <div class="fee-input">
-                            <span class="currency">$</span>
+                            <span class="currency"></span>
                             <input type="number" name="fee" id="fees" required placeholder="0.00" min="0" step="0.01">
                         </div>
                     </div>
@@ -302,13 +302,7 @@ if (isset($_SESSION['success'])) {
     box-sizing: border-box;
 }
 
-body {
-    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--light-gray);
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-}
+
 
 .page-container {
     max-width: 1200px;
@@ -820,10 +814,10 @@ function togglePassword() {
     
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
-        passwordIcon.className = 'fa fa-eye-slash';
+        passwordIcon.className = 'fa fa-eye';
     } else {
         passwordInput.type = 'password';
-        passwordIcon.className = 'fa fa-eye';
+        passwordIcon.className = 'fa fa-eye-slash';
     }
 }
 
