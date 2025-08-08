@@ -13,11 +13,16 @@
     --border-light: #E5E7EB;
     --error-red: #DC2626;
     --error-light: #FEF2F2;
+    --warning-orange: #F59E0B;
+    --warning-light: #FEF3C7;
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --border-radius: 0.5rem;
+    --transition: all 0.3s ease;
 }
 
+/* Base styles */
 * {
     box-sizing: border-box;
 }
@@ -66,7 +71,7 @@
     cursor: pointer;
     padding: 0.25rem;
     border-radius: 0.25rem;
-    transition: background-color 0.2s;
+    transition: var(--transition);
 }
 
 .alert-close:hover {
@@ -109,6 +114,7 @@
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
+    flex-shrink: 0;
 }
 
 .header-text h1 {
@@ -171,6 +177,12 @@
     background: var(--light-gray);
     border-radius: 0.75rem;
     border: 2px dashed var(--border-light);
+    transition: var(--transition);
+}
+
+.photo-upload-section:hover {
+    border-color: var(--primary-green);
+    background: var(--light-green);
 }
 
 .photo-preview {
@@ -190,7 +202,7 @@
     color: var(--primary-green);
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--transition);
 }
 
 .photo-placeholder:hover {
@@ -208,6 +220,11 @@
     border-radius: 0.75rem;
     object-fit: cover;
     border: 3px solid var(--light-green);
+    transition: var(--transition);
+}
+
+#photo-preview:hover {
+    border-color: var(--primary-green);
 }
 
 .upload-controls {
@@ -228,7 +245,8 @@
     gap: 0.5rem;
 }
 
-.input-group label {
+.input-group label,
+fieldset legend {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -237,9 +255,36 @@
     font-size: 0.875rem;
 }
 
-.input-group label i {
+fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+fieldset legend {
+    float: left;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.input-group label i,
+fieldset legend i {
     color: var(--primary-green);
     width: 16px;
+    flex-shrink: 0;
+}
+
+.optional-label {
+    color: var(--text-secondary);
+    font-weight: 400;
+    font-size: 0.75rem;
+    margin-left: auto;
+}
+
+.input-help {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
 }
 
 .input-group input,
@@ -247,11 +292,12 @@
 .input-group textarea {
     padding: 0.875rem 1rem;
     border: 2px solid var(--border-light);
-    border-radius: 0.5rem;
+    border-radius: var(--border-radius);
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: var(--transition);
     background: var(--pure-white);
     resize: vertical;
+    font-family: inherit;
 }
 
 .input-group input:focus,
@@ -260,6 +306,12 @@
     outline: none;
     border-color: var(--primary-green);
     box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.input-group input:invalid,
+.input-group select:invalid,
+.input-group textarea:invalid {
+    border-color: var(--error-red);
 }
 
 .input-group input::placeholder,
@@ -283,7 +335,7 @@
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 0.25rem;
-    transition: color 0.3s ease;
+    transition: var(--transition);
 }
 
 .password-toggle:hover {
@@ -314,6 +366,7 @@
     display: flex;
     gap: 1rem;
     margin-top: 0.5rem;
+    flex-wrap: wrap;
 }
 
 .radio-option {
@@ -323,10 +376,11 @@
     cursor: pointer;
     padding: 0.75rem 1rem;
     border: 2px solid var(--border-light);
-    border-radius: 0.5rem;
-    transition: all 0.3s ease;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
     flex: 1;
     justify-content: center;
+    min-width: 120px;
 }
 
 .radio-option:hover {
@@ -344,7 +398,8 @@
     border: 2px solid var(--border-light);
     border-radius: 50%;
     position: relative;
-    transition: all 0.3s ease;
+    transition: var(--transition);
+    flex-shrink: 0;
 }
 
 .radio-option input[type="radio"]:checked + .radio-custom {
@@ -396,13 +451,19 @@
     gap: 0.5rem;
     padding: 0.875rem 1.5rem;
     border: none;
-    border-radius: 0.5rem;
+    border-radius: var(--border-radius);
     font-weight: 600;
     font-size: 1rem;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--transition);
     text-decoration: none;
     justify-content: center;
+    font-family: inherit;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .btn-primary {
@@ -411,7 +472,7 @@
     box-shadow: var(--shadow-md);
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
     background: var(--dark-green);
     transform: translateY(-1px);
     box-shadow: var(--shadow-lg);
@@ -423,7 +484,7 @@
     border: 2px solid var(--border-light);
 }
 
-.btn-secondary:hover {
+.btn-secondary:hover:not(:disabled) {
     border-color: var(--medium-gray);
     color: var(--text-primary);
 }
@@ -434,7 +495,7 @@
     border: 2px solid var(--primary-green);
 }
 
-.btn-outline:hover {
+.btn-outline:hover:not(:disabled) {
     background: var(--primary-green);
     color: var(--pure-white);
 }
@@ -449,7 +510,43 @@
     gap: 1rem;
 }
 
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Loading state */
+.form-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.form-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border-light);
+    border-top-color: var(--primary-green);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
 /* Responsive Design */
+@media (max-width: 1024px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 768px) {
     .page-container {
         padding: 0.75rem;
@@ -470,12 +567,15 @@
     }
 
     .form-grid {
-        grid-template-columns: 1fr;
         gap: 1.5rem;
     }
 
     .radio-group {
         flex-direction: column;
+    }
+
+    .radio-option {
+        min-width: auto;
     }
 
     .time-group {
@@ -487,19 +587,77 @@
         gap: 1rem;
     }
 
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
     .form-actions .btn {
         width: 100%;
     }
 }
 
 @media (max-width: 480px) {
-    .photo-placeholder {
-        width: 100px;
-        height: 100px;
-    }
-
+    .photo-placeholder,
     #photo-preview {
         width: 100px;
         height: 100px;
     }
+
+    .header-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
+    }
+
+    .doctor-form {
+        padding: 1rem;
+    }
+
+    .form-header {
+        padding: 1rem;
+    }
 }
+
+/* Print styles */
+@media print {
+    .form-header,
+    .form-actions,
+    .btn {
+        display: none;
+    }
+    
+    .form-container {
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+    
+    .page-container {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+/* Focus management for accessibility */
+.form-container:focus-within .section-header {
+    border-bottom-color: var(--primary-green);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --border-light: #666;
+        --text-secondary: #333;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
