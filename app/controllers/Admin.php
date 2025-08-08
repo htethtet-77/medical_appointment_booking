@@ -136,12 +136,14 @@ class Admin extends Controller
             $timeslots = $this->db->columnFilter('timeslots', 'user_id', $user_id);
             if (!empty($timeslots)) {
                 $this->db->delete('timeslots', $timeslots['id']);    
-
-                // Delete appointment(s)
-                $appointment = $this->db->columnFilter('appointment','timeslot_id',$timeslots['id']);
-                if ($appointment && isset($appointment['id'])) {
-                    $this->db->delete('appointment', $appointment['id']);
+               
+                    // Delete appointment(s)
+                    $appointment = $this->db->columnFilterAll('appointment','timeslot_id',$timeslots['id']);
+                    foreach ($appointment as $appt) {
+                    $this->db->delete('appointment', $appt['id']);
                 }
+
+                
             }
 
             // Always delete doctorprofile

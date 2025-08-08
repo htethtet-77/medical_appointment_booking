@@ -13,7 +13,7 @@ class AuthMiddleware
     {
         self::startSession();
 
-        if (!isset($_SESSION['user']) || $_SESSION['current_user']['type_id'] != ROLE_ADMIN) {
+        if (!isset($_SESSION['current_user']) || $_SESSION['current_user']['type_id'] != ROLE_ADMIN) {
             header("Location: " . URLROOT . "/pages/login");
             exit();
         }
@@ -34,7 +34,7 @@ class AuthMiddleware
         self::startSession();
 
         if (!isset($_SESSION['current_user']) || $_SESSION['current_user']['type_id'] != ROLE_PATIENT) {
-            header("Location: " . URLROOT . "/pages/login");
+            header("Location: " . URLROOT . "/pages/register");
             exit();
         }
     }

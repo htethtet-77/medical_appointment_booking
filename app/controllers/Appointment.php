@@ -148,7 +148,7 @@ class Appointment extends Controller
                 return redirect('appointment/appointmentlist');
             }
 
-            // 🔁 Call stored procedure instead of direct delete
+            // Call stored procedure instead of direct delete
             $deleted = $this->db->callProcedure('delete_appointment', [$id]);
 
             setMessage($deleted ? 'success' : 'error', $deleted ? 'Appointment cancelled successfully.' : 'Failed to cancel appointment.');
