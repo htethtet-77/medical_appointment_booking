@@ -23,7 +23,7 @@
       <!-- Payment Options -->
       <div class="footer-box">
         <i class="fas fa-credit-card footer-icon"></i>
-        <p>Multiple</p>
+        <p>Offline</p>
         <p>Payment Option</p>
       </div>
     </div>

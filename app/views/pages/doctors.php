@@ -103,9 +103,10 @@
                     </div>
 
                     <h3 class="text-xl font-semibold text-gray-800">Dr. ${doc.name}</h3>
-                    <p class="text-gray-600">${doc.specialty}(${doc.degree})</p>
+                    <p class="text-green-600">${doc.specialty}</p>
+                    <p class="text-gray-600">${doc.degree}</p>
                     <p class="text-sm text-gray-500">${doc.experience ?? 'Experience N/A'} Years Experience</p>
-                    <p class="text-sm text-gray-500">${startTime} - ${endTime}</p>
+                    <p class="text-sm text-blue-700 bg-blue-100 p-2 rounded font-medium">${startTime} - ${endTime}</p>
                     <button class="view-profile-btn" data-doctor-id="${doc.user_id}">
                         View Profile
                     </button>

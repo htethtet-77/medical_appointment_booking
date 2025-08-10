@@ -18,10 +18,10 @@ class Pages extends Controller
     
         $this->view('pages/home');
     }
-    public function doctors()
-    {
-        $this->view('pages/doctors');
-    }
+    // public function doctors()
+    // {
+    //     $this->view('pages/doctors');
+    // }
      public function appointment()
     {
         $this->view('pages/appointment');

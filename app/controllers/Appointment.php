@@ -1,36 +1,34 @@
 <?php
-// require_once 'helpers/appointment_helper.php';
+require_once __DIR__ . '/../services/AppointmentService.php';
+// require_once __DIR__ . '/../repositories/AppointmentRepository.php';
 
 class Appointment extends Controller
 {
+    private $service;
 
-    private $db;
     public function __construct()
     {
-        $this->model("AppointmentModel");
-        // $this->model("UserModel");
-        $this->db = new Database();
+        $db=new Database();
+        $repo = new AppointmentRepository($db);
+        $this->service = new AppointmentService($repo);
     }
-    // Main form loader - loads initial page and slots for default or given date
-    public function appointmentform($doctor_id) {
-        date_default_timezone_set('Asia/Yangon');
-        require_once APPROOT .'/helpers/appointment_helper.php';
 
+    public function appointmentform($doctorId)
+    {
         $user = $_SESSION['current_user'] ?? null;
         if (!$user) {
             setMessage('error', "You need to register first");
             return redirect("pages/register");
         }
 
-        $doctor = $this->db->columnFilter('doctor_view', 'user_id', $doctor_id) ?? die('Doctor not found');
-        $time = $this->db->columnFilter('timeslots', 'user_id', $doctor_id) ?? die('Doctor timeslot not found');
-
         $selectedDate = $_GET['date'] ?? date('Y-m-d');
 
-        $slots = getAvailableSlots($time['start_time'], $time['end_time']);
-        $appointments = $this->db->columnFilterAll('appointment', 'doctor_id', $doctor_id) ?? [];
-        $bookedTimes = getBookedTimes($appointments, $selectedDate);
-        $availableSlots = filterFutureAvailableSlots($slots, $bookedTimes, $selectedDate);
+        try {
+            $availableSlots = $this->service->getAvailableSlotsForDoctor($doctorId, $selectedDate);
+            $doctor = $this->service->getDoctorById($doctorId); // or inject doctor service separately
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
 
         $this->view('pages/appointmentform', [
             'doctor' => $doctor,
@@ -40,164 +38,91 @@ class Appointment extends Controller
         ]);
     }
 
-
-
-        public function book() {
+        public function book()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return redirect('pages/home');
         }
 
-        // Sanitize and assign POST data
-        $doctorId     = $_POST['doctor_id'] ?? null;
-        $email        = $_POST['email'] ?? null;
-        $reason       = trim($_POST['reason'] ?? '');
-        $timeslot     = $_POST['timeslot'] ?? '';
-        $date         = $_POST['appointment_date'] ?? null;
-
-        // Format inputs
-        $appointmentDate = $date ? date("Y-m-d", strtotime($date)) : null;
-        $appointmentTime = $timeslot ? date("H:i:s", strtotime($timeslot)) : null;
-
-        // Validate required fields
-        if (!$doctorId || !$appointmentDate || !$appointmentTime || empty($reason)) {
-            setMessage('error', 'Please fill in all required fields.');
-            return redirect("appointment/appointmentform/$doctorId");
-        }
-
-        // Check user session
         $user = $_SESSION['current_user'] ?? null;
         if (!$user) {
             setMessage('error', 'Please log in to book an appointment.');
             return redirect('pages/login');
         }
 
-        // Fetch doctor and patient data
-        $doctor = $this->db->columnFilter('doctor_view', 'user_id', $doctorId);
-        $patient = $this->db->columnFilter('users', 'id', $user['id']);
+        $data = [
+            'doctor_id' => $_POST['doctor_id'] ?? null,
+            'patient_id' => $user['id'],
+            'timeslot_id' => isset($_POST['timeslot_id']) ? (int)$_POST['timeslot_id'] : null,  // IMPORTANT: cast to int
+            'appointment_date' => isset($_POST['appointment_date']) ? date("Y-m-d", strtotime($_POST['appointment_date'])) : null,
+            'appointment_time' => isset($_POST['appointment_time']) ? date("H:i:s", strtotime($_POST['appointment_time'])) : null,
+            'reason' => trim($_POST['reason'] ?? ''),
+        ];
 
-        if (!$doctor || !$patient) {
-            setMessage('error', 'Doctor or patient not found.');
-            return redirect("appointment/appointmentform/$doctorId");
+        // Basic validation example:
+        if (!$data['doctor_id'] || !$data['timeslot_id'] || !$data['appointment_date'] || !$data['appointment_time']) {
+            setMessage('error', 'Please fill all required fields.');
+            return redirect("appointment/appointmentform/{$data['doctor_id']}");
         }
 
-        // Check for duplicate booking
-        $appointments = $this->db->columnFilterAll('appointment', 'doctor_id', $doctorId);
-        foreach ($appointments as $a) {
-            if ($a['appointment_date'] === $appointmentDate && $a['appointment_time'] === $appointmentTime) {
-                setMessage('error', 'This timeslot is already booked. Please choose another.');
-                return redirect("appointment/appointmentform/$doctorId");
+        try {
+            $success = $this->service->bookAppointment($data);
+            if (!$success) {
+                throw new Exception("Failed to create appointment.");
             }
+            setMessage('success', 'Appointment booked successfully.');
+            return redirect('appointment/appointmentlist');
+        } catch (Exception $e) {
+            setMessage('error', $e->getMessage());
+            return redirect("appointment/appointmentform/{$data['doctor_id']}");
         }
-
-        // Call stored procedure to create appointment
-        $success = $this->db->callProcedure('book_appointment', [
-            $doctorId,
-            $patient['id'],
-            $doctor['timeslot_id'],
-            $appointmentDate,
-            $appointmentTime,
-            $reason,
-            2 // status_id: pending
-        ]);
-
-        if (!$success) {
-            setMessage('error', 'Failed to create appointment.');
-            return redirect("appointment/appointmentform/$doctorId");
-        }
-
-        setMessage('success', 'Appointment booked successfully.');
-        return redirect('appointment/appointmentlist');
     }
 
-
-       public function appointmentlist() {
-        // session_start();
-            if (!isset($_SESSION['current_user']) || !is_array($_SESSION['current_user'])) {
-                redirect('pages/appointment');
-                exit;
-            }
-            $user = $_SESSION['current_user'] ?? '' ;
-
-            $appointments = $this->db->columnFilterAll('appointment_view', 'patient_id', $user['id']);
-            // var_dump($appointments);
-            // exit;
-            $data = [
-                'appointments' => $appointments,
-                'user'=>$user,
-                ];
-            $this->view("pages/appointment", $data);
+    public function appointmentlist()
+    {
+        $user = $_SESSION['current_user'] ?? null;
+        if (!$user) {
+            return redirect('pages/appointment');
         }
 
-//patient appointment cancel
-        public function delete($id) 
-        {
-            $appointment = $this->db->columnFilter('appointment', 'id', $id);
+        $appointments = $this->service->getAppointmentsByPatient($user['id']);
 
-            if (!$appointment) {
-                setMessage('error', 'Appointment not found.');
-                return redirect('appointment/appointmentlist');
-            }
+        $this->view("pages/appointment", [
+            'appointments' => $appointments,
+            'user' => $user,
+        ]);
+    }
 
-            if ($appointment['status_id'] === 1) {
-                setMessage('error', 'Appointment already confirmed.');
-                return redirect('appointment/appointmentlist');
-            }
-
-            if ($appointment['status_id'] === 3) {
-                setMessage('error', 'Appointment already rejected by doctor.');
-                return redirect('appointment/appointmentlist');
-            }
-
-            // Call stored procedure instead of direct delete
-            $deleted = $this->db->callProcedure('delete_appointment', [$id]);
-
-            setMessage($deleted ? 'success' : 'error', $deleted ? 'Appointment cancelled successfully.' : 'Failed to cancel appointment.');
-            redirect('appointment/appointmentlist');
+    public function delete($id)
+    {
+        try {
+            $this->service->cancelAppointment($id);
+            setMessage('success', 'Appointment cancelled successfully.');
+        } catch (Exception $e) {
+            setMessage('error', $e->getMessage());
         }
+        redirect('appointment/appointmentlist');
+    }
 
-    //appointment confirm by doctor
-        public function confirm($appointment_id){
-            $id=$this->db->columnFilter('appointment','id',$appointment_id);
-  
-            $appointment = new AppointmentModel();
-                $appointment->created_at=$id['created_at'];
-                $appointment->reason=$id['reason'];
-                $appointment->timeslot_id=$id['timeslot_id'];
-                $appointment->appointment_date=$id['appointment_date'];
-                $appointment->appointment_time=$id['appointment_time'];
-                $appointment->user_id=$id['user_id'];  // patient id
-                $appointment->doctor_id=$id['doctor_id'];      // doctor id
-                $appointment->status_id=1;
-            $updated= $this->db->update('appointment',$id['id'],$appointment->toArray());
-                if(!$updated){
-                    setMessage('error','Something Wrong');
-                    return;
-                }
-                setMessage('success','Appointment confirmed successfully');
-                redirect("doctor/dash");
+    public function confirm($appointmentId)
+    {
+        try {
+            $this->service->updateAppointmentStatus($appointmentId, 1);
+            setMessage('success', 'Appointment confirmed successfully.');
+        } catch (Exception $e) {
+            setMessage('error', $e->getMessage());
         }
-        //appointment reject by doctor
-        public function  reject($appointment_id){
-            $id=$this->db->columnFilter('appointment','id', $appointment_id);
-            $appointment = new AppointmentModel();
-                $appointment->created_at=$id['created_at'];
-                $appointment->reason=$id['reason'];
-                $appointment->timeslot_id=$id['timeslot_id'];
-                $appointment->appointment_date=$id['appointment_date'];
-                $appointment->appointment_time=$id['appointment_time'];
-                $appointment->user_id=$id['user_id'];  // patient id
-                $appointment->doctor_id=$id['doctor_id'];      // doctor id
-                $appointment->status_id=3;
-                $updated= $this->db->update('appointment',$id['id'],$appointment->toArray());
-                if(!$updated){
-                    setMessage('error','Something Wrong');
-                    return;
-                }
-                setMessage('success','Appointment reject successfully');
-                redirect("doctor/dash");
+        redirect("doctor/dash");
+    }
 
+    public function reject($appointmentId)
+    {
+        try {
+            $this->service->updateAppointmentStatus($appointmentId, 3);
+            setMessage('success', 'Appointment rejected successfully.');
+        } catch (Exception $e) {
+            setMessage('error', $e->getMessage());
         }
-
-        
+        redirect("doctor/dash");
+    }
 }
-?>
