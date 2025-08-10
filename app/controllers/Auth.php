@@ -134,7 +134,13 @@ public function login() {
                     break;
 
                 case ROLE_PATIENT:
-                
+                $patient=$this->db->columnFilter('users','id',$user['id']);
+                   if (!$patient) {
+                        setMessage('error', 'Doctor profile not found.');
+                        redirect('pages/login');
+                        exit;
+                    }
+                $_SESSION['current_patient']=$patient;
                     redirect('patient/doctors');
                     break;
 
@@ -171,6 +177,6 @@ public function login() {
 
     session_unset();
     session_destroy();
-    redirect('pages/login');
+    redirect('pages/home');
 }
 }

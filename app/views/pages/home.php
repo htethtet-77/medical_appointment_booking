@@ -1,4 +1,5 @@
-<?php require APPROOT . '/views/inc/header.php'; ?>
+    <title><?php echo SITENAME; ?></title>
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/home.css">
 <?php require APPROOT . '/views/inc/navbar.php'; ?>
 
 <!-- Add Font Awesome if not already included -->
@@ -53,6 +54,8 @@
                     </div>
                     <h3>Dr. Daniel Smith</h3>
                     <p>General Physician</p>
+                    <!-- <p>10 Years Experience</p> -->
+                    <!-- <p>12:00 PM - 04:00 PM</p> -->
                   
                 </div>
                 <div class="doctor-card">

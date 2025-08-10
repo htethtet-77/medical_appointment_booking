@@ -1,5 +1,4 @@
 <?php
-
 class UserValidator
 {
     private $data;

@@ -1,4 +1,6 @@
+<title><?php echo SITENAME; ?></title>
 <?php require APPROOT . '/views/inc/sidebar.php'; ?>
+    
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dashboard.css">
 

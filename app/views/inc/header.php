@@ -11,7 +11,6 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>/vendor/css-hamburgers/hamburgers.min.css">
 	<!-- <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>/vendor/select2/select2.min.css"> -->
 	<link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>/css/util.css">
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/home.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/doctorpage.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/userprofile.css">
 

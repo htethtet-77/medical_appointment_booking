@@ -39,13 +39,13 @@ class AuthMiddleware
         }
     }
 
-    public static function allowRoles(array $allowedRoles)
-    {
-        self::startSession();
+    // public static function allowRoles(array $allowedRoles)
+    // {
+    //     self::startSession();
 
-        if (!isset($_SESSION['current_user']) || !in_array($_SESSION['current_user']['type_id'], $allowedRoles)) {
-            header("Location: " . URLROOT . "/pages/login");
-            exit();
-        }
-    }
+    //     if (!isset($_SESSION['current_user']) || !in_array($_SESSION['current_user']['type_id'], $allowedRoles)) {
+    //         header("Location: " . URLROOT . "/pages/login");
+    //         exit();
+    //     }
+    // }
 }

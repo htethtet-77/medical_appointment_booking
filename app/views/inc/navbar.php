@@ -10,8 +10,8 @@
 <body>
 
 <?php 
-$isLoggedIn = isset($_SESSION['current_user']);
-$user = $isLoggedIn ? $_SESSION['current_user'] : null;
+$isLoggedIn = isset($_SESSION['current_patient']);
+$user = $isLoggedIn ? $_SESSION['current_patient'] : null;
 
 // Function to detect active page
 function isActivePage($pagePath) {

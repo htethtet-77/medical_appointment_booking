@@ -1,4 +1,5 @@
 <?php
+
 class Database
 {
     private $host = DB_HOST;
@@ -163,21 +164,7 @@ class Database
         $rows = $stm->fetchAll(PDO::FETCH_ASSOC);
         return ($success) ? $rows : [];
     }
-    public function customQuery($sql, $params = [])
-    {
-        try {
-            $stm = $this->pdo->prepare($sql);
-            foreach ($params as $key => $value) {
-                // Numeric keys are 0-based but PDO expects 1-based
-                $stm->bindValue(is_int($key) ? $key + 1 : ':' . $key, $value);
-            }
-            $stm->execute();
-            return $stm->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            echo "CustomQuery Error: " . $e->getMessage();
-            return [];
-        }
-    }
+
 
 
 
@@ -337,14 +324,21 @@ class Database
         return $stmt->execute($params);
     }
     
-    public function adddoctor($procedureName, $params = [])
+   public function adddoctor($procedureName, $params = [])
     {
         $placeholders = implode(',', array_fill(0, count($params), '?'));
         $sql = "CALL {$procedureName}({$placeholders})";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
-        return $stmt;
+
+        // Fetch the first row (assumes your stored procedure SELECTs new_user_id AS user_id)
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $stmt->closeCursor(); // important for MySQL procedures
+
+        return $result['user_id'] ?? 0;
     }
+
 
 
 

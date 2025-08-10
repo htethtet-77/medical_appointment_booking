@@ -50,7 +50,7 @@
 
             <div class="form-group">
                 <label for="appointmentTime">Doctor's Available Time:</label>
-                <input type="text" id="appointmentTime" name="time" readonly
+                <input type="text" id="appointmentTime" name="timeslot_id" readonly
                        value="<?php
                             $start = $data['doctor']['start_time'] ?? null;
                             $end = $data['doctor']['end_time'] ?? null;
@@ -62,7 +62,7 @@
 
             <div class="form-group">
                 <label for="timeslot">Select Available Timeslot:</label>
-                    <select name="timeslot" id="timeslot" required>
+                    <select name="appointment_time" id="timeslot" required>
     <option value="">-- Select Time --</option>
     <?php if (!empty($data['appointment_time'])): ?>
         <?php foreach ($data['appointment_time'] as $slot): ?>
