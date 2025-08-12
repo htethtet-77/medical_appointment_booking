@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../middleware/authMiddleware.php';
 require_once __DIR__ . '/../services/PatientService.php';
+// require_once __DIR__ . '/../services/MailerService.php';
+
 
 class Patient extends Controller
 {
@@ -12,11 +14,10 @@ class Patient extends Controller
         AuthMiddleware::patientOnly();
         $db = new Database();
         $repository = new PatientRepository($db);
-        $appointmentRepository = new AppointmentRepository($db);
         $imageUploader = new ImageUploadService();
-        $appointmentService = new AppointmentService($appointmentRepository);
+        $mailer=new Mail();
 
-        $this->patientService = new PatientService($repository,$imageUploader,$appointmentService);
+        $this->patientService = new PatientService($repository,$imageUploader,$mailer);
     }
 
     public function index()
@@ -60,4 +61,25 @@ class Patient extends Controller
         }
         $this->view('pages/userprofile', $result);
     }
+    public function sendMessage()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $fullName = trim($_POST['fullName']);
+        $emailAddress = trim($_POST['emailAddress']);
+        $subject = trim($_POST['subject']);
+        $message = trim($_POST['message']);
+
+
+        $result =$this->patientService->sendContactMessage($fullName, $emailAddress, $subject, $message);
+
+        if ($result['success']) {
+            redirect('pages/contactus');
+            exit;
+        } else {
+            header("Location: /contact?error=" . urlencode($result['message']));
+            exit;
+        }
+    }
+}
+
 }
