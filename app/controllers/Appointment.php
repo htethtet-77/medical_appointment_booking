@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../services/AppointmentService.php';
-// require_once __DIR__ . '/../repositories/AppointmentRepository.php';
+// require_once __DIR__ . '/../helpers/AppointmentHelper.php';
 
 class Appointment extends Controller
 {

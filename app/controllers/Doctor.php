@@ -5,7 +5,7 @@ require_once __DIR__ . '/../services/DoctorService.php';
 class Doctor extends Controller
 {
     private $doctorService;
-
+  
     public function __construct()
     {
         AuthMiddleware::doctorOnly();
@@ -26,4 +26,33 @@ class Doctor extends Controller
     {
         $this->view('doctor/profile');
     }
+
+   public function changePassword()
+{
+    if (!isset($_SESSION['current_doctor'])) {
+        redirect('auth/login');
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        redirect('doctor/profile');
+    }
+
+    $doctorId = $_SESSION['current_doctor']['user_id'];
+  
+    $currentPassword = trim($_POST['current_password'] ?? '');
+    $newPassword = trim($_POST['new_password'] ?? '');
+    $confirmPassword = trim($_POST['confirm_password'] ?? '');
+  
+
+    try {
+        $this->doctorService->changePassword($doctorId, $currentPassword, $newPassword, $confirmPassword);
+
+        $_SESSION['password_success'] = 'Password updated successfully!';
+        redirect('doctor/profile');
+    } catch (Exception $e) {
+        $_SESSION['password_error'] = $e->getMessage();
+        redirect('doctor/profile');
+    }
+}
+
 }

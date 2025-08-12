@@ -1,24 +1,32 @@
 <?php
 require_once __DIR__ . '/../repositories/PatientRepository.php';
+require_once __DIR__ . '/../interfaces/PatientRepositoryInterface.php';
 require_once __DIR__ . '/../services/ImageUploadService.php';
-require_once __DIR__ . '/../services/AppointmentService.php';
+require_once __DIR__ . '/../interfaces/ImageUploadServiceInterface.php';
+// require_once __DIR__ . '/../interfaces/MailerInterface.php';
+// require_once __DIR__ . '/../services/MailerService.php';
+require_once __DIR__ . '/../libraries/Mail.php';
+
+
 
 class PatientService
 {
-    private $patientRepository;
-    protected ImageUploadService $imageUploader;
-    protected AppointmentService $appointmentService;
+    private PatientRepositoryInterface $patientRepository;
+    private ImageUploadServiceInterface $imageUploader;
+    private Mail $mailer;
 
 
     public function __construct(
-        PatientRepository $patientRepository,
-        ImageUploadService $imageUploader,
-        AppointmentService $appointmentService
+        PatientRepositoryInterface $patientRepository,
+        ImageUploadServiceInterface $imageUploader,
+        Mail $mailer
+
 )
     {
         $this->patientRepository = $patientRepository;
         $this->imageUploader = $imageUploader;
-        $this->appointmentService = $appointmentService;
+        $this->mailer = $mailer;
+
 
     }
 
@@ -33,16 +41,24 @@ class PatientService
 
         $doctor = $this->patientRepository->getDoctorProfile($doctorId);
         if (!$doctor) {
-            die('Doctor not found');
+            throw new Exception('Doctor not found');
         }
 
         $time = $this->patientRepository->getDoctorTimeslot($doctorId);
         if (!$time) {
-            die('Doctor timeslot not found');
+            throw new Exception('Doctor timeslot not found');
         }
 
         $selectedDate = $selectedDate ?? date('Y-m-d');
-        $availableSlots = $this->appointmentService->getAvailableSlotsForDoctor($doctorId, $selectedDate);
+        $allAppointments = $this->patientRepository->getAppointmentsByTimeslot($time['id']) ?? [];
+
+        $slots = AppointmentHelper::getAvailableSlots($time['start_time'], $time['end_time']);
+        $bookedTimes =AppointmentHelper:: getBookedTimes($allAppointments, $selectedDate);
+        $availableSlots = array_map(function ($s) {
+            return DateTime::createFromFormat('H:i:s', $s)->format('h:i A');
+        }, AppointmentHelper::filterFutureAvailableSlots($slots, $bookedTimes, $selectedDate));
+
+
 
         return [
             'doctor' => $doctor,
@@ -136,4 +152,20 @@ class PatientService
 
         return ['user' => $user];
     }
+        public function sendContactMessage($fullName, $emailAddress, $subject, $message)
+    {
+        if (empty($fullName) || empty($emailAddress) || empty($subject) || empty($message)) {
+            return ['success' => false, 'message' => 'All fields are required.'];
+        }
+
+        // Use the Mail class
+        $sent = $this->mailer->sendContactMessage($fullName, $emailAddress, $subject, $message);
+
+        if ($sent) {
+            return ['success' => true, 'message' => 'Your message has been sent successfully.'];
+        } else {
+            return ['success' => false, 'message' => 'Failed to send your message. Please try again later.'];
+        }
+    }
+
 }

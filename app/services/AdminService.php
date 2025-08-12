@@ -1,18 +1,21 @@
 <?php
 require_once __DIR__ . '/../repositories/AdminRepository.php';
+require_once __DIR__ . '/../interfaces/AdminRepositoryInterface.php';
 require_once __DIR__ . '/../helpers/UserValidator.php';
 require_once __DIR__ . '/../services/ImageUploadService.php';
+require_once __DIR__ . '/../interfaces/ImageUploadServiceInterface.php';
+
 
 class AdminService
 {
-    protected AdminRepository $adminRepo;
+    protected AdminRepositoryInterface $adminRepo;
     protected UserValidator $validator;
-    protected ImageUploadService $imageUploader;
+    protected ImageUploadServiceInterface $imageUploader;
 
     public function __construct(
-        AdminRepository $adminRepo,
+        AdminRepositoryInterface $adminRepo,
         UserValidator $validator,
-        ImageUploadService $imageUploader
+        ImageUploadServiceInterface $imageUploader
     ) {
         $this->adminRepo = $adminRepo;
         $this->validator = $validator;

@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/../../src/PHPMailer.php';
+require_once __DIR__ . '/../../src/SMTP.php';
+require_once __DIR__ . '/../../src/Exception.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -6,47 +9,70 @@ use PHPMailer\PHPMailer\Exception;
 
 class Mail
 {
+    private $host = 'smtp.gmail.com';
+    private $username = 'htethtetwin664@gmail.com';
+    private $password = 'evph nvsr raat wgcf'; // Gmail App Password
+    private $port = 587;
+    private $fromEmail = 'htethtetwin664@gmail.com';
+    private $fromName = 'Medical Appointment Booking';
 
-    public function verifyMail($recipient_mail,$recipient_name)
+    private function getMailer()
     {
-        // Load Composer's autoloader
-        require '../vendor/autoload.php';
+        require '../vendor/autoload.php'; // Adjust path as needed
 
-        try {
+        $mail = new PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host       = $this->host;
+        $mail->SMTPAuth   = true;
+        $mail->Username   = $this->username;
+        $mail->Password   = $this->password;
+        $mail->SMTPSecure = 'tls';
+        $mail->Port       = $this->port;
+        $mail->setFrom($this->fromEmail, $this->fromName);
+        $mail->isHTML(true);
 
-            // Instantiation and passing `true` enables exceptions
-            $mail = new PHPMailer(true);
-
-            //Server settings
-            $mail->SMTPDebug = false;// Enable verbose debug output
-            $mail->isSMTP(); // Send using SMTP
-            $mail->Host       = 'smtp.gmail.com';// Set the SMTP server to send through
-            $mail->SMTPAuth   = true;// Enable SMTP authentication
-            $mail->Username   = 'htethtetwin664@gmail.com';// SMTP username
-            $mail->Password   = 'evph nvsr raat wgcf';// SMTP password
-            $mail->SMTPSecure = 'tls';// Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-            $mail->Port       = 587;// TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
-
-            //Recipients
-            $mail->setFrom('htethtetwin664@gmail.com', 'Medical Appointment Booking');  
-            $mail->addAddress($recipient_mail,$recipient_name);     // Add a recipient
-
-            // Content
-            $mail->isHTML(true);                                  // Set email format to HTML
-            $mail->Subject = 'Verify Mail';
-            $verificationLink = "https://yourdomain.com/verify?email=" . urlencode($recipient_mail) . "&token=some_unique_token_here";
-
-            $mail->Body = "<b><a href='$verificationLink' target='_blank'>Click here</a></b> to verify your registration.";
-            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-            $success = $mail->send();
-            //echo 'Message has been sent';
-        } catch (Exception $e) {
-            //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-        }
-
+        return $mail;
     }
 
+    // Existing verification method
+    public function verifyMail($recipient_mail, $recipient_name)
+    {
+        try {
+            $mail = $this->getMailer();
+            $mail->addAddress($recipient_mail, $recipient_name);
+            $mail->Subject = 'Verify Mail';
+            // $token = hash_hmac('sha256', $recipient_mail, SECRET_KEY);
+            // $verificationLink = "http://localhost:8000/verify?email=" . urlencode($recipient_mail) . "&token=" ;
+            $mail->Body = "<b><a href='http://localhost:8000/pages/login' target='_blank'>Click</a></b> Thank you for your registration.";
+            $mail->AltBody = 'Visit the verification link to complete registration.';
+            return $mail->send();
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    // New contact form email method
+    public function sendContactMessage($fullName, $emailAddress, $subject, $message)
+    {
+        try {
+            $mail = $this->getMailer();
+            $mail->addAddress($this->fromEmail, 'Admin'); // Send to yourself
+            $mail->Subject = "Contact Form Message: $subject";
+
+            $mail->Body = "
+                <h2>New Contact Message</h2>
+                <p><strong>Name:</strong> {$fullName}</p>
+                <p><strong>Email:</strong> {$emailAddress}</p>
+                <p><strong>Subject:</strong> {$subject}</p>
+                <p><strong>Message:</strong><br>" . nl2br(htmlspecialchars($message)) . "</p>
+            ";
+            $mail->AltBody = strip_tags("Name: $fullName\nEmail: $emailAddress\nSubject: $subject\nMessage: $message");
+
+            return $mail->send();
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }
 
 

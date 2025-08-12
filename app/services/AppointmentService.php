@@ -1,12 +1,14 @@
 <?php
 require_once __DIR__ . '/../repositories/AppointmentRepository.php';
+require_once __DIR__ . '/../interfaces/AppointmentRepositoryInterface.php';
+
 require_once __DIR__ . '/../models/AppointmentModel.php';
 
 class AppointmentService
 {
-    private $repo;
+    private AppointmentRepositoryInterface $repo;
 
-    public function __construct(AppointmentRepository $repo)
+    public function __construct(AppointmentRepositoryInterface $repo)
     {
         $this->repo = $repo;
     }
@@ -24,10 +26,10 @@ class AppointmentService
             throw new Exception("Doctor timeslot not found");
         }
 
-        $slots = getAvailableSlots($timeslot['start_time'], $timeslot['end_time']);
+        $slots = AppointmentHelper::getAvailableSlots($timeslot['start_time'], $timeslot['end_time']);
         $appointments = $this->repo->findAppointmentsByDoctorId($doctorId);
-        $bookedTimes = getBookedTimes($appointments, $selectedDate);
-        return filterFutureAvailableSlots($slots, $bookedTimes, $selectedDate);
+        $bookedTimes = AppointmentHelper::getBookedTimes($appointments, $selectedDate);
+        return AppointmentHelper::filterFutureAvailableSlots($slots, $bookedTimes, $selectedDate);
     }
 
     public function getDoctorById(int $doctorId)

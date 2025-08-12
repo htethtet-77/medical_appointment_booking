@@ -1,6 +1,7 @@
 <?php
+require_once __DIR__ . '/../interfaces/ImageUploadServiceInterface.php';
 
-class ImageUploadService
+class ImageUploadService implements ImageUploadServiceInterface
 {
     public function upload(array $file, string $uploadDir, string $prefix = ''): string
     {
