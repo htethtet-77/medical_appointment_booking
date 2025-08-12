@@ -17,7 +17,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <!-- Contact Form Section -->
                 <div class="order-2 md:order-1">
-                    <form action="#" method="POST" class="space-y-6">
+                    <form action="<?php echo URLROOT; ?>/patient/sendMessage " method="POST" class="space-y-6">
                         <div>
                             <label for="fullName" class="sr-only">Full Name</label>
                             <input type="text" id="fullName" name="fullName" placeholder="Full Name" class="form-input-field">

@@ -18,3 +18,4 @@ define('SITENAME', 'Medical Appointment Booking');
 define("ROLE_ADMIN",1);
 define("ROLE_DOCTOR",2);
 define("ROLE_PATIENT",3);
+

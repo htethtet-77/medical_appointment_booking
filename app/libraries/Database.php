@@ -64,82 +64,126 @@ class Database
     // }
 
     public function create($table, $data)
-{
-    try {
-        $column = array_keys($data);
-        $columnSql = implode(', ', $column);
-        $bindingSql = ':' . implode(',:', $column);
+    {
+        try {
+            $this->pdo->beginTransaction();
 
-        $sql = "INSERT INTO $table ($columnSql) VALUES ($bindingSql)";
-        $stm = $this->pdo->prepare($sql);
+            $column = array_keys($data);
+            $columnSql = implode(', ', $column);
+            $bindingSql = ':' . implode(',:', $column);
 
-        foreach ($data as $key => $value) {
-            // echo "Binding :$key => $value<br>";
-            // exit();
-            $stm->bindValue(':' . $key, $value);
-        }
+            $sql = "INSERT INTO $table ($columnSql) VALUES ($bindingSql)";
+            $stm = $this->pdo->prepare($sql);
 
-        $status = $stm->execute();
+            foreach ($data as $key => $value) {
+                $stm->bindValue(':' . $key, $value);
+            }
 
-        if (!$status) {
-            $errorInfo = $stm->errorInfo();
-            // echo "SQLSTATE error code: " . $errorInfo[0] . "<br>";
-            // echo "Driver-specific error code: " . $errorInfo[1] . "<br>";
-            // echo "Driver-specific error message: " . $errorInfo[2] . "<br>";
+            $status = $stm->execute();
+
+            if (!$status) {
+                $this->pdo->rollBack();
+                return false;
+            }
+
+            $lastId = $this->pdo->lastInsertId();
+
+            $this->pdo->commit();
+
+            return $lastId;
+
+        } catch (PDOException $e) {
+            $this->pdo->rollBack();
+            echo "PDOException: " . $e->getMessage();
             return false;
         }
-
-        // echo "Insert successful. Last Insert ID: " . $this->pdo->lastInsertId() . "<br>";
-        return $this->pdo->lastInsertId();
-
-    } catch (PDOException $e) {
-        echo "PDOException: " . $e->getMessage();
-        return false;
     }
-}
+
 
 
     // Update Query
     public function update($table, $id, $data)
-    {   
-        // First, we don't want id from category table
+    {
         if (isset($data['id'])) {
             unset($data['id']);
         }
 
         try {
+            $this->pdo->beginTransaction();
+
+            // Lock the row first
+            $lockSql = "SELECT * FROM $table WHERE id = :id FOR UPDATE";
+            $lockStmt = $this->pdo->prepare($lockSql);
+            $lockStmt->bindValue(':id', $id);
+            $lockStmt->execute();
+
+            // Prepare update statement
             $columns = array_keys($data);
             $columns = array_map(function($item) {
-            return $item . '=:' . $item;
-        }, $columns);
+                return $item . '=:' . $item;
+            }, $columns);
             $bindingSql = implode(',', $columns);
-            // echo $bindingSql;
-            // exit;
+
             $sql = 'UPDATE ' .  $table . ' SET ' . $bindingSql . ' WHERE `id` =:id';
             $stm = $this->pdo->prepare($sql);
 
-            // Now, we assign id to bind
             $data['id'] = $id;
 
             foreach ($data as $key => $value) {
                 $stm->bindValue(':' . $key, $value);
             }
+
             $status = $stm->execute();
-            // print_r($status);
+
+            if (!$status) {
+                $this->pdo->rollBack();
+                return false;
+            }
+
+            $this->pdo->commit();
+
             return $status;
+
         } catch (PDOException $e) {
-            echo $e;
+            $this->pdo->rollBack();
+            echo $e->getMessage();
+            return false;
         }
     }
 
+
     public function delete($table, $id)
     {
-        $sql = 'DELETE FROM ' . $table . ' WHERE `id` = :id';
-        $stm = $this->pdo->prepare($sql);
-        $stm->bindValue(':id', $id);
-        $success = $stm->execute();
-        return ($success);
+        try {
+            $this->pdo->beginTransaction();
+
+            // Lock the row first
+            $lockSql = "SELECT * FROM $table WHERE id = :id FOR UPDATE";
+            $lockStmt = $this->pdo->prepare($lockSql);
+            $lockStmt->bindValue(':id', $id);
+            $lockStmt->execute();
+
+            $sql = 'DELETE FROM ' . $table . ' WHERE `id` = :id';
+            $stm = $this->pdo->prepare($sql);
+            $stm->bindValue(':id', $id);
+            $success = $stm->execute();
+
+            if (!$success) {
+                $this->pdo->rollBack();
+                return false;
+            }
+
+            $this->pdo->commit();
+
+            return true;
+
+        } catch (PDOException $e) {
+            $this->pdo->rollBack();
+            echo $e->getMessage();
+            return false;
+        }
     }
+
 
     public function columnFilter($table, $column, $value)
     {

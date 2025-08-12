@@ -1,4 +1,5 @@
-    <title><?php echo SITENAME; ?></title>
+<link rel="icon" type="image/png" href="<?php echo URLROOT; ?>/images/icons/favicon.ico"/>
+<title><?php echo SITENAME; ?></title>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/home.css">
 <?php require APPROOT . '/views/inc/navbar.php'; ?>
 
