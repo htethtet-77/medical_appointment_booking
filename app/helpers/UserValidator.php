@@ -1,5 +1,6 @@
 <?php
-class UserValidator
+
+class UserValidator 
 {
     private $data;
     private $errors = [];

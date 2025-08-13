@@ -1,23 +1,19 @@
 <?php
 require_once __DIR__ . '/../middleware/authMiddleware.php';
 require_once __DIR__ . '/../services/PatientService.php';
-// require_once __DIR__ . '/../services/MailerService.php';
+require_once __DIR__ . '/../interfaces/PatientServiceInterface.php';
 
 
 class Patient extends Controller
 {
-    protected $patientService;
+    protected PatientServiceInterface $patientService;
 
     // Inject PatientService, which requires PatientRepository internally
-    public function __construct()
+    public function __construct(PatientServiceInterface $patientService)
     {
         AuthMiddleware::patientOnly();
-        $db = new Database();
-        $repository = new PatientRepository($db);
-        $imageUploader = new ImageUploadService();
-        $mailer=new Mail();
 
-        $this->patientService = new PatientService($repository,$imageUploader,$mailer);
+        $this->patientService =$patientService;
     }
 
     public function index()
