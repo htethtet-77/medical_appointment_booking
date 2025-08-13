@@ -1,27 +1,23 @@
 <?php
-require_once __DIR__ . '/../services/AdminService.php';
-require_once __DIR__ . '/../helpers/UserValidator.php'; 
+require_once __DIR__ . '/../interfaces/AdminServiceInterface.php';
 require_once __DIR__ . '/../middleware/authMiddleware.php'; 
+require_once __DIR__ . '/../services/AdminService.php';
 
 class Admin extends Controller
 {
-    protected AdminService $adminService;
+    protected AdminServiceInterface $adminService;
 
-    public function __construct()
+    public function __construct(AdminServiceInterface $adminService)
     {
-        // Restrict to admin users only
         AuthMiddleware::adminOnly();
-        $db=new Database();
-        $adminRepo = new AdminRepository($db);
-        $validator = new UserValidator([]);
-        $imageUploader = new ImageUploadService();
-
-        $this->adminService = new AdminService($adminRepo, $validator, $imageUploader);
+        $this->adminService = $adminService;
+  
     }
+    
 
     public function index()
     {
-        $this->dashboard();
+        return $this->dashboard();
     }
 
     public function adddoctor()
@@ -35,12 +31,10 @@ class Admin extends Controller
             setMessage('success', "Doctor added successfully! (ID: {$userId})");
             redirect('admin/doctorlist');
         } catch (Exception $e) {
-            // You can customize messages based on exception type or message content:
-            if (strpos($e->getMessage(), 'upload') !== false) {
-                setMessage('error', 'Image upload failed: ' . $e->getMessage());
-            } else {
-                setMessage('error', $e->getMessage());
-            }
+            $msg = strpos($e->getMessage(), 'upload') !== false
+                ? 'Image upload failed: ' . $e->getMessage()
+                : $e->getMessage();
+            setMessage('error', $msg);
             redirect('admin/adddoctor');
         }
 
@@ -87,9 +81,10 @@ class Admin extends Controller
             $this->adminService->updateDoctor($_POST, $_FILES['image'] ?? []);
             setMessage('success', 'Doctor updated successfully!');
         } catch (Exception $e) {
-            setMessage('error', 'Image upload failed: ' . $e->getMessage());
-        } catch (Exception $e) {
-            setMessage('error', $e->getMessage());
+            $msg = strpos($e->getMessage(), 'upload') !== false
+                ? 'Image upload failed: ' . $e->getMessage()
+                : $e->getMessage();
+            setMessage('error', $msg);
         }
 
         redirect('admin/doctorlist');

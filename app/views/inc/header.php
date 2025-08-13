@@ -13,6 +13,7 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>/css/util.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/doctorpage.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/userprofile.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/home.css?v=2">
 
     
     

@@ -1,10 +1,12 @@
 <?php
 require_once __DIR__ . '/../interfaces/DoctorRepositoryInterface.php';
+require_once __DIR__ . '/../interfaces/DoctorServiceInterface.php';
+
 require_once __DIR__ . '/../repositories/DoctorRepository.php';
 
 
 
-class DoctorService
+class DoctorService implements DoctorServiceInterface
 {
     private DoctorRepositoryInterface $doctorRepository;
  

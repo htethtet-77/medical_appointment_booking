@@ -95,7 +95,7 @@ if (isset($_SESSION['success'])) {
                         </form>
                         
                         <form method="POST" action="<?php echo URLROOT; ?>/admin/deletedoctor" 
-                              onsubmit="return confirm('Are you sure you want to delete this doctor?')">
+                              >
                             <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($doctor['user_id']); ?>">
                             <button type="submit" class="btn btn-delete" title="Delete Doctor">
                                 <i class="fa fa-trash"></i>

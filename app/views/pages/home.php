@@ -1,6 +1,7 @@
 <link rel="icon" type="image/png" href="<?php echo URLROOT; ?>/images/icons/favicon.ico"/>
 <title><?php echo SITENAME; ?></title>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/home.css">
+<?php require APPROOT . '/views/inc/header.php'; ?>
+
 <?php require APPROOT . '/views/inc/navbar.php'; ?>
 
 <!-- Add Font Awesome if not already included -->
@@ -8,21 +9,26 @@
 <body class="antialiased">
 
     <section class="hero-section">
-        <div class="gradient-overlay"></div>
-        <div class="container hero-content">
-            <h1 class="">Book Your Appointment Online</h1>
-            <p class="">
-                Skip the waiting room. Find your doctor and book appointments instantly.
-                It's Fast, Easy, Simple.
-            </p>
-            <a href="<?php echo URLROOT;?>/pages/register" class="hero-button">
-                Appointment Now
-            </a>
+    <div class="gradient-overlay"></div>
+    <div class="hero-content">
+        <!-- Add this badge above your title -->
+        <div class="hero-badge">
+            <i class="fas fa-heart-pulse" style="color: #4ade80;"></i>
+            Your Health, Our Priority
         </div>
-    </section>
-
+        
+        <h1>Book Your Appointment Online</h1>
+        <p>
+            Skip the waiting room and find your perfect doctor. Book appointments instantly with verified healthcare professionals. It's Fast, Easy, and Secure.
+        </p>
+        <a href="<?php echo URLROOT;?>/pages/register" class="hero-button">
+            <i class="fas fa-calendar-plus"></i>
+            Book Appointment Now
+        </a>
+    </div>
+</section>
     <section class="specialties-section">
-        <div class="homecontainer">
+        <div class="home">
             <h2>Categories of Specialities</h2>
             <div class="specialty-grid">
                 <div class="specialty-category-card" data-specialty="General Physician">
@@ -46,7 +52,7 @@
     </section>
 
     <section class="doctors-section">
-        <div class="container">
+        <div class="home">
             <h2>Featured Doctors or Clinics</h2>
             <div class="doctor-grid">
                 <div class="doctor-card">
