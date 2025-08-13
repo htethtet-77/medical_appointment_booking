@@ -1,10 +1,11 @@
 <?php
 require_once __DIR__ . '/../repositories/AppointmentRepository.php';
 require_once __DIR__ . '/../interfaces/AppointmentRepositoryInterface.php';
+require_once __DIR__ . '/../interfaces/AppointmentServiceInterface.php';
 
 require_once __DIR__ . '/../models/AppointmentModel.php';
 
-class AppointmentService
+class AppointmentService implements AppointmentServiceInterface
 {
     private AppointmentRepositoryInterface $repo;
 

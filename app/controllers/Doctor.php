@@ -1,18 +1,16 @@
 <?php
 require_once APPROOT . '/middleware/authMiddleware.php';
 require_once __DIR__ . '/../services/DoctorService.php';
+require_once __DIR__ . '/../interfaces/DoctorServiceInterface.php';
+
 
 class Doctor extends Controller
 {
-    private $doctorService;
-  
-    public function __construct()
-    {
-        AuthMiddleware::doctorOnly();
-        $db = new Database();
-        $doctorRepository = new DoctorRepository($db);
-        $this->doctorService = new DoctorService($doctorRepository);
+     protected DoctorServiceInterface $doctorService;
 
+    public function __construct(DoctorServiceInterface $doctorService )
+    {
+        $this->doctorService = $doctorService;
     }
 
     public function dash()

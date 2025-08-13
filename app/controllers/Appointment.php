@@ -1,16 +1,14 @@
 <?php
 require_once __DIR__ . '/../services/AppointmentService.php';
-// require_once __DIR__ . '/../helpers/AppointmentHelper.php';
+require_once __DIR__ . '/../interfaces/AppointmentServiceInterface.php';
 
 class Appointment extends Controller
 {
-    private $service;
+     protected AppointmentServiceInterface $service;
 
-    public function __construct()
+    public function __construct(AppointmentServiceInterface $service)
     {
-        $db=new Database();
-        $repo = new AppointmentRepository($db);
-        $this->service = new AppointmentService($repo);
+        $this->service = $service;
     }
 
     public function appointmentform($doctorId)

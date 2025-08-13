@@ -2,23 +2,20 @@
 require_once __DIR__ . '/../repositories/AdminRepository.php';
 require_once __DIR__ . '/../interfaces/AdminRepositoryInterface.php';
 require_once __DIR__ . '/../helpers/UserValidator.php';
+require_once __DIR__ . '/../interfaces/AdminServiceInterface.php';
 require_once __DIR__ . '/../services/ImageUploadService.php';
 require_once __DIR__ . '/../interfaces/ImageUploadServiceInterface.php';
 
-
-class AdminService
+class AdminService  implements AdminServiceInterface
 {
     protected AdminRepositoryInterface $adminRepo;
-    protected UserValidator $validator;
     protected ImageUploadServiceInterface $imageUploader;
 
     public function __construct(
         AdminRepositoryInterface $adminRepo,
-        UserValidator $validator,
         ImageUploadServiceInterface $imageUploader
     ) {
         $this->adminRepo = $adminRepo;
-        $this->validator = $validator;
         $this->imageUploader = $imageUploader;
     }
 
@@ -37,9 +34,10 @@ class AdminService
             throw new Exception('Phone number already exists!');
         }
 
-        // Validate form data
-        $this->validator = new UserValidator($data);
-        $errors = $this->validator->validateForm();
+        // // Validate form data
+        $validator = new UserValidator($data);
+        $errors = $validator->validateForm();
+        // var_dump($errors);
         if (!empty($errors)) {
             throw new Exception(json_encode($errors));
         }

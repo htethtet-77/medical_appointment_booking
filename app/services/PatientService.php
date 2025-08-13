@@ -3,34 +3,29 @@ require_once __DIR__ . '/../repositories/PatientRepository.php';
 require_once __DIR__ . '/../interfaces/PatientRepositoryInterface.php';
 require_once __DIR__ . '/../services/ImageUploadService.php';
 require_once __DIR__ . '/../interfaces/ImageUploadServiceInterface.php';
-// require_once __DIR__ . '/../interfaces/MailerInterface.php';
+require_once __DIR__ . '/../interfaces/PatientServiceInterface.php';
 // require_once __DIR__ . '/../services/MailerService.php';
 require_once __DIR__ . '/../libraries/Mail.php';
 
 
 
-class PatientService
+class PatientService implements PatientServiceInterface
 {
     private PatientRepositoryInterface $patientRepository;
     private ImageUploadServiceInterface $imageUploader;
-    private Mail $mailer;
 
 
     public function __construct(
         PatientRepositoryInterface $patientRepository,
-        ImageUploadServiceInterface $imageUploader,
-        Mail $mailer
+        ImageUploadServiceInterface $imageUploader
 
 )
     {
         $this->patientRepository = $patientRepository;
         $this->imageUploader = $imageUploader;
-        $this->mailer = $mailer;
-
-
     }
 
-    public function getDoctorProfile($doctorId, $selectedDate = null)
+    public function getDoctorProfile($doctorId, $selectedDate = null):array
     {
         require_once APPROOT . '/helpers/appointment_helper.php';
 
@@ -68,13 +63,13 @@ class PatientService
         ];
     }
 
-    public function listDoctors()
+    public function listDoctors():array
     {
         $doctors = $this->patientRepository->listDoctors();
         return ['doctors' => $doctors];
     }
 
-    public function uploadProfileImage($files)
+    public function uploadProfileImage($files):array
     {
         try {
             if (!isset($files['profile_image'])) {
@@ -112,7 +107,7 @@ class PatientService
         }
     }
 
-    public function removeProfileImage()
+    public function removeProfileImage():array
     {
         $userId = $_SESSION['current_user']['id'];
         $currentUser = $this->patientRepository->getUserById($userId);
@@ -139,7 +134,7 @@ class PatientService
     }
 
 
-    public function getUserProfile()
+    public function getUserProfile():array
     {
   
 
@@ -152,14 +147,15 @@ class PatientService
 
         return ['user' => $user];
     }
-        public function sendContactMessage($fullName, $emailAddress, $subject, $message)
+        public function sendContactMessage($fullName, $emailAddress, $subject, $message):array
     {
         if (empty($fullName) || empty($emailAddress) || empty($subject) || empty($message)) {
             return ['success' => false, 'message' => 'All fields are required.'];
         }
 
         // Use the Mail class
-        $sent = $this->mailer->sendContactMessage($fullName, $emailAddress, $subject, $message);
+        $mail=new Mail();
+        $sent = $mail->sendContactMessage($fullName, $emailAddress, $subject, $message);
 
         if ($sent) {
             return ['success' => true, 'message' => 'Your message has been sent successfully.'];
