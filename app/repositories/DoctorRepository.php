@@ -1,6 +1,8 @@
 <?php
-require_once __DIR__ . '/../interfaces/DoctorRepositoryInterface.php';
-
+// require_once __DIR__ . '/../interfaces/DoctorRepositoryInterface.php';
+namespace Asus\Medical\repositories;
+use Asus\Medical\interfaces\DoctorRepositoryInterface;
+use Asus\Medical\libraries\Database;
 class DoctorRepository implements DoctorRepositoryInterface{
     private $db;
     public function __construct(Database $db){

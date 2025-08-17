@@ -1,6 +1,8 @@
 <?php
-require_once __DIR__ . '/../interfaces/ImageUploadServiceInterface.php';
-
+// require_once __DIR__ . '/../interfaces/ImageUploadServiceInterface.php';
+namespace Asus\Medical\Services;
+use Asus\Medical\interfaces\ImageUploadServiceInterface;
+use Exception;
 class ImageUploadService implements ImageUploadServiceInterface
 {
     public function upload(array $file, string $uploadDir, string $prefix = ''): string

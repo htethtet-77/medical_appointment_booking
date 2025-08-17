@@ -1,13 +1,15 @@
 <?php
 // load model and views
-
+namespace Asus\Medical\libraries;
 class Controller
 {
     // Load Model
     public function model($model) // Product
     {
+        $modelFQN = "\\Asus\\Medical\\models\\$model"; // Fully-qualified namespace
         require_once '../app/models/' . $model . '.php';
-        return new $model();
+        // return new $model();
+        return new $modelFQN();
     }
     // Load views
     public function view($view, $data = [])

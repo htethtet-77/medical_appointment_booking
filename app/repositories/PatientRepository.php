@@ -1,6 +1,8 @@
 <?php
-
-require_once __DIR__ . '/../interfaces/PatientRepositoryInterface.php';
+namespace Asus\Medical\repositories;
+use Asus\Medical\interfaces\PatientRepositoryInterface;
+use Asus\Medical\libraries\Database;
+// require_once __DIR__ . '/../interfaces/PatientRepositoryInterface.php';
 
 class PatientRepository implements PatientRepositoryInterface
 {
@@ -21,10 +23,11 @@ class PatientRepository implements PatientRepositoryInterface
         return $this->db->columnFilter('timeslots', 'user_id', $doctorId);
     }
 
-    public function getAppointmentsByTimeslot(int $timeslotId)
+    public function findAppointmentsByDoctorId(int $doctorId): array
     {
-        return $this->db->columnFilterAll('appointment', 'timeslot_id', $timeslotId);
+        return $this->db->columnFilterAll('appointment', 'doctor_id', $doctorId) ?? [];
     }
+
 
     public function listDoctors()
     {

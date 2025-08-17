@@ -1,4 +1,5 @@
 <?php
+namespace Asus\Medical\interfaces;
 interface AdminRepositoryInterface
 {
     public function getAllDoctors(): array;

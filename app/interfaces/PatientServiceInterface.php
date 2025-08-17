@@ -1,5 +1,5 @@
 <?php
-
+namespace Asus\Medical\interfaces;
 interface PatientServiceInterface
 {
     public function getDoctorProfile(int $doctorId, ?string $selectedDate = null): array;

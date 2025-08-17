@@ -1,7 +1,12 @@
 <?php
-require_once APPROOT . '/middleware/authMiddleware.php';
-require_once __DIR__ . '/../services/DoctorService.php';
-require_once __DIR__ . '/../interfaces/DoctorServiceInterface.php';
+namespace Asus\Medical\controllers;
+use Asus\Medical\interfaces\DoctorServiceInterface;
+use Asus\Medical\Middleware\AuthMiddleware;
+use Asus\Medical\libraries\Controller;
+use Exception;
+// require_once APPROOT . '/middleware/authMiddleware.php';
+// require_once __DIR__ . '/../services/DoctorService.php';
+// require_once __DIR__ . '/../interfaces/DoctorServiceInterface.php';
 
 
 class Doctor extends Controller
@@ -10,6 +15,7 @@ class Doctor extends Controller
 
     public function __construct(DoctorServiceInterface $doctorService )
     {
+        AuthMiddleware::allowRoles([ROLE_DOCTOR]);
         $this->doctorService = $doctorService;
     }
 

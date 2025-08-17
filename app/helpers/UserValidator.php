@@ -1,5 +1,5 @@
 <?php
-
+namespace Asus\Medical\helpers;
 class UserValidator 
 {
     private $data;

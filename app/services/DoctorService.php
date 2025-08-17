@@ -1,8 +1,13 @@
 <?php
-require_once __DIR__ . '/../interfaces/DoctorRepositoryInterface.php';
-require_once __DIR__ . '/../interfaces/DoctorServiceInterface.php';
+namespace Asus\Medical\services;
+use Asus\Medical\interfaces\DoctorServiceInterface;
+use Asus\Medical\interfaces\DoctorRepositoryInterface;
+use Exception;
+use DateTime;
+// require_once __DIR__ . '/../interfaces/DoctorRepositoryInterface.php';
+// require_once __DIR__ . '/../interfaces/DoctorServiceInterface.php';
 
-require_once __DIR__ . '/../repositories/DoctorRepository.php';
+// require_once __DIR__ . '/../repositories/DoctorRepository.php';
 
 
 

@@ -1,7 +1,13 @@
 <?php
-require_once __DIR__ . '/../middleware/authMiddleware.php';
-require_once __DIR__ . '/../services/PatientService.php';
-require_once __DIR__ . '/../interfaces/PatientServiceInterface.php';
+namespace Asus\Medical\controllers;
+use Asus\Medical\Middleware\AuthMiddleware;
+use Asus\Medical\libraries\Controller;
+use Asus\Medical\interfaces\PatientServiceInterface;
+use function Asus\Medical\helpers\setMessage;
+
+// require_once __DIR__ . '/../middleware/authMiddleware.php';
+// require_once __DIR__ . '/../services/PatientService.php';
+// require_once __DIR__ . '/../interfaces/PatientServiceInterface.php';
 
 
 class Patient extends Controller
@@ -11,7 +17,7 @@ class Patient extends Controller
     // Inject PatientService, which requires PatientRepository internally
     public function __construct(PatientServiceInterface $patientService)
     {
-        AuthMiddleware::patientOnly();
+        AuthMiddleware::allowRoles([ROLE_PATIENT]);
 
         $this->patientService =$patientService;
     }
@@ -22,14 +28,28 @@ class Patient extends Controller
     }
 
     public function doctorprofile($id)
-    {
-        $result = $this->patientService->getDoctorProfile($id, $_GET['date'] ?? null);
-        if (isset($result['redirect'])) {
-            setMessage('error', $result['message']);
-            return redirect($result['redirect']);
-        }
-        $this->view('pages/doctorprofile', $result);
+{
+    $result = $this->patientService->getDoctorProfile($id, $_GET['date'] ?? null);
+    
+    if (isset($result['redirect'])) {
+        setMessage('error', $result['message']);
+        return redirect($result['redirect']);
     }
+
+    // Check if AJAX request
+    if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+       strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+        // Return JSON only for AJAX
+        header('Content-Type: application/json');
+        echo json_encode([
+            'appointment_time' => $result['appointment_time']
+        ]);
+        exit;
+    }
+
+    $this->view('pages/doctorprofile', $result);
+}
+
 
     public function doctors()
     {

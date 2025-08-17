@@ -3,7 +3,10 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
 <?php require APPROOT . '/views/inc/navbar.php'; ?>
-
+<?php
+// Assuming you store login status in $_SESSION['user_id']
+$url = isset($_SESSION['current_user']) ? URLROOT . '/patient/doctors' : URLROOT . '/pages/register';
+?>
 <!-- Add Font Awesome if not already included -->
 
 <body class="antialiased">
@@ -21,10 +24,10 @@
         <p>
             Skip the waiting room and find your perfect doctor. Book appointments instantly with verified healthcare professionals. It's Fast, Easy, and Secure.
         </p>
-        <a href="<?php echo URLROOT;?>/pages/register" class="hero-button">
-            <i class="fas fa-calendar-plus"></i>
-            Book Appointment Now
-        </a>
+       <a href="<?php echo $url; ?>" class="hero-button">
+    <i class="fas fa-calendar-plus"></i>
+    Book Appointment Now
+</a>
     </div>
 </section>
     <section class="specialties-section">

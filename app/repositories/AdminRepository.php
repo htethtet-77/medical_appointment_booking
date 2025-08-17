@@ -1,6 +1,8 @@
 <?php
-require_once __DIR__ . '/../interfaces/AdminRepositoryInterface.php';
-
+namespace Asus\Medical\repositories;
+// require_once __DIR__ . '/../interfaces/AdminRepositoryInterface.php';
+use Asus\Medical\interfaces\AdminRepositoryInterface;
+use Asus\Medical\libraries\Database;
 class AdminRepository implements AdminRepositoryInterface
 {
     protected  $db;

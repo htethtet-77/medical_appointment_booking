@@ -1,5 +1,7 @@
 <?php
-require_once "BaseModel.php";
+// require_once "BaseModel.php";
+namespace Asus\Medical\models;
+use Asus\Medical\models\BaseModel;
 class DoctorModel extends BaseModel {
 
     protected $degree;

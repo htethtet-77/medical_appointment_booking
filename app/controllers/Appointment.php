@@ -1,6 +1,12 @@
 <?php
-require_once __DIR__ . '/../services/AppointmentService.php';
-require_once __DIR__ . '/../interfaces/AppointmentServiceInterface.php';
+namespace Asus\Medical\controllers;
+use Asus\Medical\libraries\Controller;
+use Asus\Medical\interfaces\AppointmentServiceInterface;
+use function Asus\Medical\helpers\setMessage;
+use Exception;
+use Asus\Medical\Middleware\AuthMiddleware;
+// require_once __DIR__ . '/../services/AppointmentService.php';
+// require_once __DIR__ . '/../interfaces/AppointmentServiceInterface.php';
 
 class Appointment extends Controller
 {
@@ -8,11 +14,13 @@ class Appointment extends Controller
 
     public function __construct(AppointmentServiceInterface $service)
     {
+       
         $this->service = $service;
     }
 
     public function appointmentform($doctorId)
     {
+         AuthMiddleware::allowRoles([ROLE_PATIENT]);
         $user = $_SESSION['current_user'] ?? null;
         if (!$user) {
             setMessage('error', "You need to register first");
@@ -34,6 +42,24 @@ class Appointment extends Controller
             'appointment_time' => $availableSlots,
             'selected_date' => $selectedDate
         ]);
+    }
+    public function getslots()
+    {
+        $doctorId = $_GET['doctor_id'] ?? null;
+        $selectedDate = $_GET['date'] ?? date('Y-m-d');
+
+        if (!$doctorId) {
+            echo json_encode([]);
+            return;
+        }
+
+        try {
+            $slots = $this->service->getAvailableSlotsForDoctor((int)$doctorId, $selectedDate);
+            echo json_encode($slots);
+        } catch (Exception $e) {
+            echo json_encode([]);
+        }
+        exit;
     }
 
         public function book()
@@ -102,25 +128,77 @@ class Appointment extends Controller
         redirect('appointment/appointmentlist');
     }
 
-    public function confirm($appointmentId)
-    {
-        try {
-            $this->service->updateAppointmentStatus($appointmentId, 1);
-            setMessage('success', 'Appointment confirmed successfully.');
-        } catch (Exception $e) {
-            setMessage('error', $e->getMessage());
-        }
-        redirect("doctor/dash");
-    }
+    // public function confirm($appointmentId)
+    // {
+    //     try {
+    //         $this->service->updateAppointmentStatus($appointmentId, 1);
+    //         setMessage('success', 'Appointment confirmed successfully.');
+    //     } catch (Exception $e) {
+    //         setMessage('error', $e->getMessage());
+    //     }
+    //     redirect("doctor/dash");
+    // }
 
-    public function reject($appointmentId)
-    {
-        try {
-            $this->service->updateAppointmentStatus($appointmentId, 3);
-            setMessage('success', 'Appointment rejected successfully.');
-        } catch (Exception $e) {
-            setMessage('error', $e->getMessage());
+    // public function reject($appointmentId)
+    // {
+    //     try {
+    //         $this->service->updateAppointmentStatus($appointmentId, 3);
+    //         setMessage('success', 'Appointment rejected successfully.');
+    //     } catch (Exception $e) {
+    //         setMessage('error', $e->getMessage());
+    //     }
+    //     redirect("doctor/dash");
+    // }
+    public function confirm($appointmentId)
+{
+    try {
+        $this->service->updateAppointmentStatus($appointmentId, 1);
+        $message = 'Appointment confirmed successfully.';
+
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+            echo json_encode([
+                'success' => true,
+                'message' => $message,
+                'status' => 'Confirmed'
+            ]);
+            exit;
         }
-        redirect("doctor/dash");
+
+        setMessage('success', $message);
+    } catch (Exception $e) {
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            exit;
+        }
+        setMessage('error', $e->getMessage());
     }
+    redirect("doctor/dash");
+}
+
+public function reject($appointmentId)
+{
+    try {
+        $this->service->updateAppointmentStatus($appointmentId, 3);
+        $message = 'Appointment rejected successfully.';
+
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+            echo json_encode([
+                'success' => true,
+                'message' => $message,
+                'status' => 'Cancelled'
+            ]);
+            exit;
+        }
+
+        setMessage('success', $message);
+    } catch (Exception $e) {
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            exit;
+        }
+        setMessage('error', $e->getMessage());
+    }
+    redirect("doctor/dash");
+}
+
 }

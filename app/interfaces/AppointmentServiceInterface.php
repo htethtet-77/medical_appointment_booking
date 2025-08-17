@@ -1,5 +1,5 @@
 <?php
-// namespace App\Interfaces;
+namespace Asus\Medical\interfaces;
 interface AppointmentServiceInterface
 {
     public function getAvailableSlotsForDoctor(int $doctorId, string $selectedDate): array;

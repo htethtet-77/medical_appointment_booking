@@ -1,5 +1,12 @@
 <?php
 //for user login and logout
+namespace Asus\Medical\controllers;
+use Asus\Medical\libraries\Controller;
+use Asus\Medical\libraries\Database;
+use Asus\Medical\helpers\UserValidator;
+use Asus\Medical\libraries\Mail;
+use Asus\Medical\models\UserModel;
+use function Asus\Medical\helpers\setMessage;
 class Auth extends Controller
 {
     private $db;

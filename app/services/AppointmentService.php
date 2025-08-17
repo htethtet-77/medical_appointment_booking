@@ -1,9 +1,15 @@
 <?php
-require_once __DIR__ . '/../repositories/AppointmentRepository.php';
-require_once __DIR__ . '/../interfaces/AppointmentRepositoryInterface.php';
-require_once __DIR__ . '/../interfaces/AppointmentServiceInterface.php';
+namespace Asus\Medical\services;
+use Asus\Medical\interfaces\AppointmentRepositoryInterface;
+use Asus\Medical\interfaces\AppointmentServiceInterface;
+use Asus\Medical\models\AppointmentModel;
+use Asus\Medical\helpers\AppointmentHelper;
+use Exception;
+// require_once __DIR__ . '/../repositories/AppointmentRepository.php';
+// require_once __DIR__ . '/../interfaces/AppointmentRepositoryInterface.php';
+// require_once __DIR__ . '/../interfaces/AppointmentServiceInterface.php';
 
-require_once __DIR__ . '/../models/AppointmentModel.php';
+// require_once __DIR__ . '/../models/AppointmentModel.php';
 
 class AppointmentService implements AppointmentServiceInterface
 {
@@ -16,7 +22,7 @@ class AppointmentService implements AppointmentServiceInterface
 
     public function getAvailableSlotsForDoctor(int $doctorId, string $selectedDate): array
     {
-        require_once APPROOT .'/helpers/appointment_helper.php';
+        // require_once APPROOT .'/helpers/appointment_helper.php';
         $doctor = $this->repo->findDoctorById($doctorId);
         if (!$doctor) {
             throw new Exception("Doctor not found");

@@ -1,5 +1,8 @@
 <?php
-
+namespace Asus\Medical\libraries;
+use PDO;             
+use PDOException;   
+use Exception; 
 class Database
 {
     private $host = DB_HOST;

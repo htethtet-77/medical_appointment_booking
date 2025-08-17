@@ -1,6 +1,12 @@
 <?php
+namespace Asus\Medical\Tests\Controllers;
+require_once __DIR__ . '/../app/config/config.php';
+
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Asus\Medical\Controllers\Admin;
+use Asus\Medical\Interfaces\AdminServiceInterface;
+use ReflectionClass;
 
 // ---- Test doubles & shims (must be defined before including Admin.php) ----
 
@@ -10,13 +16,13 @@ if (!class_exists('Controller')) {
         public string $lastView = '';
         public array $lastData = [];
         protected function view($tpl, $data = []) { $this->lastView = $tpl; $this->lastData = $data; }
-        public function viewPublic($tpl, $data = []) { $this->view($tpl, $data); } // helper to assert
+        public function viewPublic($tpl, $data = []) { $this->view($tpl, $data); }
     }
 }
 
 // No-op middleware
 if (!class_exists('AuthMiddleware')) {
-    class AuthMiddleware { public static function adminOnly() { /* no-op */ } }
+    class AuthMiddleware { public static function adminOnly() {} }
 }
 
 // Capture messages and redirects
@@ -32,11 +38,7 @@ if (!function_exists('redirect')) {
 
 // --------------------------------------------------------------------------
 
-// Provide the interface the controller expects
-require_once __DIR__ . '/../app/interfaces/AdminServiceInterface.php';
 
-// Load the controller under test
-require_once __DIR__ . '/../app/controllers/Admin.php';
 
 final class AdminControllerTest extends TestCase
 {
@@ -47,7 +49,6 @@ final class AdminControllerTest extends TestCase
     {
         $GLOBALS['__messages'] = [];
         $GLOBALS['__redirect'] = null;
-
         $this->service = $this->createMock(AdminServiceInterface::class);
     }
 
@@ -55,10 +56,8 @@ final class AdminControllerTest extends TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $ctrl = new Admin($this->service);
-        // call method
         $ctrl->adddoctor();
 
-        // Because `view` is protected in our stub, expose via reflection:
         $ref = new ReflectionClass($ctrl);
         $propView = $ref->getParentClass()->getProperty('lastView');
         $propView->setAccessible(true);
@@ -95,7 +94,7 @@ final class AdminControllerTest extends TestCase
 
         $this->service->expects($this->once())
             ->method('addDoctor')
-            ->willThrowException(new Exception('Some validation failed'));
+            ->willThrowException(new \Exception('Some validation failed'));
 
         $ctrl = new Admin($this->service);
         $ctrl->adddoctor();
