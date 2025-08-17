@@ -1,4 +1,6 @@
 <?php
+namespace Asus\Medical\models;
+use Exception;
 abstract class BaseModel{
     public function __get($property){
         if(property_exists($this,$property)){

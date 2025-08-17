@@ -1,6 +1,5 @@
-
 <?php
-
+namespace Asus\Medical\interfaces;
 interface AdminServiceInterface
 {
     public function getAllDoctors();

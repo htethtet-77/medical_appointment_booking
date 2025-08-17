@@ -57,6 +57,7 @@ if (isset($_SESSION['success'])) {
         </div>
 
         <form action="<?php echo URLROOT; ?>/admin/adddoctor" method="POST" enctype="multipart/form-data" class="doctor-form">
+
             <div class="form-grid">
                 <!-- Personal Information Section -->
                 <div class="form-section">

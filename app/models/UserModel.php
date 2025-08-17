@@ -1,5 +1,7 @@
 <?php
-require_once "BaseModel.php";
+namespace Asus\Medical\models;
+use Asus\Medical\models\BaseModel;
+// require_once "BaseModel.php";
 class UserModel extends BaseModel
 {
     // Access Modifier = public, private, protected

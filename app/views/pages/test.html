@@ -1,47 +1,60 @@
-<?php
-$selectedSpecialty = $_POST['specialty'] ?? $data['doctorprofile']['specialty'] ?? '';
-$selectedDegree = $_POST['degree'] ?? $data['doctorprofile']['degree'] ?? '';
 
-$degreeOptions = [
-    "General Physician" => ["MBBS", "MD", "DO"],
-    "Dentist" => ["BDS", "MDS", "DDS"],
-    "Pediatrician" => ["MBBS", "MD Pediatrics", "DCH"],
-    "Dermatologist" => ["MBBS", "MD Dermatology", "DDVL"],
-    "Cardiologist" => ["MBBS", "MD Cardiology", "DM Cardiology"],
-    "Neurologist" => ["MBBS", "MD Neurology", "DM Neurology"],
-    "Orthopedic" => ["MBBS", "MS Orthopedics", "DNB Orthopedics"]
-];
 
-// CSRF token for security
-use function Asus\Medical\helpers\csrfInput;
+<title>Medical Appointment Booking</title>
 
-?>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="http://localhost:8000/css/bar.css?v=2">
 
-<title><?php echo htmlspecialchars(SITENAME); ?></title>
-<?php require APPROOT . '/views/inc/sidebar.php'; ?>
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/editdoctor.css">
+</head>
+<body>
+<header class="navbar">
+    <a href="http://localhost:8000/admin/dashboard" class="logo">Dashboard</a>
+    <button class="navbar-toggle" onclick="toggleNavbar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <nav class="navbar-nav" id="navbarNav">
+        <li>
+            <a href="http://localhost:8000/admin/dashboard" 
+               class="">
+               HOME
+            </a>
+        </li>
+        <li>
+            <a href="http://localhost:8000/admin/patientlist"
+               class="">
+                PATIENTS
+            </a>
+        </li>
+        <li>
+            <a href="http://localhost:8000/admin/doctorlist"
+               class="">
+               DOCTORS
+            </a>
+        </li>
+        <li>
+            <a href="http://localhost:8000/admin/appointmentview"
+               class="">
+               APPOINTMENTS
+            </a>
+        </li>
+                        
+            <li>
+                    <i class="fas fa-user"></i>
+                    <span>Htet Htet Win</span>
+            
+            </li>
+            <li>
+                <a href="http://localhost:8000/auth/logout">Logout</a>
+            </li>
+        
+            </nav>
+</header>
+
+</body>
+</html>    <link rel="stylesheet" href="http://localhost:8000/css/editdoctor.css">
 
 <!-- Alert Messages -->
-<?php
-function displayAlert($type, $sessionKey) {
-    if (isset($_SESSION[$sessionKey])) {
-        $icon = $type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle';
-        echo '<div class="alert alert-' . $type . '" role="alert">
-                <div class="alert-content">
-                    <i class="fa ' . $icon . '" aria-hidden="true"></i>
-                    <span>' . htmlspecialchars($_SESSION[$sessionKey]) . '</span>
-                    <button onclick="this.parentElement.parentElement.remove();" class="alert-close" aria-label="Close alert">
-                        <i class="fa fa-times" aria-hidden="true"></i>
-                    </button>
-                </div>
-              </div>';
-        unset($_SESSION[$sessionKey]);
-    }
-}
-
-displayAlert('error', 'error');
-displayAlert('success', 'success');
-?>
 
 <div class="page-container">
     <div class="form-container">
@@ -57,12 +70,11 @@ displayAlert('success', 'success');
             </div>
         </div>
 
-        <form action="<?php echo htmlspecialchars(URLROOT); ?>/admin/updatedoctor" method="POST" enctype="multipart/form-data" class="doctor-form" novalidate>
+        <form action="http://localhost:8000/admin/updatedoctor" method="POST" enctype="multipart/form-data" class="doctor-form" novalidate>
             <!-- CSRF Protection -->
 
-    <?= csrfInput(); ?>
-            <!-- <input type="hidden" name="id" value="<?= htmlspecialchars($data['users']['id']) ?>"> -->
-            <input type="hidden" name="id" value="<?= htmlspecialchars($data['users']['id']) ?>">
+    <input type="hidden" name="csrf_token" value="8f43fd4a785a09b600e5ebdc83f5d95542b47a5c9255c16b5af3566d4c3757a6">            <!-- <input type="hidden" name="id" value="64"> -->
+            <input type="hidden" name="id" value="64">
             
             <div class="form-grid">
                 <!-- Personal Information Section -->
@@ -75,26 +87,17 @@ displayAlert('success', 'success');
                     <!-- Photo Upload -->
                     <div class="photo-upload-section">
                         <div class="photo-preview">
-                            <?php if (!empty($data['users']['profile_image'])): ?>
-                                <img id="photo-preview" src="<?= htmlspecialchars(URLROOT . '/' . $data['users']['profile_image']) ?>" alt="Current doctor photo">
+                                                            <img id="photo-preview" src="http://localhost:8000/image/doctor__689e096426a20.jpg" alt="Current doctor photo">
                                 <div class="photo-placeholder" id="photo-placeholder" style="display: none;">
                                     <i class="fa fa-camera" aria-hidden="true"></i>
                                     <span>Change Photo</span>
                                 </div>
-                            <?php else: ?>
-                                <div class="photo-placeholder" id="photo-placeholder">
-                                    <i class="fa fa-camera" aria-hidden="true"></i>
-                                    <span>Upload Photo</span>
-                                </div>
-                                <img id="photo-preview" style="display: none;" alt="Doctor photo preview">
-                            <?php endif; ?>
-                        </div>
+                                                    </div>
                         <div class="upload-controls">
                             <input type="file" name="image" id="profile-photo" accept="image/jpeg,image/png,image/webp" aria-describedby="photo-help" hidden>
                             <button type="button" class="btn btn-outline" onclick="document.getElementById('profile-photo').click()">
                                 <i class="fa fa-upload" aria-hidden="true"></i> 
-                                <?= !empty($data['users']['profile_image']) ? 'Change Photo' : 'Choose Photo' ?>
-                            </button>
+                                Change Photo                            </button>
                             <small id="photo-help">Recommended: Square image, max 2MB (JPEG, PNG, WebP)</small>
                         </div>
                     </div>
@@ -105,14 +108,8 @@ displayAlert('success', 'success');
                             <i class="fa fa-user" aria-hidden="true"></i>
                             Doctor Name *
                         </label>
-                        <input type="text" name="name" id="name" value="<?= htmlspecialchars($data['users']['name']) ?>" required placeholder="Enter full name" autocomplete="name" maxlength="100">
-                        <?php if (isset($data['name-err'])): ?>
-                            <div class="error-message" role="alert">
-                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                <?= htmlspecialchars($data['name-err']); ?>
-                            </div>
-                        <?php endif; ?>
-                    </div>
+                        <input type="text" name="name" id="name" value="Paing Kyaw Moe" required placeholder="Enter full name" autocomplete="name" maxlength="100">
+                                            </div>
 
                     <!-- Email -->
                     <div class="input-group">
@@ -120,14 +117,8 @@ displayAlert('success', 'success');
                             <i class="fa fa-envelope" aria-hidden="true"></i>
                             Email Address *
                         </label>
-                        <input type="email" name="email" id="doctor-email" value="<?= htmlspecialchars($data['users']['email']) ?>" required placeholder="doctor@example.com" autocomplete="email" maxlength="255">
-                        <?php if (isset($data['email-err'])): ?>
-                            <div class="error-message" role="alert">
-                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                <?= htmlspecialchars($data['email-err']); ?>
-                            </div>
-                        <?php endif; ?>
-                    </div>
+                        <input type="email" name="email" id="doctor-email" value="paingkyawmoe33@gmail.com" required placeholder="doctor@example.com" autocomplete="email" maxlength="255">
+                                            </div>
 
                     <!-- Gender -->
                     <fieldset class="input-group">
@@ -137,12 +128,12 @@ displayAlert('success', 'success');
                         </legend>
                         <div class="radio-group" role="radiogroup">
                             <label class="radio-option">
-                                <input type="radio" name="gender" value="male" <?= $data['users']['gender'] == 'male' ? 'checked' : '' ?> required>
+                                <input type="radio" name="gender" value="male" checked required>
                                 <span class="radio-custom"></span>
                                 <i class="fa fa-mars" aria-hidden="true"></i> Male
                             </label>
                             <label class="radio-option">
-                                <input type="radio" name="gender" value="female" <?= $data['users']['gender'] == 'female' ? 'checked' : '' ?> required>
+                                <input type="radio" name="gender" value="female"  required>
                                 <span class="radio-custom"></span>
                                 <i class="fa fa-venus" aria-hidden="true"></i> Female
                             </label>
@@ -156,14 +147,8 @@ displayAlert('success', 'success');
                             <i class="fa fa-phone" aria-hidden="true"></i>
                             Phone Number *
                         </label>
-                        <input type="tel" name="phone" id="phone" value="<?= htmlspecialchars($data['users']['phone']) ?>" required placeholder="+1 (555) 123-4567" autocomplete="tel" pattern="[\+]?[0-9\s\-\(\)]{10,20}">
-                        <?php if (isset($data['phone-err'])): ?>
-                            <div class="error-message" role="alert">
-                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                <?= htmlspecialchars($data['phone-err']); ?>
-                            </div>
-                        <?php endif; ?>
-                    </div>
+                        <input type="tel" name="phone" id="phone" value="09665554897" required placeholder="+1 (555) 123-4567" autocomplete="tel" pattern="[\+]?[0-9\s\-\(\)]{10,20}">
+                                            </div>
 
                     <!-- Password -->
                     <div class="input-group">
@@ -179,13 +164,7 @@ displayAlert('success', 'success');
                             </button>
                         </div>
                         <small class="input-help">Only fill this if you want to change the password. Minimum 8 characters.</small>
-                        <?php if (isset($data['password-err'])): ?>
-                            <div class="error-message" role="alert">
-                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                <?= htmlspecialchars($data['password-err']); ?>
-                            </div>
-                        <?php endif; ?>
-                    </div>
+                                            </div>
                 </div>
 
                 <!-- Professional Information Section -->
@@ -203,10 +182,14 @@ displayAlert('success', 'success');
                         </label>
                         <select name="specialty" id="specialty" required onchange="updateDegrees()" aria-describedby="specialty-help">
                             <option value="">-- Select Specialty --</option>
-                            <?php foreach ($degreeOptions as $spec => $degrees): ?>
-                                <option value="<?= htmlspecialchars($spec) ?>" <?= $selectedSpecialty == $spec ? 'selected' : '' ?>><?= htmlspecialchars($spec) ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                                                            <option value="General Physician" >General Physician</option>
+                                                            <option value="Dentist" selected>Dentist</option>
+                                                            <option value="Pediatrician" >Pediatrician</option>
+                                                            <option value="Dermatologist" >Dermatologist</option>
+                                                            <option value="Cardiologist" >Cardiologist</option>
+                                                            <option value="Neurologist" >Neurologist</option>
+                                                            <option value="Orthopedic" >Orthopedic</option>
+                                                    </select>
                         <small id="specialty-help" class="input-help">Select your medical specialty</small>
                     </div>
 
@@ -218,12 +201,10 @@ displayAlert('success', 'success');
                         </label>
                         <select name="degree" id="degree" required aria-describedby="degree-help">
                             <option value="">-- Select Degree --</option>
-                            <?php if ($selectedSpecialty && isset($degreeOptions[$selectedSpecialty])): ?>
-                                <?php foreach ($degreeOptions[$selectedSpecialty] as $deg): ?>
-                                    <option value="<?= htmlspecialchars($deg) ?>" <?= $selectedDegree == $deg ? 'selected' : '' ?>><?= htmlspecialchars($deg) ?></option>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </select>
+                                                                                                <option value="BDS" selected>BDS</option>
+                                                                    <option value="MDS" >MDS</option>
+                                                                    <option value="DDS" >DDS</option>
+                                                                                    </select>
                         <small id="degree-help" class="input-help">Select your highest medical degree</small>
                     </div>
 
@@ -233,7 +214,7 @@ displayAlert('success', 'success');
                             <i class="fa fa-clock-o" aria-hidden="true"></i>
                             Years of Experience
                         </label>
-                        <input type="number" name="experience" id="experience" value="<?= htmlspecialchars($data['doctorprofile']['experience']) ?>" placeholder="e.g., 5" min="0" max="60" step="1">
+                        <input type="number" name="experience" id="experience" value="9" placeholder="e.g., 5" min="0" max="60" step="1">
                     </div>
 
                     <!-- Fees -->
@@ -244,7 +225,7 @@ displayAlert('success', 'success');
                         </label>
                         <div class="fee-input">
                             <span class="currency">$</span>
-                            <input type="number" name="fee" id="fees" value="<?= htmlspecialchars($data['doctorprofile']['fee']) ?>" required placeholder="0.00" min="0" max="9999.99" step="0.01">
+                            <input type="number" name="fee" id="fees" value="15000" required placeholder="0.00" min="0" max="9999.99" step="0.01">
                         </div>
                     </div>
 
@@ -254,7 +235,7 @@ displayAlert('success', 'success');
                             <i class="fa fa-map-marker" aria-hidden="true"></i>
                             Clinic Address *
                         </label>
-                        <textarea name="address" id="address" required placeholder="Enter clinic address" rows="3" maxlength="500"><?= htmlspecialchars($data['doctorprofile']['address']) ?></textarea>
+                        <textarea name="address" id="address" required placeholder="Enter clinic address" rows="3" maxlength="500">123 Main Street,Yangon</textarea>
                     </div>
 
                     <!-- Working Hours -->
@@ -264,7 +245,7 @@ displayAlert('success', 'success');
                                 <i class="fa fa-clock-o" aria-hidden="true"></i>
                                 Start Time *
                             </label>
-                            <input type="time" id="start-time" name="start_time" value="<?= date('H:i', strtotime($data['timeslots']['start_time'])) ?>" required min="06:00" max="18:00">
+                            <input type="time" id="start-time" name="start_time" value="17:30" required min="06:00" max="18:00">
                         </div>
 
                         <div class="input-group">
@@ -272,7 +253,7 @@ displayAlert('success', 'success');
                                 <i class="fa fa-clock-o" aria-hidden="true"></i>
                                 End Time *
                             </label>
-                            <input type="time" id="end-time" name="end_time" value="<?= date('H:i', strtotime($data['timeslots']['end_time'])) ?>" required min="08:00" max="22:00">
+                            <input type="time" id="end-time" name="end_time" value="19:22" required min="08:00" max="22:00">
                         </div>
                     </div>
 
@@ -282,7 +263,7 @@ displayAlert('success', 'success');
                             <i class="fa fa-info-circle" aria-hidden="true"></i>
                             About Doctor
                         </label>
-                        <textarea name="bio" id="bio" placeholder="Brief description about the doctor..." rows="4" maxlength="1000"><?= htmlspecialchars($data['doctorprofile']['bio']) ?></textarea>
+                        <textarea name="bio" id="bio" placeholder="Brief description about the doctor..." rows="4" maxlength="1000">Dr. Paing Kyaw Moe is a compassionate and skilled dentist dedicated to providing high-quality dental care with a gentle and personalized approach. With years of experience in both general and cosmetic dentistry, Dr. Moe is committed to helping patients achieve and maintain healthy, beautiful smiles.  </textarea>
                         <small class="input-help">Maximum 1000 characters</small>
                     </div>
                 </div>
@@ -290,7 +271,7 @@ displayAlert('success', 'success');
 
             <!-- Form Actions -->
             <div class="form-actions">
-                <a href="<?php echo htmlspecialchars(URLROOT); ?>/admin/doctorlist" class="btn btn-secondary">
+                <a href="http://localhost:8000/admin/doctorlist" class="btn btn-secondary">
                     <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to List
                 </a>
                 <div class="action-buttons">
@@ -309,7 +290,7 @@ displayAlert('success', 'success');
 
 <script>
 // Constants and configuration
-const degreeOptions = <?php echo json_encode($degreeOptions); ?>;
+const degreeOptions = {"General Physician":["MBBS","MD","DO"],"Dentist":["BDS","MDS","DDS"],"Pediatrician":["MBBS","MD Pediatrics","DCH"],"Dermatologist":["MBBS","MD Dermatology","DDVL"],"Cardiologist":["MBBS","MD Cardiology","DM Cardiology"],"Neurologist":["MBBS","MD Neurology","DM Neurology"],"Orthopedic":["MBBS","MS Orthopedics","DNB Orthopedics"]};
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
@@ -342,7 +323,7 @@ function initializeForm() {
 function updateDegrees() {
     const specialty = document.getElementById("specialty").value;
     const degreeSelect = document.getElementById("degree");
-    const selectedDegree = "<?php echo addslashes($selectedDegree); ?>";
+    const selectedDegree = "BDS";
 
     // Clear existing options
     degreeSelect.innerHTML = '<option value="">-- Select Degree --</option>';
@@ -397,7 +378,7 @@ function resetForm() {
 }
 
 function resetPhotoPreview() {
-    const currentImage = "<?= !empty($data['users']['profile_image']) ? htmlspecialchars(URLROOT . '/' . $data['users']['profile_image']) : '' ?>";
+    const currentImage = "http://localhost:8000/image/doctor__689e096426a20.jpg";
     const preview = document.getElementById('photo-preview');
     const placeholder = document.getElementById('photo-placeholder');
     

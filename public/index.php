@@ -8,4 +8,10 @@
 // 	Use require_once() to load dependencies ( classes, functions, constants).
 // the include() function generates a warning, but the script will continue execution. The require() generates a fatal error, and the script will stop.
 require_once '../app/class_loader.php';
+require_once '../app/middleware/CsrfMiddleware.php';
+require_once '../app/helpers/csrf_helper.php';
+
+use Asus\Medical\libraries\Core;
+
+
 $init = new Core();

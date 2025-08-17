@@ -117,19 +117,20 @@
                                             </td>
 
                                                 <td class="action-cell">
-                                                    <div class="action-buttons">
-                                                        
-                                                        <!-- <button class="btn btn-view">
-                                                             View
-                                                        </button> -->
-                                                        <a href="<?php echo URLROOT;?>/appointment/confirm/<?php echo $appointment['appointment_id']; ?>" class="btn btn-confirm">
-                                                            Confirm
-                                                        </a>
-                                                        <a href="<?php echo URLROOT;?>/appointment/reject/<?php echo $appointment['appointment_id']; ?>" class="btn btn-cancel">
-                                                            Cancel
-                                                        </a>
-                                                    </div>
-                                                </td>
+    <div class="action-buttons">
+        <?php if ($appointment['status_name'] === 'Pending'): ?>
+            <a href="#" class="btn-appointment btn btn-confirm" data-id="<?= $appointment['appointment_id']; ?>" data-action="confirm">Confirm</a>
+            <a href="#" class="btn-appointment btn btn-cancel" data-id="<?= $appointment['appointment_id']; ?>" data-action="reject">Cancel</a>
+        <?php elseif ($appointment['status_name'] === 'Confirmed'): ?>
+            <a href="#" class="btn-appointment btn btn-cancel" data-id="<?= $appointment['appointment_id']; ?>" data-action="reject">Cancel</a>
+        <?php elseif ($appointment['status_name'] === 'Cancelled'): ?>
+            <a href="#" class="btn-appointment btn btn-confirm" data-id="<?= $appointment['appointment_id']; ?>" data-action="confirm">Confirm</a>
+        <?php endif; ?>
+    </div>
+</td>
+
+
+
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -164,4 +165,74 @@ statusFilter.addEventListener("change", function () {
         }
     });
 });
+</script>
+<script>
+document.querySelectorAll('.btn-appointment').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const appointmentId = this.dataset.id;
+        const action = this.dataset.action; // 'confirm' or 'reject'
+        const btn = this;
+
+        fetch(`<?= URLROOT ?>/appointment/${action}/${appointmentId}`, {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const row = btn.closest('tr');
+
+                // Update status badge
+                const statusBadge = row.querySelector('span.badge');
+                if (statusBadge) {
+                    statusBadge.textContent = data.status;
+                    statusBadge.className = 'badge ' +
+                        (data.status === 'Confirmed' ? 'badge-confirmed' : 'badge-rejected');
+                }
+
+                // Remove ONLY the clicked button
+                btn.remove();
+
+                // If both buttons are gone (rare), show the remaining one
+                const actionDiv = row.querySelector('.action-buttons');
+                if (action === 'confirm') {
+                    if (!actionDiv.querySelector('.btn-cancel')) {
+                        const cancelBtn = document.createElement('a');
+                        cancelBtn.href = '#';
+                        cancelBtn.className = 'btn-appointment btn btn-cancel';
+                        cancelBtn.dataset.id = appointmentId;
+                        cancelBtn.dataset.action = 'reject';
+                        cancelBtn.textContent = 'Cancel';
+                        actionDiv.appendChild(cancelBtn);
+
+                        // Attach click again
+                        cancelBtn.addEventListener('click', arguments.callee);
+                    }
+                } else if (action === 'reject') {
+                    if (!actionDiv.querySelector('.btn-confirm')) {
+                        const confirmBtn = document.createElement('a');
+                        confirmBtn.href = '#';
+                        confirmBtn.className = 'btn-appointment btn btn-confirm';
+                        confirmBtn.dataset.id = appointmentId;
+                        confirmBtn.dataset.action = 'confirm';
+                        confirmBtn.textContent = 'Confirm';
+                        actionDiv.appendChild(confirmBtn);
+
+                        // Attach click again
+                        confirmBtn.addEventListener('click', arguments.callee);
+                    }
+                }
+
+            } else {
+                alert(data.message || 'Failed to update appointment');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Error occurred. Please try again.');
+        });
+    });
+});
+
 </script>

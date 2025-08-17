@@ -1,14 +1,19 @@
 <?php
-require_once __DIR__ . '/../repositories/PatientRepository.php';
-require_once __DIR__ . '/../interfaces/PatientRepositoryInterface.php';
-require_once __DIR__ . '/../services/ImageUploadService.php';
-require_once __DIR__ . '/../interfaces/ImageUploadServiceInterface.php';
-require_once __DIR__ . '/../interfaces/PatientServiceInterface.php';
-// require_once __DIR__ . '/../services/MailerService.php';
-require_once __DIR__ . '/../libraries/Mail.php';
-
-
-
+// require_once __DIR__ . '/../repositories/PatientRepository.php';
+// require_once __DIR__ . '/../interfaces/PatientRepositoryInterface.php';
+// require_once __DIR__ . '/../services/ImageUploadService.php';
+// require_once __DIR__ . '/../interfaces/ImageUploadServiceInterface.php';
+// require_once __DIR__ . '/../interfaces/PatientServiceInterface.php';
+// // require_once __DIR__ . '/../services/MailerService.php';
+// require_once __DIR__ . '/../libraries/Mail.php';
+namespace Asus\Medical\services;
+use Asus\Medical\interfaces\PatientServiceInterface;
+use Asus\Medical\interfaces\ImageUploadServiceInterface;
+use Asus\Medical\interfaces\PatientRepositoryInterface;
+use Asus\Medical\helpers\AppointmentHelper;
+use Asus\Medical\libraries\Mail;
+use Exception;
+use DateTime;
 class PatientService implements PatientServiceInterface
 {
     private PatientRepositoryInterface $patientRepository;
@@ -27,7 +32,7 @@ class PatientService implements PatientServiceInterface
 
     public function getDoctorProfile($doctorId, $selectedDate = null):array
     {
-        require_once APPROOT . '/helpers/appointment_helper.php';
+        // require_once APPROOT . '/helpers/appointment_helper.php';
 
         $user = $_SESSION['current_user'] ?? null;
         if (!$user) {
@@ -45,7 +50,7 @@ class PatientService implements PatientServiceInterface
         }
 
         $selectedDate = $selectedDate ?? date('Y-m-d');
-        $allAppointments = $this->patientRepository->getAppointmentsByTimeslot($time['id']) ?? [];
+        $allAppointments = $this->patientRepository->findAppointmentsByDoctorId($doctorId) ?? [];
 
         $slots = AppointmentHelper::getAvailableSlots($time['start_time'], $time['end_time']);
         $bookedTimes =AppointmentHelper:: getBookedTimes($allAppointments, $selectedDate);
