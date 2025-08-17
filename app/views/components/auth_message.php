@@ -1,3 +1,7 @@
+<?php
+// Import the helper functions
+use function Asus\Medical\helpers\unsetMessage;
+?>
 <?php if (isset($_SESSION['success'])) { ?>
     <div class="alert text-center alert-success" role="alert">
         <?php echo $_SESSION['success'];

@@ -1,4 +1,8 @@
 <?php
+namespace Asus\Medical\libraries;
+
+use Exception;
+use ReflectionClass;
 
 class Core
 {
@@ -9,29 +13,17 @@ class Core
     // Cache of instantiated dependencies
     protected $container = [];
 
-    // Map class names (or keywords) to their folders
-    protected $classMap = [
-        'Controller'           => '../app/controllers/',
-        'Service'              => '../app/services/',
-        'Repositor'           => '../app/repositories/',
-        'Interface'            => '../app/interfaces/',
-        'Library'              => '../app/libraries/',
-        'Database'         => '../app/libraries/',
-        // Add more mappings if needed
-    ];
-
     // Interface to concrete class bindings
     protected $interfaceBindings = [
-        'AdminServiceInterface'         => 'AdminService',
-        'AppointmentServiceInterface'         => 'AppointmentService',
-        'DoctorServiceInterface'         => 'DoctorService',
-        'PatientServiceInterface'         => 'PatientService',
-        'AdminRepositoryInterface'      => 'AdminRepository',
-        'AppointmentRepositoryInterface'      => 'AppointmentRepository',
-        'DoctorRepositoryInterface'          => 'DoctorRepository',
-        'PatientRepositoryInterface'       => 'PatientRepository',
-        'ImageUploadServiceInterface'     => 'ImageUploadService',
-        // Add more interface to class mappings here
+        'AdminServiceInterface'       => 'AdminService',
+        'AppointmentServiceInterface' => 'AppointmentService',
+        'DoctorServiceInterface'      => 'DoctorService',
+        'PatientServiceInterface'     => 'PatientService',
+        'AdminRepositoryInterface'    => 'AdminRepository',
+        'AppointmentRepositoryInterface' => 'AppointmentRepository',
+        'DoctorRepositoryInterface'   => 'DoctorRepository',
+        'PatientRepositoryInterface'  => 'PatientRepository',
+        'ImageUploadServiceInterface' => 'ImageUploadService',
     ];
 
     public function __construct()
@@ -41,16 +33,14 @@ class Core
         // Controller detection
         if (isset($url[0])) {
             $controllerName = ucwords($url[0]);
-            if (file_exists('../app/controllers/' . $controllerName . '.php')) {
+            $filePath = "../app/controllers/$controllerName.php";
+            if (file_exists($filePath)) {
                 $this->currentController = $controllerName;
                 unset($url[0]);
             }
         }
 
-        // Require controller file
-        require_once('../app/controllers/' . $this->currentController . '.php');
-
-        // Instantiate controller with dependencies injected
+        // Instantiate controller safely
         $this->currentController = $this->resolveController($this->currentController);
 
         // Method detection
@@ -59,62 +49,58 @@ class Core
             unset($url[1]);
         }
 
-        // Parameters for the method
+        // Parameters
         $this->params = $url ? array_values($url) : [];
 
-        // Call the controller method with params
+        // Call method
         call_user_func_array([$this->currentController, $this->currentMethod], $this->params);
     }
 
     protected function resolveController(string $controllerName)
     {
-        $reflection = new ReflectionClass($controllerName);
-        $constructor = $reflection->getConstructor();
+        $fullClass = "Asus\\Medical\\Controllers\\$controllerName";
 
-        // If no constructor or constructor without params, just instantiate
-        if (!$constructor || $constructor->getNumberOfParameters() === 0) {
-            return new $controllerName;
-        }
-
-        $dependencies = [];
-        foreach ($constructor->getParameters() as $param) {
-            $depClass = $param->getType() && !$param->getType()->isBuiltin()
-                ? $param->getType()->getName()
-                : null;
-
-            if ($depClass) {
-                if (!isset($this->container[$depClass])) {
-                    $this->container[$depClass] = $this->resolveDependency($depClass);
-                }
-                $dependencies[] = $this->container[$depClass];
-            } elseif ($param->isDefaultValueAvailable()) {
-                $dependencies[] = $param->getDefaultValue();
-            } else {
-                throw new Exception("Cannot resolve dependency '{$param->getName()}' for controller '{$controllerName}'");
+        if (!class_exists($fullClass)) {
+            $filePath = "../app/controllers/$controllerName.php";
+            if (!file_exists($filePath)) {
+                throw new Exception("Controller file '$filePath' not found.");
             }
+            require_once $filePath;
         }
 
-        return $reflection->newInstanceArgs($dependencies);
+        return $this->resolveClass($fullClass);
     }
 
     protected function resolveDependency(string $className)
     {
-        // If the className is an interface, get the concrete class from the bindings
-        if (interface_exists($className) && isset($this->interfaceBindings[$className])) {
-            $className = $this->interfaceBindings[$className];
+        // Convert interface to concrete class if binding exists
+        $shortName = (strpos($className, '\\') !== false) 
+            ? substr(strrchr($className, "\\"), 1) 
+            : $className;
+
+        if (interface_exists($className) && isset($this->interfaceBindings[$shortName])) {
+            $shortName = $this->interfaceBindings[$shortName];
+            $className = "Asus\\Medical\\" . $this->guessNamespace($shortName) . $shortName;
         }
 
-        $filePath = $this->getFilePathForClass($className);
-        if (!$filePath ||  !file_exists($filePath)) {
-            throw new Exception("Class file for '{$className}' not found at '{$filePath}'");
+        if (!class_exists($className)) {
+            $filePath = $this->getFilePathForClass($shortName);
+            if (!$filePath || !file_exists($filePath)) {
+                throw new Exception("Class file for '$className' not found at '$filePath'");
+            }
+            require_once $filePath;
         }
 
-        require_once $filePath;
-        $reflection = new ReflectionClass($className);
+        return $this->resolveClass($className);
+    }
+
+    protected function resolveClass(string $fullClass)
+    {
+        $reflection = new ReflectionClass($fullClass);
         $constructor = $reflection->getConstructor();
 
         if (!$constructor || $constructor->getNumberOfParameters() === 0) {
-            return new $className;
+            return new $fullClass;
         }
 
         $dependencies = [];
@@ -131,25 +117,42 @@ class Core
             } elseif ($param->isDefaultValueAvailable()) {
                 $dependencies[] = $param->getDefaultValue();
             } else {
-                throw new Exception("Cannot resolve dependency '{$param->getName()}' for class '{$className}'");
+                throw new Exception("Cannot resolve dependency '{$param->getName()}' for class '{$fullClass}'");
             }
         }
 
         return $reflection->newInstanceArgs($dependencies);
     }
 
-    protected function getFilePathForClass(string $className): ?string
+    protected function getFilePathForClass(string $shortName): ?string
     {
-        // Find mapping by matching any keyword in class name
-        foreach ($this->classMap as $keyword => $folder) {
-            if (stripos($className, $keyword) !== false) {
-                return $folder . $className . '.php';
-            }
+        if (stripos($shortName, 'Service') !== false) {
+            return "../app/services/$shortName.php";
         }
+        if (stripos($shortName, 'Repository') !== false) {
+            return "../app/repositories/$shortName.php";
+        }
+        if (stripos($shortName, 'Controller') !== false) {
+            return "../app/controllers/$shortName.php";
+        }
+        if (stripos($shortName, 'Interface') !== false) {
+            return "../app/interfaces/$shortName.php";
+        }
+        if (stripos($shortName, 'Library') !== false) {
+            return "../app/libraries/$shortName.php";
+        }
+        return "../app/$shortName.php";
+    }
 
-        // Default to app root folder (change if needed)
-        $defaultPath = '../app/' . $className . '.php';
-        return file_exists($defaultPath) ? $defaultPath : null;
+    protected function guessNamespace(string $shortName): string
+    {
+        if (stripos($shortName, 'Service') !== false) return 'Services\\';
+        if (stripos($shortName, 'Repository') !== false) return 'Repositories\\';
+        if (stripos($shortName, 'Controller') !== false) return 'Controllers\\';
+        if (stripos($shortName, 'Interface') !== false) return 'Interfaces\\';
+        if (stripos($shortName, 'Library') !== false) return 'Libraries\\';
+        if (stripos($shortName, 'Middleware') !== false) return 'Middleware\\'; // <--- add this
+        return '';
     }
 
     public function getURL(): array
@@ -161,4 +164,38 @@ class Core
         }
         return [];
     }
+    // public function getURL(): array
+    // {
+    //     /** @var array $_GET */
+    //     $url = $_GET['url'] ?? null;
+
+    //     if ($url) {
+    //         $url = rtrim($url, '/');
+    //         $url = filter_var($url, FILTER_SANITIZE_URL);
+    //         return explode('/', $url);
+    //     }
+
+    //     return [];
+    // }
+//     public function getURL(): array
+// {
+//     /** @var array $_GET */
+//     $url = $_GET['url'] ?? null;
+
+//     // Fallback for CLI or missing GET
+//     if (!$url && php_sapi_name() === 'cli') {
+//         global $argv;
+//         $url = $argv[1] ?? '';
+//     }
+
+//     if ($url) {
+//         $url = rtrim($url, '/');
+//         $url = filter_var($url, FILTER_SANITIZE_URL);
+//         return explode('/', $url);
+//     }
+
+//     return [];
+// }
+
+
 }

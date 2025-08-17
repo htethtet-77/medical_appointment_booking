@@ -1,5 +1,7 @@
 <?php
-
+namespace Asus\Medical\controllers;
+use Asus\Medical\libraries\Database;
+use Asus\Medical\libraries\Controller;
 class Pages extends Controller
 {
 

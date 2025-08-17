@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/../../src/PHPMailer.php';
-require_once __DIR__ . '/../../src/SMTP.php';
-require_once __DIR__ . '/../../src/Exception.php';
-
+// require_once __DIR__ . '/../../src/PHPMailer.php';
+// require_once __DIR__ . '/../../src/SMTP.php';
+// require_once __DIR__ . '/../../src/Exception.php';
+namespace Asus\Medical\libraries;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;

@@ -1,5 +1,5 @@
 <?php
-// namespace App\Interfaces;
+namespace Asus\Medical\interfaces;
 interface AppointmentRepositoryInterface
 {
     public function findDoctorById(int $doctorId);

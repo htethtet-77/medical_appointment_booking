@@ -3,5 +3,7 @@
         "APPROOT",
         "URLROOT",
         "isdestroy"
-    ]
+    ],
+    "intelephense.diagnostics.undefinedVariables": false
+
 }

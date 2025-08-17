@@ -1,7 +1,14 @@
 <?php
-require_once __DIR__ . '/../interfaces/AdminServiceInterface.php';
-require_once __DIR__ . '/../middleware/authMiddleware.php'; 
-require_once __DIR__ . '/../services/AdminService.php';
+namespace Asus\Medical\Controllers;
+use Asus\Medical\Interfaces\AdminServiceInterface;
+use Asus\Medical\Middleware\AuthMiddleware;
+use Asus\Medical\Middleware\CsrfMiddleware;
+use Asus\Medical\Middleware\PostMiddleware;
+
+use Asus\Medical\libraries\Controller;
+use function Asus\Medical\helpers\setMessage;
+use Exception;
+
 
 class Admin extends Controller
 {
@@ -9,7 +16,8 @@ class Admin extends Controller
 
     public function __construct(AdminServiceInterface $adminService)
     {
-        AuthMiddleware::adminOnly();
+        AuthMiddleware::allowRoles([ROLE_ADMIN]);
+        // PostMiddleware::protect();
         $this->adminService = $adminService;
   
     }
@@ -22,6 +30,7 @@ class Admin extends Controller
 
     public function adddoctor()
     {
+        
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return $this->view('admin/adddoctor');
         }
@@ -39,6 +48,29 @@ class Admin extends Controller
         }
 
     }
+//    public function adddoctor()
+// {
+//     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+//         // Generate CSRF token
+//         $csrf_token = CsrfMiddleware::generateToken();
+//         return $this->view('admin/adddoctor', ['csrf_token' => $csrf_token]);
+//     }
+
+//     try {
+//         // Validate CSRF token on POST
+//         CsrfMiddleware::validateToken();
+
+//         $userId = $this->adminService->addDoctor($_POST, $_FILES['image'] ?? []);
+//         setMessage('success', "Doctor added successfully! (ID: {$userId})");
+//         redirect('admin/doctorlist');
+//     } catch (Exception $e) {
+//         $msg = strpos($e->getMessage(), 'upload') !== false
+//             ? 'Image upload failed: ' . $e->getMessage()
+//             : $e->getMessage();
+//         setMessage('error', $msg);
+//         redirect('admin/adddoctor');
+//     }
+// }
 
     public function doctorlist()
     {
@@ -60,35 +92,104 @@ class Admin extends Controller
         redirect('admin/doctorlist');
     }
 
-    public function editdoctor($user_id)
-    {
-        try {
-            $data = $this->adminService->getDoctorDetails($user_id);
-            $this->view('admin/editdoctor', $data);
-        } catch (Exception $e) {
-            setMessage('error', $e->getMessage());
-            redirect('admin/doctorlist');
-        }
-    }
+public function editdoctor($user_id)
+{
+    try {
+        // Make sure user is admin (AuthMiddleware already runs in constructor)
+        $doctorData = $this->adminService->getDoctorDetails($user_id);
 
-    public function updatedoctor()
-    {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            redirect('admin/doctorlist');
-        }
+        // Generate CSRF token for this form only
+        $doctorData['csrf_token'] = CsrfMiddleware::generateToken();
 
-        try {
-            $this->adminService->updateDoctor($_POST, $_FILES['image'] ?? []);
-            setMessage('success', 'Doctor updated successfully!');
-        } catch (Exception $e) {
-            $msg = strpos($e->getMessage(), 'upload') !== false
-                ? 'Image upload failed: ' . $e->getMessage()
-                : $e->getMessage();
-            setMessage('error', $msg);
-        }
+        // Pass data to edit view
+        $this->view('admin/editdoctor', $doctorData);
 
+    } catch (Exception $e) {
+        setMessage('error', $e->getMessage());
         redirect('admin/doctorlist');
     }
+}
+
+public function updatedoctor()
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        redirect('admin/doctorlist');
+    }
+
+    try {
+        // Validate CSRF token from this form only
+       CsrfMiddleware::validateToken();
+
+        // Call service to update doctor
+        $this->adminService->updateDoctor($_POST, $_FILES['image'] ?? []);
+
+        setMessage('success', 'Doctor updated successfully!');
+    } catch (Exception $e) {
+        $msg = strpos($e->getMessage(), 'upload') !== false
+            ? 'Image upload failed: ' . $e->getMessage()
+            : $e->getMessage();
+        setMessage('error', $msg);
+    }
+
+    redirect('admin/doctorlist');
+}
+
+
+
+
+    // public function editdoctor($user_id)
+    // {
+    //     try {
+    //         $data = $this->adminService->getDoctorDetails($user_id);
+    //         $this->view('admin/editdoctor', $data);
+    //     } catch (Exception $e) {
+    //         setMessage('error', $e->getMessage());
+    //         redirect('admin/doctorlist');
+    //     }
+    // }
+/*public function updatedoctor()
+{
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        redirect('admin/doctorlist');
+    }
+
+    // Only validate for this form
+    CsrfMiddleware::validateToken();
+
+    try {
+        $this->adminService->updateDoctor($_POST, $_FILES['image'] ?? []);
+        setMessage('success', 'Doctor updated successfully!');
+    } catch (Exception $e) {
+        $msg = strpos($e->getMessage(), 'upload') !== false
+            ? 'Image upload failed: ' . $e->getMessage()
+            : $e->getMessage();
+        setMessage('error', $msg);
+    }
+
+    redirect('admin/doctorlist');
+}*/
+
+
+
+    // public function updatedoctor()
+    // {
+    //     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    //         redirect('admin/doctorlist');
+    //     }
+
+    //     try {
+    //         $this->adminService->updateDoctor($_POST, $_FILES['image'] ?? []);
+    //         setMessage('success', 'Doctor updated successfully!');
+    //     } catch (Exception $e) {
+    //         $msg = strpos($e->getMessage(), 'upload') !== false
+    //             ? 'Image upload failed: ' . $e->getMessage()
+    //             : $e->getMessage();
+    //         setMessage('error', $msg);
+    //     }
+
+    //     redirect('admin/doctorlist');
+    // }
 
     public function patientlist()
     {
@@ -108,3 +209,4 @@ class Admin extends Controller
         $this->view('admin/dashboard', $data);
     }
 }
+?>

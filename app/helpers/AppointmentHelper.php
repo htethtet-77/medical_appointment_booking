@@ -1,5 +1,8 @@
 <?php
-class   AppointmentHelper{
+namespace Asus\Medical\helpers;
+use DateTime;
+use DateTimeZone;
+class AppointmentHelper{
     public static function getAvailableSlots($startTime, $endTime, $intervalMinutes = 20) {
     $slots = [];
     $start = strtotime($startTime);

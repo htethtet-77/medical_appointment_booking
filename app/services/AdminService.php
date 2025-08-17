@@ -1,10 +1,10 @@
 <?php
-require_once __DIR__ . '/../repositories/AdminRepository.php';
-require_once __DIR__ . '/../interfaces/AdminRepositoryInterface.php';
-require_once __DIR__ . '/../helpers/UserValidator.php';
-require_once __DIR__ . '/../interfaces/AdminServiceInterface.php';
-require_once __DIR__ . '/../services/ImageUploadService.php';
-require_once __DIR__ . '/../interfaces/ImageUploadServiceInterface.php';
+namespace Asus\Medical\Services;
+use Asus\Medical\interfaces\AdminRepositoryInterface;
+use Asus\Medical\helpers\UserValidator;
+use Asus\Medical\interfaces\AdminServiceInterface;
+use Asus\Medical\interfaces\ImageUploadServiceInterface;
+use Exception;
 
 class AdminService  implements AdminServiceInterface
 {
@@ -129,47 +129,51 @@ class AdminService  implements AdminServiceInterface
     }
 
     public function updateDoctor(array $data, array $file)
-    {
-        $existingUser = $this->adminRepo->findUserById($data['id']);
-        if (!$existingUser) {
-            throw new Exception('User not found.');
-        }
-
-        // Handle image upload only if new file provided
-        $imagePath = $existingUser['profile_image'];
-        // If new file uploaded
-        if (!empty($file['tmp_name']) && $file['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = dirname(APPROOT) . '/public/image/';
-            $imageName = $this->imageUploader->upload($file, $uploadDir, 'doctor_');
-            $imagePath = 'image/' . $imageName;
-        }
-
-        // Keep existing password if none provided
-        $finalPassword = !empty(trim($data['password']))
-            ? base64_encode(trim($data['password']))
-            : $existingUser['password'];
-
-        $params = [
-            $data['id'],
-            $data['name'],
-            $data['email'],
-            $data['phone'],
-            $data['gender'],
-            $finalPassword,
-            $imagePath,
-            $data['degree'],
-            (int)$data['experience'],
-            $data['bio'],
-            $data['fee'],
-            $data['specialty'],
-            $data['address'],
-            $data['start_time'] . ':00',
-            $data['end_time'] . ':00',
-        ];
-
-        $this->adminRepo->updateDoctor($params);
-        return true;
+{
+    if (empty($data['id'])) {
+        throw new Exception('Doctor ID is missing.');
     }
+
+    $userId = (int)$data['id'];
+    $existingUser = $this->adminRepo->findUserById($userId);
+    if (!$existingUser) {
+        throw new Exception('User not found.');
+    }
+
+    // Handle image upload only if new file provided
+    $imagePath = $existingUser['profile_image'];
+    if (!empty($file['tmp_name']) && $file['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = dirname(APPROOT) . '/public/image/';
+        $imageName = $this->imageUploader->upload($file, $uploadDir, 'doctor_');
+        $imagePath = 'image/' . $imageName;
+    }
+
+    // Keep existing password if none provided
+    $finalPassword = !empty(trim($data['password']))
+        ? base64_encode(trim($data['password']))
+        : $existingUser['password'];
+
+    $params = [
+        $userId,
+        $data['name'],
+        $data['email'],
+        $data['phone'],
+        $data['gender'],
+        $finalPassword,
+        $imagePath,
+        $data['degree'],
+        (int)$data['experience'],
+        $data['bio'],
+        $data['fee'],
+        $data['specialty'],
+        $data['address'],
+        $data['start_time'] . ':00',
+        $data['end_time'] . ':00',
+    ];
+
+    $this->adminRepo->updateDoctor($params);
+    return true;
+}
 
     public function getPatients()
     {

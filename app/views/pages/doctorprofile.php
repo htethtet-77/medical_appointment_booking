@@ -81,19 +81,27 @@
             </div>
 
             <h3 class="text-xl font-bold text-gray-700 mb-4">Available Time Slot by Date</h3>
-            <form method="GET" class="mb-6">
-                <input type="hidden" name="id" value="<?php echo htmlspecialchars($data['doctor']['user_id']); ?>">
-                <input type="date" name="date" value="<?php echo htmlspecialchars($data['selected_date']); ?>" 
-                    class="border p-2 rounded-lg shadow-sm">
-                <button type="submit" 
-                    class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700">
-                    Check Availability
-                </button>
-            </form>
+          <form id="availabilityForm" method="GET" class="mb-6">
+    <input type="hidden" name="id" value="<?php echo htmlspecialchars($data['doctor']['user_id']); ?>">
+    <input type="date" name="date" value="<?php echo htmlspecialchars($data['selected_date']); ?>" 
+           class="border p-2 rounded-lg shadow-sm">
+    <button type="submit" 
+            class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700">
+        Check Availability
+    </button>
+</form>
+
+<!-- <div id="slotsContainer" class="flex flex-wrap gap-3">
+    <?php foreach ($data['appointment_time'] as $slot): ?>
+        <span class="bg-teal-100 text-teal-800 rounded-lg p-3 text-center font-medium">
+            <?php echo htmlspecialchars($slot); ?>
+        </span>
+    <?php endforeach; ?>
+</div> -->
 
           <?php 
           $doctor_id = htmlspecialchars($data['doctor']['user_id']); ?>
-            <div class="flex flex-wrap gap-3">
+            <div id="slotsContainer" class="flex flex-wrap gap-3">
                <?php
             $selectedDate = $data['selected_date'] ?? date('Y-m-d');
             $now = new DateTime();
@@ -175,3 +183,35 @@
 
 </body>
 </html>
+<script>
+document.getElementById('availabilityForm').addEventListener('submit', function(e){
+    e.preventDefault(); // prevent page refresh
+
+    const form = e.target;
+    const doctorId = form.querySelector('input[name="id"]').value;
+    const selectedDate = form.querySelector('input[name="date"]').value;
+
+    fetch(`/patient/doctorprofile/${doctorId}?date=${selectedDate}`, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const container = document.getElementById('slotsContainer');
+        container.innerHTML = '';
+
+        if(data.appointment_time && data.appointment_time.length > 0){
+            data.appointment_time.forEach(slot => {
+                const span = document.createElement('span');
+                span.className = 'bg-teal-100 text-teal-800 rounded-lg p-3 text-center font-medium';
+                span.textContent = slot;
+                container.appendChild(span);
+            });
+        } else {
+            container.innerHTML = '<span class="text-gray-500">No timeslots available</span>';
+        }
+    })
+    .catch(err => console.error('Error fetching slots:', err));
+});
+</script>

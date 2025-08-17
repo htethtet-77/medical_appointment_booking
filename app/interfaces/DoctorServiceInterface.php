@@ -1,4 +1,5 @@
 <?php
+namespace Asus\Medical\interfaces;
 interface DoctorServiceInterface
 {
     public function getDoctorDashboardData(int $doctorUserId): array;

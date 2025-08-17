@@ -1,5 +1,5 @@
 <?php
-
+namespace Asus\Medical\helpers;
 function setMessage($name, $description)
 {  
     // Check if a session is already started

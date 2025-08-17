@@ -1,5 +1,8 @@
 <?php
-require_once __DIR__ . '/../interfaces/AppointmentRepositoryInterface.php';
+namespace Asus\Medical\repositories;
+use Asus\Medical\interfaces\AppointmentRepositoryInterface;
+use Asus\Medical\libraries\Database;
+// require_once __DIR__ . '/../interfaces/AppointmentRepositoryInterface.php';
 class AppointmentRepository implements AppointmentRepositoryInterface
 {
     private $db;
