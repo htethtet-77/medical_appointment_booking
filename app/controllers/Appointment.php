@@ -5,6 +5,7 @@ use Asus\Medical\interfaces\AppointmentServiceInterface;
 use function Asus\Medical\helpers\setMessage;
 use Exception;
 use Asus\Medical\Middleware\AuthMiddleware;
+use Asus\Medical\Middleware\CsrfMiddleware;
 // require_once __DIR__ . '/../services/AppointmentService.php';
 // require_once __DIR__ . '/../interfaces/AppointmentServiceInterface.php';
 
@@ -67,6 +68,8 @@ class Appointment extends Controller
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return redirect('pages/home');
         }
+        CsrfMiddleware::validateToken();
+
 
         $user = $_SESSION['current_user'] ?? null;
         if (!$user) {
@@ -104,7 +107,7 @@ class Appointment extends Controller
 
     public function appointmentlist()
     {
-        $user = $_SESSION['current_user'] ?? null;
+        $user = $_SESSION['current_patient'] ?? null;
         if (!$user) {
             return redirect('pages/appointment');
         }

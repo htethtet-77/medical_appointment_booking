@@ -73,7 +73,105 @@ class PatientService implements PatientServiceInterface
         $doctors = $this->patientRepository->listDoctors();
         return ['doctors' => $doctors];
     }
+/*public function uploadProfileImage(array $file): array
+{
+    try {
+        $user = $_SESSION['current_user'] ?? null;
+        if (!$user || empty($user['id'])) {
+            return ['success' => false, 'message' => 'User not authenticated'];
+        }
+        $userId = (int)$user['id'];
 
+        if (empty($file) || $file['error'] !== UPLOAD_ERR_OK) {
+            return ['success' => false, 'message' => 'No valid file uploaded'];
+        }
+
+        // Absolute upload directory
+        $uploadDir = realpath(dirname(__DIR__, 2) . '/public/uploads');
+        if (!$uploadDir) {
+            throw new Exception('Upload directory not found.');
+        }
+
+        // Delete old image if exists and not default
+        $currentUser = $this->patientRepository->getUserById($userId);
+        if ($currentUser && !empty($currentUser['profile_image']) &&
+            $currentUser['profile_image'] !== 'default_profile.jpg') {
+
+            $oldImagePath = $uploadDir . '/' . $currentUser['profile_image'];
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
+        }
+
+        // Upload new image
+        $filename = $this->imageUploader->upload(
+            $file,
+            $uploadDir,
+            'profile_' . $userId . '_'
+        );
+
+        // Update DB & session
+        $this->patientRepository->updateUserProfileImage($userId, $filename);
+        $_SESSION['current_user']['profile_image'] = $filename;
+
+        // Return public URL
+       
+        $imageUrl = APPROOT . '/uploads/' . $filename;
+
+        return ['success' => true, 'imageUrl' => $imageUrl];
+
+    } catch (Exception $e) {
+        return ['success' => false, 'message' => $e->getMessage()];
+    }
+}
+
+public function removeProfileImage(): array
+{
+    $user = $_SESSION['current_user'] ?? null;
+    if (!$user || empty($user['id'])) {
+        return ['success' => false, 'message' => 'User not authenticated'];
+    }
+    $userId = (int)$user['id'];
+
+    $currentUser = $this->patientRepository->getUserById($userId);
+    if (!$currentUser) {
+        return ['success' => false, 'message' => 'User not found'];
+    }
+
+    $uploadDir = realpath(dirname(__DIR__, levels: 2) . '/public/uploads');
+
+    if (!empty($currentUser['profile_image']) && $currentUser['profile_image'] !== 'default_profile.jpg') {
+        $imagePath = $uploadDir . '/' . $currentUser['profile_image'];
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
+        }
+    }
+
+    $this->patientRepository->updateUserProfileImage($userId, 'default_profile.jpg');
+    $_SESSION['current_user']['profile_image'] = 'default_profile.jpg';
+
+    return [
+        'success' => true,
+        'message' => 'Profile image removed successfully',
+        'imageUrl' => URLROOT . '/uploads/default_profile.jpg'
+    ];
+}
+
+
+    public function getUserProfile(): array
+    {
+        $user = $_SESSION['current_user'] ?? null;
+        if (!$user || empty($user['id'])) {
+            return ['redirect' => 'auth/login'];
+        }
+
+        $dbUser = $this->patientRepository->getUserById((int)$user['id']);
+        if (!$dbUser) {
+            return ['redirect' => 'auth/login'];
+        }
+
+        return ['user' => $dbUser];
+    }*/
     public function uploadProfileImage($files):array
     {
         try {
@@ -82,7 +180,7 @@ class PatientService implements PatientServiceInterface
             }
 
             $file = $files['profile_image'];
-            $userId = $_SESSION['current_user']['id'];
+            $userId = $_SESSION['current_patient']['id'];
             $uploadDir = dirname(APPROOT) . '/public/uploads/';
 
             // Remove old image if it's not the default
@@ -103,7 +201,7 @@ class PatientService implements PatientServiceInterface
 
             // Update DB & session
             $this->patientRepository->updateUserProfileImage($userId, $filename);
-            $_SESSION['current_user']['profile_image'] = $filename;
+            $_SESSION['current_patient']['profile_image'] = $filename;
 
             return ['success' => true, 'imageUrl' => $filename];
 
@@ -114,7 +212,7 @@ class PatientService implements PatientServiceInterface
 
     public function removeProfileImage():array
     {
-        $userId = $_SESSION['current_user']['id'];
+        $userId = $_SESSION['current_patient']['id'];
         $currentUser = $this->patientRepository->getUserById($userId);
 
         if (!$currentUser) {
@@ -131,7 +229,7 @@ class PatientService implements PatientServiceInterface
 
         $updated = $this->patientRepository->updateUserProfileImage($userId, 'default_profile.jpg');
         if ($updated) {
-            $_SESSION['current_user']['profile_image'] = 'default_profile.jpg';
+            $_SESSION['current_patient']['profile_image'] = 'default_profile.jpg';
             return ['success' => true, 'message' => 'Profile image removed successfully'];
         }
 
@@ -141,9 +239,10 @@ class PatientService implements PatientServiceInterface
 
     public function getUserProfile():array
     {
-  
-
-        $userId = $_SESSION['current_user']['id'];
+        $userId = $_SESSION['current_patient']['id'];
+         if (!$userId || empty($userId['id'])) {
+            return ['redirect' => 'auth/login'];
+        }
         $user = $this->patientRepository->getUserById($userId);
 
         if (!$user) {

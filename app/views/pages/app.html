@@ -1,0 +1,223 @@
+
+
+<title>Medical Appointment Booking</title>
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="http://localhost:8000/css/bar.css">
+
+    
+</head>
+<body>
+
+
+
+<header class="navbar">
+    <a href="http://localhost:8000/pages/home" class="logo">Mediplus</a>
+    <button class="navbar-toggle" onclick="toggleNavbar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <nav class="navbar-nav" id="navbarNav">
+        <li>
+            <a href="http://localhost:8000/pages/home" 
+               class="">
+               HOME
+            </a>
+        </li>
+        <li>
+            <a href="http://localhost:8000/patient/doctors"
+               class="">
+               DOCTORS
+            </a>
+        </li>
+        <li>
+            <a href="http://localhost:8000/appointment/appointmentlist"
+               class="">
+               APPOINTMENT
+            </a>
+        </li>
+        <li>
+            <a href="http://localhost:8000/pages/contactus"
+               class="">
+               CONTACT
+            </a>
+        </li>
+        
+                    <li>
+                <a href="http://localhost:8000/pages/userprofile"
+                   class="">
+                    <i class="fas fa-user"></i>
+                    <span>Mi Mi </span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:8000/auth/logout">Logout</a>
+            </li>
+            </nav>
+</header>
+
+<script>
+function toggleNavbar() {
+    const navbar = document.getElementById('navbarNav');
+    navbar.classList.toggle('show');
+}
+</script>
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html><link rel="stylesheet" href="http://localhost:8000/css/appointmentform.css">
+<div class="appointmentform-container">
+    <h2>Book Your Appointment</h2>
+    <form action="http://localhost:8000/appointment/book" method="POST">
+    <input type="hidden" name="csrf_token" value="94cb762ecee8be8bba59f7fbf5f29badea9c639142c2d9faa0ec94a58c5201e7">        <fieldset class="form-section">
+            <legend>Your Information</legend>
+            <div class="form-group">
+                <label for="patientName">Full Name:</label>
+                <input type="text" id="patientName" name="name" value="Mi Mi " required>
+            </div>
+            <div class="form-group">
+                <label for="patientEmail">Email:</label>
+                <input type="email" id="patientEmail" name="email" value="mimikhainglin70@gmail.com" required>
+            </div>
+            <div class="form-group">
+                <label for="patientPhone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" value="09441386934" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <input type="text" id="gender" name="gender" value="female" required>
+            </div>
+        </fieldset>
+        <fieldset class="form-section">
+            <legend>Appointment Details</legend>
+            <input type="hidden" name="doctor_id" value="64">
+            <div class="form-group">
+                <label>Selected Doctor:</label>
+                <p class="selected-doctor-name">
+                    Dr. Paing Kyaw Moe                    (BDS)
+                </p>
+            </div>
+            <div class="form-group">
+                <label for="appointmentDate">Appointment Date:</label>
+                <input type="date" id="appointmentDate" name="appointment_date"
+       min="2025-08-19"
+       value="2025-08-19"
+       required>
+            </div>
+            <div class="form-group">
+                <label for="appointmentTime">Doctor's Available Time:</label>
+                <input type="text" id="appointmentTime" name="timeslot_id" readonly
+                       value="05:30 PM =&gt; 07:22 PM">
+            </div>
+            <div class="form-group">
+                <label for="timeslot">Select Available Timeslot:</label>
+                    <select name="appointment_time" id="timeslot" required>
+    <option value="">-- Select Time --</option>
+                                    <option value="17:30:00">
+                5:30 PM            </option>
+                                <option value="17:50:00">
+                5:50 PM            </option>
+                                <option value="18:10:00">
+                6:10 PM            </option>
+                                <option value="18:30:00">
+                6:30 PM            </option>
+                                <option value="18:50:00">
+                6:50 PM            </option>
+            </select>
+
+                        </div>
+            <div class="form-group">
+                <label for="reason">Reason for Visit (Symptoms):</label>
+                <textarea id="reason" name="reason" rows="4" placeholder="Briefly describe your symptoms or reason for visit..."></textarea>
+            </div>
+        </fieldset>
+        <button type="submit" class="submit-btn">Book Appointment</button>
+    </form>
+<div class="back-button-container">
+  <a href="http://localhost:8000/patient/doctorprofile/64" 
+     class="back-button" role="button" tabindex="0">
+    ⬅ Back to Profile
+  </a>
+</div>
+</div>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html>
+<script>
+document.getElementBy

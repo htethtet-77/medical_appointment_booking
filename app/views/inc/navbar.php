@@ -9,6 +9,7 @@
 </head>
 <body>
 
+
 <?php 
 $isLoggedIn = isset($_SESSION['current_patient']);
 $user = $isLoggedIn ? $_SESSION['current_patient'] : null;

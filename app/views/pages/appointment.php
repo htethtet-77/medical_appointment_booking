@@ -302,6 +302,9 @@
     
 </div>
 
+            <a href="<?= URLROOT; ?>/patient/doctors" class="add-appointment-btn" aria-label="Book a new appointment">
+                <i class="fa-solid fa-plus"></i>
+            </a>
         </main>
     <?php require APPROOT . '/views/inc/footer.php'; ?>
 

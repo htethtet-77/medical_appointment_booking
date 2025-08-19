@@ -4,7 +4,10 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
+if (!isset($_SESSION['current_patient'])) {
+    redirect('pages/login');
+    exit;
+}
 ?>
 <div class="user-main-content">
     <div class="container profile-container">

@@ -170,7 +170,43 @@ public function login() {
     //     $this->db->unsetLogin($id);
     //     redirect('pages/login');
     // }
-   public function logout($id = null)
+     public function logout($id = null)
+    {
+        // Use session user ID if $id not provided
+        if ($id === null && isset($_SESSION['current_user']['id'] )) {
+            $id = $_SESSION['current_user']['id'];
+        }
+
+        // Update database login status if needed
+        if ($id) {
+            $this->db->unsetLogin($id);
+        }
+
+        // Clear all session data
+        $_SESSION = [];
+
+        // Remove session cookie
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(
+                session_name(),
+                '',
+                time() - 42000,
+                $params["path"],
+                $params["domain"],
+                $params["secure"],
+                $params["httponly"]
+            );
+        }
+        
+    session_unset();
+        // Destroy the session
+        session_destroy();
+
+        // Redirect to login page
+        redirect('pages/login');
+    }
+ /*  public function logout($id=null)
 {
     // If $id is null, use session-based user ID
     if ($id === null && isset($_SESSION['user_id'])) {
@@ -184,5 +220,5 @@ public function login() {
     session_unset();
     session_destroy();
     redirect('pages/login');
-}
+}*/
 } 
