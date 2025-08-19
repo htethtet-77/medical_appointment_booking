@@ -20,7 +20,10 @@
 				<input type="checkbox" id="togglePassword" />
 				<label for="togglePassword">Show Password</label>
 			</div>
-
+ <!-- Google reCAPTCHA -->
+            <div class="form-group">
+                <div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_V2_SITEKEY;?>"></div>
+            </div>
 			<button type="submit">Login</button>
 
 			Do not have an account! 
@@ -42,3 +45,5 @@
     });
   });
 </script>
+<!-- Include Google reCAPTCHA script -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
