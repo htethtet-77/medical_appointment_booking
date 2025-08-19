@@ -10,11 +10,11 @@ use PHPMailer\PHPMailer\Exception;
 class Mail
 {
     private $host = 'smtp.gmail.com';
-    private $username = 'htethtetwin664@gmail.com';
-    private $password = 'evph nvsr raat wgcf'; // Gmail App Password
+    private $username = 'mediplusappointment@gmail.com';
+    private $password = 'rwha rycc hxjg vibf'; // Gmail App Password
     private $port = 587;
-    private $fromEmail = 'htethtetwin664@gmail.com';
-    private $fromName = 'Medical Appointment Booking';
+    private $fromEmail = 'mediplusappointment@gmail.com';
+    private $fromName = 'Medical Appointment Booking System';
 
     private function getMailer()
     {

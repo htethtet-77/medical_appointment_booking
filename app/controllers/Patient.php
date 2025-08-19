@@ -27,8 +27,10 @@ class Patient extends Controller
         $this->view('pages/home');
     }
 
-    public function doctorprofile($id)
+    public function doctorprofile($encodedId=null)
 {
+    $decoded = base64_decode($encodedId,true);
+    $id=(int)$decoded;
     $result = $this->patientService->getDoctorProfile($id, $_GET['date'] ?? null);
     
     if (isset($result['redirect'])) {
@@ -71,6 +73,11 @@ class Patient extends Controller
 
     public function userprofile()
     {
+        if (!isset($_SESSION['current_patient'])) {
+            redirect('pages/login');
+            exit;
+        }
+
         $result = $this->patientService->getUserProfile();
         if (isset($result['redirect'])) {
             return redirect($result['redirect']);
@@ -89,10 +96,12 @@ class Patient extends Controller
         $result =$this->patientService->sendContactMessage($fullName, $emailAddress, $subject, $message);
 
         if ($result['success']) {
+            setMessage('success', $result['message']); // <--- Add this
             redirect('pages/contactus');
             exit;
         } else {
-            header("Location: /contact?error=" . urlencode($result['message']));
+            setMessage('error', $result['message']); // <--- Fix redirect issue
+            redirect('pages/contactus'); // Always redirect somewhere
             exit;
         }
     }

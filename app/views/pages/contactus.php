@@ -7,7 +7,27 @@
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/contactus.css">
 <?php require APPROOT . '/views/inc/navbar.php'; ?>
       
+    <?php
+    if (isset($_SESSION['error'])) {
+        echo '
+        <div class="max-w-lg mx-auto mt-6 flex items-center justify-between p-4 border border-red-300 text-red-700 bg-red-100 rounded-lg shadow-md transition transform hover:scale-[1.01]">
+            <span class="font-medium">'.htmlspecialchars($_SESSION['error']).'</span>
+            <button onclick="this.parentElement.remove();" 
+                class="text-red-700 hover:text-red-900 font-bold text-xl leading-none">&times;</button>
+        </div>';
+        unset($_SESSION['error']);
+    }
 
+    if (isset($_SESSION['success'])) {
+        echo '
+        <div class="max-w-lg mx-auto mt-6 flex items-center justify-between p-4 border border-green-300 text-green-700 bg-green-100 rounded-lg shadow-md transition transform hover:scale-[1.01]">
+            <span class="font-medium">'.htmlspecialchars($_SESSION['success']).'</span>
+            <button onclick="this.parentElement.remove();" 
+                class="text-green-700 hover:text-green-900 font-bold text-xl leading-none">&times;</button>
+        </div>';
+        unset($_SESSION['success']);
+    }
+    ?>
     <!-- Main Content Section: Contact Us -->
     <main class="py-10 px-4">
         <div class="container mx-auto max-w-6xl bg-white rounded-xl shadow-lg p-8 md:p-12">
@@ -58,7 +78,7 @@
                             <i class="fa-solid fa-envelope contact-info-icon"></i>
                             <div class="contact-info-text">
                                 <strong>Email</strong>
-                                <span>appointment@gmail.com</span>
+                                <span>mediplusappointment@gmail.com</span>
                             </div>
                         </div>
                         <!-- Address -->
@@ -76,3 +96,13 @@
     </main>
 
        <?php require APPROOT . '/views/inc/footer.php'; ?>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const alerts = document.querySelectorAll(".max-w-lg");
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                alert.remove();
+            }, 4000); // auto-hide after 4 seconds
+        });
+    });
+</script>
