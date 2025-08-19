@@ -35,6 +35,20 @@ class Auth extends Controller
    public function register()
 {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+        // -----------------------------
+        // RECAPTCHA V3 VERIFICATION
+        // -----------------------------
+        $recaptchaResponse = $_POST['g-recaptcha-response'] ?? '';
+        $secret = '<?php echo RECAPTCHA_V3_SECRET; ?>';
+        $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secret}&response={$recaptchaResponse}");
+        $captcha = json_decode($verify);
+
+        if (!$captcha->success || $captcha->score < 0.5) {
+            setMessage('error', 'CAPTCHA verification failed. Are you a bot?');
+            return redirect('pages/register');
+        }
+
         $email = $_POST['email'];
         $phone = $_POST['phone'];
 
@@ -95,7 +109,7 @@ class Auth extends Controller
 
 
 
-public function login() {
+/*public function login() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['email']) && isset($_POST['password'])) {
          
@@ -163,7 +177,101 @@ public function login() {
         // If GET request, show login form
         $this->view('pages/login');
     }
+}*/
+public function login() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $email = trim($_POST['email'] ?? '');
+        $password = trim($_POST['password'] ?? '');
+
+        if (!$email || !$password) {
+            setMessage('error', 'Please fill in both email and password.');
+            redirect('pages/login');
+            return;
+        }
+
+        $ip = $_SERVER['REMOTE_ADDR'];
+
+        // Count recent login attempts by email or IP in the last 10 minutes
+        $attempts = $this->db->columnFilterAll('login_attempts', 'email', $email);
+        $count = count($attempts);
+
+
+        // Require CAPTCHA if attempts >= 3
+        if ($count >= 3) {
+            $recaptcha_response = $_POST['g-recaptcha-response'] ?? '';
+            $secret = '<?php echo RECAPTCHA_V2_SECRET;?>';
+            $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$recaptcha_response");
+            $captcha_success = json_decode($verify);
+
+            if (!$captcha_success->success) {
+                setMessage('error', 'Please complete CAPTCHA.');
+                redirect('pages/login');
+                return;
+            }
+        }
+
+        // Encode password (your current method)
+        $encoded_password = base64_encode($password);
+
+        // Check user credentials
+        $user = $this->db->loginCheck($email, $encoded_password);
+
+        // Record this attempt in DB
+        $this->db->create('login_attempts', [
+            'email' => $email,
+            'ip' => $ip,
+            'attempt_time' => date('Y-m-d H:i:s')
+        ]);
+
+        if (!$user) {
+            setMessage('error', 'Invalid email or password.');
+            redirect('pages/login');
+            return;
+        }
+
+        // Successful login: clear previous failed attempts (optional)
+        // $this->db->deleteLoginAttempts($email, $ip);
+
+        // Set session and update login status
+        $_SESSION['current_user'] = $user;
+        $this->db->setLogin($user['id']);
+
+        // Redirect based on role
+        switch ($user['type_id']) {
+            case ROLE_ADMIN:
+                redirect('admin/dashboard');
+                break;
+            case ROLE_DOCTOR:
+                $doctor = $this->db->columnFilter('doctor_view', 'user_id', $user['id']);
+                if (!$doctor) {
+                    setMessage('error', 'Doctor profile not found.');
+                    redirect('pages/login');
+                    exit;
+                }
+                $_SESSION['current_doctor'] = $doctor;
+                redirect('doctor/dash');
+                break;
+            case ROLE_PATIENT:
+                $patient = $this->db->columnFilter('users', 'id', $user['id']);
+                if (!$patient) {
+                    setMessage('error', 'Patient profile not found.');
+                    redirect('pages/login');
+                    exit;
+                }
+                $_SESSION['current_patient'] = $patient;
+                redirect('patient/doctors');
+                break;
+            default:
+                setMessage('error', 'Invalid user role.');
+                redirect('pages/login');
+                break;
+        }
+    } else {
+        // GET request: show login form
+        $this->view('pages/login');
+    }
 }
+
 
     // function logout($id)
     // {

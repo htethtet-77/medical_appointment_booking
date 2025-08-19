@@ -71,7 +71,19 @@ if (session_status() === PHP_SESSION_NONE) {
 </div>
 
 
+<!-- reCAPTCHA v3 -->
+<script src="https://www.google.com/recaptcha/api.js?render=<?php echo RECAPTCHA_V3_SITEKEY; ?>"></script>
 <script>
+grecaptcha.ready(function() {
+    grecaptcha.execute('<?php echo RECAPTCHA_V3_SITEKEY; ?>', {action: 'register'}).then(function(token) {
+        let form = document.querySelector('form[name="contactForm"]');
+        let input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'g-recaptcha-response';
+        input.value = token;
+        form.appendChild(input);
+    });
+});
 	//show password
   const toggle = document.getElementById('togglePassword');
   const passwordFields = document.querySelectorAll('input[type="password"]');

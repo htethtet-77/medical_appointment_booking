@@ -4,9 +4,73 @@
 <?php require APPROOT . '/views/inc/navbar.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/appointmentform.css">
 <div class="appointmentform-container">
+   <?php
+if (isset($_SESSION['error'])) {
+    echo '
+    <div class="alert alert-error">
+        <span>' . htmlspecialchars($_SESSION['error']) . '</span>
+        <button onclick="this.parentElement.style.display=\'none\'">&times;</button>
+    </div>';
+    unset($_SESSION['error']);
+}
+
+if (isset($_SESSION['success'])) {
+    echo '
+    <div class="alert alert-success">
+        <span>' . htmlspecialchars($_SESSION['success']) . '</span>
+        <button onclick="this.parentElement.style.display=\'none\'">&times;</button>
+    </div>';
+    unset($_SESSION['success']);
+}
+?>
+
+<style>
+/* Base alert style */
+.alert {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 12px 16px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+/* Error alert */
+.alert-error {
+    border: 1px solid #f5c6cb;
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Success alert */
+.alert-success {
+    border: 1px solid #c3e6cb;
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Close button */
+.alert button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    color: inherit;
+}
+.alert button:hover {
+    opacity: 0.7;
+}
+</style>
+
     <h2>Book Your Appointment</h2>
     <form action="<?php echo URLROOT; ?>/appointment/book" method="POST">
     <?= csrfInput(); ?>
+        <input type="hidden" name="g-recaptcha-response" id="recaptchaResponse">
         <fieldset class="form-section">
             <legend>Your Information</legend>
             <div class="form-group">
@@ -80,14 +144,18 @@
                 <label for="reason">Reason for Visit (Symptoms):</label>
                 <textarea id="reason" name="reason" rows="4" placeholder="Briefly describe your symptoms or reason for visit..."></textarea>
             </div>
+             
         </fieldset>
+         <!-- Google reCAPTCHA -->
+            <!-- <div class="form-group">
+                <div class="g-recaptcha" data-sitekey="6Ldt3aorAAAAAFE1cumOeq5KAxWJgLSLBIpLaWa-"></div>
+            </div> -->
         <button type="submit" class="submit-btn">Book Appointment</button>
     </form>
 <div class="back-button-container">
-  <a href="<?= URLROOT ?>/patient/doctorprofile/<?= htmlspecialchars($data['doctor']['user_id']) ?>" 
-     class="back-button" role="button" tabindex="0">
-    ⬅ Back to Profile
-  </a>
+    <a href="<?= URLROOT ?>/patient/doctorprofile/<?= base64_encode($data['doctor']['user_id']) ?>" 
+    class="back-button">⬅ Back to Profile</a>
+
 </div>
 </div>
 </body>
@@ -123,5 +191,14 @@ document.getElementById('appointmentDate').addEventListener('change', function()
             timeslotSelect.innerHTML = '<option disabled>Error loading slots</option>';
             console.error(err);
         });
+});
+</script>
+<!-- Include Google reCAPTCHA script -->
+<script src="https://www.google.com/recaptcha/api.js?render=<?php echo RECAPTCHA_V3_SITEKEY; ?>"></script>
+<script>
+grecaptcha.ready(function() {
+    grecaptcha.execute('<?php echo RECAPTCHA_V3_SITEKEY; ?>', {action: 'appointment'}).then(function(token) {
+        document.getElementById('recaptchaResponse').value = token;
+    });
 });
 </script>
