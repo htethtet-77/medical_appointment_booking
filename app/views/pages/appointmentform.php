@@ -1,6 +1,4 @@
-
-<?php
-use Asus\Medical\Middleware\CsrfMiddleware;
+<?php use function Asus\Medical\helpers\csrfInput;
 ?>
 <title><?php echo SITENAME; ?></title>
 <?php require APPROOT . '/views/inc/navbar.php'; ?>
@@ -8,7 +6,7 @@ use Asus\Medical\Middleware\CsrfMiddleware;
 <div class="appointmentform-container">
     <h2>Book Your Appointment</h2>
     <form action="<?php echo URLROOT; ?>/appointment/book" method="POST">
-    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(CsrfMiddleware::generateToken()); ?>">
+    <?= csrfInput(); ?>
         <fieldset class="form-section">
             <legend>Your Information</legend>
             <div class="form-group">

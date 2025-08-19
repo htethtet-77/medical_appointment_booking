@@ -188,7 +188,7 @@ document.getElementById('availabilityForm').addEventListener('submit', function(
     e.preventDefault(); // prevent page refresh
 
     const form = e.target;
-    const doctorId = form.querySelector('input[name="id"]').value;
+    const doctorId = btoa(form.querySelector('input[name="id"]').value); // Base64 encode
     const selectedDate = form.querySelector('input[name="date"]').value;
 
     fetch(`/patient/doctorprofile/${doctorId}?date=${selectedDate}`, {

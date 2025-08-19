@@ -138,7 +138,7 @@ function getTimeGreeting() {
             
             <li>
                 <a href="<?php echo defined('URLROOT') ? URLROOT : ''; ?>/doctor/profile"
-                   class="<?php echo isActivePage('/pages/userprofile') ? 'active' : ''; ?>">
+                   class="<?php echo isActivePage('/doctor/profile') ? 'active' : ''; ?>">
                     <i class="fas fa-user-md"></i>
                     <span class="doctor-greeting" id="doctorGreeting"></span>
                     <span class="doctor-name">Dr. <?php echo htmlspecialchars($doctor['name']); ?></span>

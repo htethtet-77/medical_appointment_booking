@@ -122,7 +122,8 @@
             document.querySelectorAll('.view-profile-btn').forEach(btn => {
                 btn.addEventListener('click', function () {
                     const id = this.dataset.doctorId;
-                    window.location.href = `<?php echo URLROOT; ?>/patient/doctorprofile/${id}`;
+                    const encodedId = btoa(id); // encode
+                    window.location.href = `<?php echo URLROOT; ?>/patient/doctorprofile/${encodedId}`;
                 });
             });
         }
