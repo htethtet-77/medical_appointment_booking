@@ -40,7 +40,7 @@ class Auth extends Controller
         // RECAPTCHA V3 VERIFICATION
         // -----------------------------
         $recaptchaResponse = $_POST['g-recaptcha-response'] ?? '';
-        $secret = '<?php echo RECAPTCHA_V3_SECRET; ?>';
+        $secret = RECAPTCHA_V3_SECRET;
         $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secret}&response={$recaptchaResponse}");
         $captcha = json_decode($verify);
 
@@ -188,18 +188,9 @@ public function login() {
             redirect('pages/login');
             return;
         }
-
-        $ip = $_SERVER['REMOTE_ADDR'];
-
-        // Count recent login attempts by email or IP in the last 10 minutes
-        $attempts = $this->db->columnFilterAll('login_attempts', 'email', $email);
-        $count = count($attempts);
-
-
-        // Require CAPTCHA if attempts >= 3
-        if ($count >= 3) {
+      
             $recaptcha_response = $_POST['g-recaptcha-response'] ?? '';
-            $secret = '<?php echo RECAPTCHA_V2_SECRET;?>';
+            $secret = RECAPTCHA_V2_SECRET; // Correct
             $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$recaptcha_response");
             $captcha_success = json_decode($verify);
 
@@ -208,7 +199,7 @@ public function login() {
                 redirect('pages/login');
                 return;
             }
-        }
+        
 
         // Encode password (your current method)
         $encoded_password = base64_encode($password);
@@ -216,21 +207,11 @@ public function login() {
         // Check user credentials
         $user = $this->db->loginCheck($email, $encoded_password);
 
-        // Record this attempt in DB
-        $this->db->create('login_attempts', [
-            'email' => $email,
-            'ip' => $ip,
-            'attempt_time' => date('Y-m-d H:i:s')
-        ]);
-
         if (!$user) {
             setMessage('error', 'Invalid email or password.');
             redirect('pages/login');
             return;
         }
-
-        // Successful login: clear previous failed attempts (optional)
-        // $this->db->deleteLoginAttempts($email, $ip);
 
         // Set session and update login status
         $_SESSION['current_user'] = $user;

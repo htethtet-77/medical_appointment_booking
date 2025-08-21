@@ -48,6 +48,71 @@ class AppointmentService implements AppointmentServiceInterface
         return $doctor;
     }
 
+    public function bookAppointmentFromRequest(array $postData, ?array $currentUser): bool
+    {
+        if (!$currentUser) {
+            throw new Exception("Please log in to book an appointment.");
+        }
+
+        $userId = $currentUser['id'];
+        $time = time();
+
+        // -----------------------------
+        // Rate limiting: max 3 per day per user
+        // -----------------------------
+        if (!isset($_SESSION['booking_requests'])) {
+            $_SESSION['booking_requests'] = [];
+        }
+
+        $_SESSION['booking_requests'] = array_filter(
+            $_SESSION['booking_requests'],
+            fn($r) => $r['time'] > $time - 86400
+        );
+
+        $count = count(array_filter($_SESSION['booking_requests'], fn($r) => $r['user_id'] === $userId));
+        if ($count >= 5) {
+            throw new Exception("You have reached the daily booking limit (3).");
+        }
+
+        $_SESSION['booking_requests'][] = ['user_id' => $userId, 'time' => $time];
+
+        // -----------------------------
+        // Prepare data
+        // -----------------------------
+        $data = [
+            'doctor_id' => (int)($postData['doctor_id'] ?? 0),
+            'patient_id' => $userId,
+            'timeslot_id' => isset($postData['timeslot_id']) ? (int)$postData['timeslot_id'] : null,
+            'appointment_date' => isset($postData['appointment_date']) ? date("Y-m-d", strtotime($postData['appointment_date'])) : null,
+            'appointment_time' => isset($postData['appointment_time']) ? date("H:i:s", strtotime($postData['appointment_time'])) : null,
+            'reason' => htmlspecialchars(trim($postData['reason'] ?? ''), ENT_QUOTES, 'UTF-8'),
+        ];
+
+        // -----------------------------
+        // Recaptcha validation
+        // -----------------------------
+        $recaptchaResponse = $postData['g-recaptcha-response'] ?? '';
+        if (!$recaptchaResponse) {
+            throw new Exception('CAPTCHA verification is required.');
+        }
+
+        $secret = RECAPTCHA_V3_SECRET;
+        $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secret}&response={$recaptchaResponse}");
+        $captchaSuccess = json_decode($verify,true);
+// var_dump($captchaSuccess); exit;
+
+    $minScore = 0.5; // minimum score to accept
+    if (!$captchaSuccess['success'] || ($captchaSuccess['score'] ?? 0) < $minScore) {
+        throw new Exception('CAPTCHA verification failed or suspicious request. Score: ' . ($captchaSuccess['score'] ?? 'N/A'));
+    }
+
+
+        // -----------------------------
+        // Service-level validation & booking
+        // -----------------------------
+        return $this->bookAppointment($data);
+    }
+
 
     public function bookAppointment(array $data): bool
     {

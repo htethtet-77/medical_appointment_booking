@@ -1,178 +1,140 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body, html {
-    height: 100%;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background-color: #f4f7f6; /* A soft, calming background color */
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+}
+.show-password {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 15px;
+  color: #333;
 }
 
-/* Main Container */
+.show-password input[type="checkbox"] {
+  accent-color: #009688; /* Modern browsers */
+  margin-right: 8px;
+  transform: scale(1.2);
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.show-password label {
+  cursor: pointer;
+  user-select: none;
+}
 .container {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+  /* background: url('background.jpg') no-repeat center center/cover; */
+  /* background-color: #ffffff; */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
-/* Registration Box */
 .register-box {
-    background: white;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 450px; /* Slightly wider for better spacing */
+  background: white;
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 400px;
 }
 
 .register-box h2 {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 2em;
-    color: #2c3e50;
-    font-weight: 600;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
-/* Form Groups */
-.form-group {
-    margin-bottom: 20px;
+.register-box p {
+  text-align: center;
+  font-size: 14px;
+  color: red;
+  margin-bottom: 20px;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #4a5568;
+.register-box form input[type="text"],
+.register-box form input[type="email"],
+.register-box form input[type="date"],
+.register-box form input[type="tel"],
+.register-box form input[type="password"] {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
 }
 
-.form-group input {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 1em;
-    transition: border-color 0.3s ease;
+.input-icon {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  overflow: hidden;
 }
 
-.form-group input:focus {
-    border-color: #3498db;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+.input-icon .icon,
+.input-icon .flag {
+  background: #f0f0f0;
+  padding: 10px;
+  font-size: 16px;
+  border-right: 1px solid #ccc;
 }
 
-.error-message {
-    color: #e74c3c; /* A strong red for errors */
-    font-size: 0.85em;
-    margin-top: 8px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+.input-icon input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  outline: none;
+  font-size: 14px;
 }
 
-.error-message i {
-    font-size: 1em;
-}
-
-/* Gender Selection */
 .gender-selection {
-    margin-bottom: 20px;
-}
-
-.gender-selection .gender-options {
-    display: flex;
-    gap: 25px;
-    margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
 }
 
 .gender-selection label {
-    font-weight: normal;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
+  font-size: 15px;
 }
 
-.gender-selection input[type="radio"] {
-    accent-color: #3498db;
-    transform: scale(1.1);
-}
-
-/* Password Field with Toggle */
-.password-container {
-    position: relative;
-}
-
-.password-container input {
-    padding-right: 40px; /* Make space for the icon */
-}
-
-.password-container i {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: #999;
-    transition: color 0.2s ease;
-}
-
-.password-container i:hover {
-    color: #333;
-}
-
-/* reCAPTCHA Styling */
-.recaptcha-group {
-    margin-top: 25px;
-    margin-bottom: 25px;
-}
-
-/* Submit Button */
 button[type="submit"] {
-    width: 100%;
-    padding: 14px;
-    background: #009688;
-    color: white;
-    font-size: 1.1em;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
+  width: 100%;
+  padding: 12px;
+  background: #009688;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 button[type="submit"]:hover {
-    background: #00796b;
-    transform: translateY(-2px);
+  background: #00796b;
 }
-
-/* Login Link */
-.login-link {
-    text-align: center;
-    margin-top: 25px;
-    font-size: 0.9em;
-    color: #555;
+.alreadyRegi{
+  margin-top: 2px;
+  margin-left: 20%;
 }
-
-.login-link a {
-    color: #3498db;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.2s ease;
-}
-
-.login-link a:hover {
-    text-decoration: underline;
-    color: #21618c;
-}
-
-/* Responsive Adjustments */
+/* Responsive */
 @media screen and (max-width: 480px) {
-    .register-box {
-        padding: 25px;
-        margin: 10px;
-    }
+  .register-box {
+    padding: 20px;
+  }
+
+  .gender-selection {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

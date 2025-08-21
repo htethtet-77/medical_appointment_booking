@@ -672,4 +672,22 @@ document.addEventListener('keydown', function(e) {
 
 // Completely remove the beforeunload event listener
 // No more "leave site" warnings or confirmations
+function refreshCsrfToken() {
+    fetch('<?= URLROOT ?>/appointment/refreshCsrfToken')
+        .then(res => res.json())
+        .then(data => {
+            const tokenInput = document.getElementById('csrf_token');
+            if (tokenInput) tokenInput.value = data.csrf_token;
+            console.log("CSRF token refreshed:", data.csrf_token);
+        })
+        .catch(err => console.error("CSRF token refresh failed:", err));
+}
+
+// Refresh on page load
+refreshCsrfToken();
+
+// Refresh every 4 minutes (before 5 min expiry)
+setInterval(refreshCsrfToken, 4 * 60 * 1000);
+// setInterval(refreshCsrfToken, 60000);
+
 </script>

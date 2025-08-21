@@ -4,6 +4,7 @@ interface AppointmentServiceInterface
 {
     public function getAvailableSlotsForDoctor(int $doctorId, string $selectedDate): array;
     public function getDoctorById(int $doctorId);
+    public function bookAppointmentFromRequest(array $postData, ?array $currentUser): bool;
     public function bookAppointment(array $data): bool;
     public function getAppointmentsByPatient(int $patientId): array;
     public function cancelAppointment(int $appointmentId): bool;

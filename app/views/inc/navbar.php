@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/bar.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/bar.css?v=2">
 
     
 </head>
@@ -69,7 +69,7 @@ function isActivePage($pagePath) {
                 </a>
             </li>
             <li>
-                <a href="<?php echo defined('URLROOT') ? URLROOT : ''; ?>/auth/logout">Logout</a>
+                <a href="<?php echo defined( 'URLROOT') ? URLROOT : ''; ?>/auth/logout">Logout</a>
             </li>
         <?php else: ?>
             <li>

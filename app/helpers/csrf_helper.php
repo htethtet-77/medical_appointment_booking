@@ -4,13 +4,13 @@ namespace Asus\Medical\helpers;
 use Asus\Medical\Middleware\CsrfMiddleware;
 
 if (!function_exists('csrfInput')) {
-    /**
-     * Generates a hidden CSRF input for forms
-     * @return string
-     */
     function csrfInput(): string
     {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         $token = CsrfMiddleware::generateToken();
-        return '<input type="hidden" name="csrf_token" value="' . $token . '">';
+        return '<input type="hidden" id="csrf_token" name="csrf_token" value="' . htmlspecialchars($token) . '">';
     }
 }
