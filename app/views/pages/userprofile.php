@@ -2,13 +2,20 @@
 <?php require APPROOT . '/views/inc/navbar.php'; ?>
 
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-if (!isset($_SESSION['current_patient'])) {
-    redirect('pages/login');
-    exit;
+use Asus\Medical\libraries\SessionManager;
+$session = new SessionManager();
+
+// Check login
+$isLoggedIn = isset($_SESSION['current_patient']);
+$user = $isLoggedIn ? $_SESSION['current_patient'] : null;
+
+if (!$isLoggedIn) {
+    // Redirect to login if not logged in
+   redirect ( "/pages/login");
+    exit();
 }
 ?>
+
 <div class="user-main-content">
     <div class="container profile-container">
         <h2 class="profile-title">View Profile</h2>
@@ -83,9 +90,9 @@ if (!isset($_SESSION['current_patient'])) {
             </div>
         </div>
 
-        <div class="profile-actions">
-            <a href="<?php echo URLROOT; ?>/auth/logout" class="action-button logout-button">Logout</a>
-        </div>
+        <!-- <div class="profile-actions">
+            <a href="<?php echo URLROOT; ?>/auth/logout" class="action-button logout-button">Edit</a>
+        </div> -->
     </div>
 </div>
 
