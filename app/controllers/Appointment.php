@@ -19,8 +19,10 @@ class Appointment extends Controller
         $this->service = $service;
     }
 
-    public function appointmentform($doctorId)
+    public function appointmentform($encodedId=null)
     {
+        $decoded = base64_decode($encodedId,true);
+        $doctorId=(int)$decoded;
          AuthMiddleware::allowRoles([ROLE_PATIENT]);
         $user = $_SESSION['current_user'] ?? null;
         if (!$user) {
@@ -63,111 +65,24 @@ class Appointment extends Controller
         exit;
     }
 
-   public function book()
-{
-    // Only allow POST
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        return redirect('pages/home');
-    }
-
-    // CSRF check
-    CsrfMiddleware::validateToken();
-
-    // -----------------------------
-    // USER CHECK
-    // -----------------------------
-    $user = $_SESSION['current_patient'] ?? null;
-    if (!$user) {
-        setMessage('error', 'Please log in to book an appointment.');
-        return redirect('pages/login');
-    }
-
-    $userId = $user['id'];
-    $time = time();
-
-    // -----------------------------
-    // RATE LIMITING (per user per day)
-    // -----------------------------
-    $limit = 3;
-    $window = 86400; // 24 hours in seconds
-
-    if (!isset($_SESSION['booking_requests'])) {
-        $_SESSION['booking_requests'] = [];
-    }
-
-    // Remove requests older than 24 hours
-    $_SESSION['booking_requests'] = array_filter(
-        $_SESSION['booking_requests'],
-        fn($r) => $r['time'] > $time - $window
-    );
-
-    // Count today's requests for this user
-    $count = count(array_filter($_SESSION['booking_requests'], fn($r) => $r['user_id'] === $userId));
-    if ($count > $limit) {
-        setMessage('error', 'You have reached the daily booking limit (3).');
-        return redirect('appointment/appointmentform/' . ($_POST['doctor_id'] ?? ''));
-    }
-
-    // Record current request
-    $_SESSION['booking_requests'][] = ['user_id' => $userId, 'time' => $time];
-
-    // -----------------------------
-    // COLLECT & SANITIZE FORM DATA
-    // -----------------------------
-    $data = [
-        'doctor_id' => (int)($_POST['doctor_id'] ?? 0),
-        'patient_id' => $userId,
-        'timeslot_id' => isset($_POST['timeslot_id']) ? (int)$_POST['timeslot_id'] : null,
-        'appointment_date' => isset($_POST['appointment_date']) ? date("Y-m-d", strtotime($_POST['appointment_date'])) : null,
-        'appointment_time' => isset($_POST['appointment_time']) ? date("H:i:s", strtotime($_POST['appointment_time'])) : null,
-        'reason' => htmlspecialchars(trim($_POST['reason'] ?? ''), ENT_QUOTES, 'UTF-8'),
-    ];
-
-    // -----------------------------
-    // BASIC VALIDATION
-    // -----------------------------
-    if (!$data['doctor_id'] || !$data['timeslot_id'] || !$data['appointment_date'] || !$data['appointment_time']) {
-        setMessage('error', 'Please fill all required fields.');
-        return redirect("appointment/appointmentform/{$data['doctor_id']}");
-    }
-
-    // -----------------------------
-    // RECAPTCHA VERIFICATION
-    // -----------------------------
-    $recaptchaResponse = $_POST['g-recaptcha-response'] ?? '';
-    $secret = '<?php echo RECAPTCHA_V3_SECRET; ?>'; // your secret key
-
-    if (!$recaptchaResponse) {
-        setMessage('error', 'CAPTCHA verification is required.');
-        return redirect("appointment/appointmentform/{$data['doctor_id']}");
-    }
-
-    $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secret}&response={$recaptchaResponse}");
-    $captchaSuccess = json_decode($verify);
-
-    if (!$captchaSuccess->success) {
-        setMessage('error', 'CAPTCHA verification failed.');
-        return redirect("appointment/appointmentform/{$data['doctor_id']}");
-    }
-
-    // -----------------------------
-    // BOOK APPOINTMENT
-    // -----------------------------
-    try {
-        $success = $this->service->bookAppointment($data);
-        if (!$success) {
-            throw new Exception("Failed to create appointment.");
+    public function book()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return redirect('pages/home');
         }
 
-        setMessage('success', 'Appointment booked successfully.');
-        return redirect('appointment/appointmentlist');
+        CsrfMiddleware::validateToken();
 
-    } catch (Exception $e) {
-        setMessage('error', $e->getMessage());
-        return redirect("appointment/appointmentform/{$data['doctor_id']}");
+        try {
+            $this->service->bookAppointmentFromRequest($_POST, $_SESSION['current_patient'] ?? null);
+            setMessage('success', 'Appointment booked successfully.');
+            return redirect('appointment/appointmentlist');
+        } catch (Exception $e) {
+            setMessage('error', $e->getMessage());
+            $doctorId = $_POST['doctor_id'] ?? '';
+            return redirect("appointment/appointmentform/{$doctorId}");
+        }
     }
-}
-
       /*  public function book()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -331,5 +246,14 @@ public function reject($appointmentId)
     }
     redirect("doctor/dash");
 }
+// Returns a new CSRF token as JSON for refreshing the token via AJAX every 5 minutes
+public function refreshCsrfToken()
+{
+    header('Content-Type: application/json');
+    $token =CsrfMiddleware::generateToken();
+    echo json_encode(['csrf_token' => $token]);
+    exit;
+}
+
 
 }

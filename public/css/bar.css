@@ -51,7 +51,7 @@
 
         /* Active state - ONLY color change */
         .navbar-nav a.active {
-            color: #00eaffff !important;
+            color: rgb(0, 0, 0) !important;
             font-weight: 700;
         }
 

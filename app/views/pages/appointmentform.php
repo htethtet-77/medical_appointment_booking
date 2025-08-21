@@ -192,6 +192,24 @@ document.getElementById('appointmentDate').addEventListener('change', function()
             console.error(err);
         });
 });
+function refreshCsrfToken() {
+    fetch('<?= URLROOT ?>/appointment/refreshCsrfToken')
+        .then(res => res.json())
+        .then(data => {
+            const tokenInput = document.getElementById('csrf_token');
+            if (tokenInput) tokenInput.value = data.csrf_token;
+            console.log("CSRF token refreshed:", data.csrf_token);
+        })
+        .catch(err => console.error("CSRF token refresh failed:", err));
+}
+
+// Refresh on page load
+refreshCsrfToken();
+
+// Refresh every 4 minutes (before 5 min expiry)
+setInterval(refreshCsrfToken, 4 * 60 * 1000);
+// setInterval(refreshCsrfToken, 60000);
+
 </script>
 <!-- Include Google reCAPTCHA script -->
 <script src="https://www.google.com/recaptcha/api.js?render=<?php echo RECAPTCHA_V3_SITEKEY; ?>"></script>
@@ -201,4 +219,5 @@ grecaptcha.ready(function() {
         document.getElementById('recaptchaResponse').value = token;
     });
 });
+
 </script>

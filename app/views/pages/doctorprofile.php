@@ -140,7 +140,7 @@
                         </div>
 
 
-            <a href="<?php echo URLROOT; ?>/appointment/appointmentform/<?php echo $doctor_id; ?>"
+            <a href="<?php echo URLROOT; ?>/appointment/appointmentform/<?= base64_encode($data['doctor']['user_id']) ?>"
                class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-10 rounded-full shadow-lg transition duration-300 inline-block text-center mt-6">
                 <i class="fa-solid fa-calendar-check mr-2"></i> Book Appointment
             </a>
