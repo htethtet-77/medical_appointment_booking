@@ -3,8 +3,6 @@ namespace Asus\Medical\Controllers;
 use Asus\Medical\Interfaces\AdminServiceInterface;
 use Asus\Medical\Middleware\AuthMiddleware;
 use Asus\Medical\Middleware\CsrfMiddleware;
-use Asus\Medical\Middleware\PostMiddleware;
-
 use Asus\Medical\libraries\Controller;
 use function Asus\Medical\helpers\setMessage;
 use Exception;

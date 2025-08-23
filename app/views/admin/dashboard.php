@@ -2,7 +2,7 @@
 <?php require APPROOT . '/views/inc/sidebar.php'; ?>
     
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dashboard.css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dashboard.css?v=2">
 
 <div class="dashboard-container">
     <div class="container">
@@ -23,7 +23,7 @@
 
         <div class="main-content">
             <div class="content-body">
-               <?php if (!empty($data['appointmentsByDate'])): ?>
+                <?php if (!empty($data['appointmentsByDate'])): ?>
     <?php foreach ($data['appointmentsByDate'] as $date => $appointments): ?>
         <div class="date-section">
             <div class="date-header today">
@@ -41,44 +41,49 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th></th>
-                            <th>Date</th>
+                            <th class="date-time-header">Date </th>
                             <th>Time</th>
-                            <th>Patient Name</th>
+                            <th>Patient</th>
                             <th>Doctor</th>
-                            <th>Contact Information</th>
                             <th>Reason</th>
                             <th class="status">Status</th>
-                           
+                            
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($appointments as $appointment): ?>
                             <tr>
-                                <td class="📅">
-                                    📅 <?= date('F j, Y', strtotime($appointment['appointment_date'])) ?>
-                                    </td>
-                                                
-                                <td class="time-cell">
-                                    <?= date('g:i A', strtotime($appointment['appointment_time'])) ?>
-                                    </td>                                
-                                <td>
-                                    <div class="patient-name"><?= htmlspecialchars($appointment['patient_name']) ?></div>
-                                </td>
-                                <td>
-                                    <div class="patient-name">Dr.<?= htmlspecialchars($appointment['doctor_name']) ?></div>
-                                </td>
-                                <td>
-                                    <div class="contact-item email-item">
-                                        <?= htmlspecialchars($appointment['patient_email']) ?>
+                                <td class="date-time-cell">
+                                    <div class="date-item">
+                                        📅 <?= date('F j, Y', strtotime($appointment['appointment_date'])) ?>
                                     </div>
                                 </td>
+                                <td class="date-time-cell">
+                                     <div class="time-item">
+                                        🕐 <?= date('g:i A', strtotime($appointment['appointment_time'])) ?>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="patient-name">👤 <?= htmlspecialchars($appointment['patient_name']) ?></div>
+                                    <div class="contact-info">
+                                        <div class="contact-item email-item">
+                                            ✉️ <?= htmlspecialchars($appointment['patient_email']) ?>
+                                        </div>
+                                        <div class="contact-item phone-item">
+                                            📞 <?= htmlspecialchars($appointment['patient_phone']) ?>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="doctor-name">Dr.<?= htmlspecialchars($appointment['doctor_name']) ?></div>
+                                </td>
+                                
                                 <td class="reason-cell">
                                     <div class="reason-text">
-                                         <?= htmlspecialchars($appointment['reason']) ?>
-                                        </div>
-                                    </td>
-                                    <td>
+                                        <?= htmlspecialchars($appointment['reason']) ?>
+                                    </div>
+                                </td>
+                                <td>
                                     <?php
                                         $status = $appointment['status_name'] ?? 'Unknown';
                                         $badgeClasses = [

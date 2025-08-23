@@ -76,7 +76,7 @@ function isActivePage($pagePath) {
                 <a href="<?php echo defined('URLROOT') ? URLROOT : ''; ?>/pages/login"
                    class="<?php echo isActivePage('/pages/login') ? 'active' : ''; ?>">
                     <i class="fas fa-user"></i>
-                    <span>Guest</span>
+                    <span>login</span>
                 </a>
             </li>
         <?php endif; ?>
