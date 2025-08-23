@@ -22,7 +22,7 @@ $url = isset($_SESSION['current_user']) ? URLROOT . '/patient/doctors' : URLROOT
         
         <h1>Book Your Appointment Online</h1>
         <p>
-            Skip the waiting room and find your perfect doctor. Book appointments instantly with verified healthcare professionals. It's Fast, Easy, and Secure.
+            Skip the waiting room and find your perfect doctor. <br>Book appointments instantly with verified healthcare professionals. <br>It's Fast, Easy, and Secure.
         </p>
        <a href="<?php echo $url; ?>" class="hero-button">
     <i class="fas fa-calendar-plus"></i>
