@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         /* Custom styles to enhance visibility and layout */
         .appointment-card {
@@ -44,7 +43,6 @@
             background-color: #0a7c80;
         }
     </style>
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/appointment.css">
 </head>
 <body class="bg-gray-50 antialiased flex flex-col min-h-screen">
     <?php require APPROOT . '/views/inc/navbar.php'; ?>
@@ -73,7 +71,7 @@
 
    <div class="max-w-4xl mx-auto">
 
-    <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">My Appointments</h1>
+    <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center mt-7">My Appointments</h1>
 
     <div class="mb-6">
         <!-- Tabs -->

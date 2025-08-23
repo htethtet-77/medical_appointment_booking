@@ -25,8 +25,8 @@
             background-repeat: no-repeat;
             position: relative; /* Needed for the gradient overlay */
             color: white;
-            padding-top: 5rem; /* py-20 */
-            padding-bottom: 5rem; /* py-20 */
+            padding-top: 4rem; /* py-20 */
+            padding-bottom: 4rem; /* py-20 */
             padding-left: 1rem; /* px-4 */
             padding-right: 1rem; /* px-4 */
         }
@@ -42,16 +42,31 @@
             position: relative; /* z-10 */
             z-index: 10;
         }
+        .hero-badge {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #e5e7eb;
+            margin-bottom: 1rem;
+
+        }
         .hero-section h1 {
-            font-size: 1.5rem; /* text-2xl */
-            font-weight: 700; /* font-bold */
-            margin-bottom: 0.75rem; /* mb-3 */
+            font-size: 2.5rem;        /* Slightly bigger than paragraph but balanced */
+            font-weight: 800;         /* Bold for emphasis */
+            line-height: 1.4;         /* Slightly tighter than paragraph */
+            color: #f8fafc;           /* Soft white for contrast */
+            margin: 0 0 1.5rem 0;     /* Space below heading */
+            letter-spacing: 0.5px;    /* Slight spacing for readability */
+            text-shadow: 1px 2px 6px rgba(0,0,0,0.3); /* Makes heading pop on image */
         }
+
         .hero-section p {
-            font-size: 0.875rem; /* text-sm */
-            max-width: 20rem; /* max-w-xs */
-            margin-bottom: 1.5rem; /* mb-6 */
+            font-size: 1.25rem;       /* Bigger and readable */
+            line-height: 1.6;         /* Gives space between lines */
+            max-width: 28rem;         /* Limit line length for readability */
+            margin: 0 auto 2rem auto; /* Center text with bottom spacing */
+            color: #e5e7eb;           /* Soft white for contrast */
         }
+
         .hero-button {
             background-color: #0C969C; /* bg-[#0C969C] */
             color: white;
@@ -66,6 +81,7 @@
         .hero-button:hover {
             background-color: rgba(12, 150, 156, 0.9); /* hover:bg-opacity-90 */
         }
+        
 
         /* Specialty Categories Section */
         .specialties-section {
@@ -235,11 +251,13 @@
                 padding-bottom: 15rem; /* md:py-28 */
             }
             .hero-section h1 {
-                font-size: 1.875rem; /* md:text-3xl */
+                font-size: 2.25rem;
+                font-weight: 700;
+                margin-bottom: 0.75rem;   
             }
             .hero-section p {
-                font-size: 1rem; /* md:text-base */
-            }
+                    letter-spacing: 0.5px;   /* Slight spacing between letters */
+                }
 
             .desktop-nav {
                 display: flex; /* md:flex - ensure desktop nav is visible */
@@ -256,7 +274,7 @@
             }
             .hero-content {
                  /* Adjust as per your image. This value shifts content to the right */
-                margin-left: 0;
+                margin-left: 100px;
                 width: 75%; /* Make content container take up remaining space */
                 text-align: left; /* Align text to left within its container */
             }
