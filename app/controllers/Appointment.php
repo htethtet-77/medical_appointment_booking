@@ -66,23 +66,35 @@ class Appointment extends Controller
     }
 
     public function book()
-    {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return redirect('pages/home');
-        }
-
-        CsrfMiddleware::validateToken();
-
-        try {
-            $this->service->bookAppointmentFromRequest($_POST, $_SESSION['current_patient'] ?? null);
-            setMessage('success', 'Appointment booked successfully.');
-            return redirect('appointment/appointmentlist');
-        } catch (Exception $e) {
-            setMessage('error', $e->getMessage());
-            $doctorId = $_POST['doctor_id'] ?? '';
-            return redirect("appointment/appointmentform/{$doctorId}");
-        }
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        return redirect('pages/home');
     }
+
+    CsrfMiddleware::validateToken();
+
+    try {
+        $this->service->bookAppointmentFromRequest($_POST, $_SESSION['current_patient'] ?? null);
+        setMessage('success', 'Appointment booked successfully.');
+        return redirect('appointment/appointmentlist');
+
+    } catch (Exception $e) {
+
+        $errorMessage = $e->getMessage();
+        setMessage('error', $errorMessage);
+
+        // If error is booking limit reached, go back to appointment list
+        if ($errorMessage === "You have reached the daily booking limit (3).") {
+            return redirect('appointment/appointmentlist');
+        }
+
+        // Otherwise, return to appointment form with doctorId properly base64 encoded
+        $doctorId = $_POST['doctor_id'] ?? '';
+        $encodedDoctorId = base64_encode($doctorId);
+        return redirect("appointment/appointmentform/{$encodedDoctorId}");
+    }
+}
+
       /*  public function book()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
