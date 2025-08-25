@@ -17,7 +17,6 @@ class Patient extends Controller
     // Inject PatientService, which requires PatientRepository internally
     public function __construct(PatientServiceInterface $patientService)
     {
-        AuthMiddleware::allowRoles([ROLE_PATIENT]);
 
         $this->patientService =$patientService;
     }
@@ -25,6 +24,12 @@ class Patient extends Controller
     public function index()
     {
         $this->view('pages/home');
+    }
+    public function home(){
+    $data = $this->patientService->listDoctors();
+    $data['doctors'] = array_slice($data['doctors'], 0, 6); // first 6 doctors
+    $this->view('pages/home', $data);
+
     }
 
     public function doctorprofile($encodedId=null)
@@ -58,6 +63,7 @@ class Patient extends Controller
         $data = $this->patientService->listDoctors();
         $this->view('pages/doctors', $data);
     }
+    
 
     public function uploadProfileImage()
     {
@@ -73,6 +79,7 @@ class Patient extends Controller
 
     public function userprofile()
     {
+        AuthMiddleware::allowRoles(allowedRoles: [ROLE_PATIENT]);
         if (!isset($_SESSION['current_patient'])) {
             redirect('pages/login');
             exit;

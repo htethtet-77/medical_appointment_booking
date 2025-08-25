@@ -22,7 +22,7 @@ function isActivePage($pagePath) {
 }
 ?>
 <header class="navbar">
-    <a href="<?php echo defined('URLROOT') ? URLROOT : ''; ?>/admin/dashboard" class="logo">Dashboard</a>
+    <a href="<?php echo defined('URLROOT') ? URLROOT : ''; ?>/admin/dashboard" class="logo">Admin Dashboard</a>
     <button class="navbar-toggle" onclick="toggleNavbar()">
         <i class="fas fa-bars"></i>
     </button>
