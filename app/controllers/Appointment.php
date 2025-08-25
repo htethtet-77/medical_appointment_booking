@@ -67,6 +67,7 @@ class Appointment extends Controller
 
     public function book()
 {
+     AuthMiddleware::allowRoles(allowedRoles: [ROLE_PATIENT]);
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         return redirect('pages/home');
     }

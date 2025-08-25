@@ -1,5 +1,5 @@
 <title><?php echo SITENAME; ?></title>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/patientlist.css?v=2">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/patientlist.css">
 <?php require APPROOT . '/views/inc/sidebar.php'; ?>
 <pre>
 <?php print_r($patients); ?>
