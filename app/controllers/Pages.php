@@ -2,6 +2,7 @@
 namespace Asus\Medical\controllers;
 use Asus\Medical\libraries\Database;
 use Asus\Medical\libraries\Controller;
+use Asus\Medical\services\PatientService;
 class Pages extends Controller
 {
 
@@ -11,15 +12,20 @@ class Pages extends Controller
         $this->db = new Database();
     }
 
-    public function index()
-    {
-        $this->view('pages/home');
-    }
+   public function index()
+{
+    $doctors = $this->db->readAll('doctor_view');
+    $data['doctors'] = array_slice($doctors, 0, 4); // first 6 doctors
+    $this->view('pages/home', $data);
+}
+
     public function home()
-    {
-    
-        $this->view('pages/home');
-    }
+{
+    $doctors = $this->db->readAll('doctor_view'); // store result
+    $data['doctors'] = array_slice($doctors, 0, 4); // first 6 doctors
+    $this->view('pages/home', $data);
+}
+
     // public function doctors()
     // {
     //     $this->view('pages/doctors');

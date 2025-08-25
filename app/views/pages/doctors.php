@@ -2,6 +2,13 @@
 <?php require APPROOT . '/views/inc/navbar.php'; ?>
 <!-- Tailwind CSS CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
+<?php
+$selectedSpecialty = $_GET['specialty'] ?? null;
+$doctorsToShow = $selectedSpecialty 
+    ? array_filter($data['doctors'], fn($doc) => $doc['specialty'] === $selectedSpecialty)
+    : $data['doctors'];
+?>
+
  <?php
        
         if (isset($_SESSION['error'])) {
@@ -63,84 +70,76 @@
         </div>
     </div>
 </main>
-
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const specialtyCards = document.querySelectorAll('.specialty-category-card');
-        const showAllBtn = document.getElementById('showAllDoctorsBtn');
-        const doctorsGrid = document.getElementById('doctorsGrid');
-        const allDoctors = <?php echo json_encode($data['doctors'] ?? []); ?>;
-        console.log("Doctors Data:", allDoctors);
+document.addEventListener('DOMContentLoaded', function () {
+    const specialtyCards = document.querySelectorAll('.specialty-category-card');
+    const showAllBtn = document.getElementById('showAllDoctorsBtn');
+    const doctorsGrid = document.getElementById('doctorsGrid');
+    const allDoctors = <?php echo json_encode($data['doctors'] ?? []); ?>;
 
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
 
-        function renderDoctors(filter = null) {
-            doctorsGrid.innerHTML = '';
+    function renderDoctors(filter = null) {
+        doctorsGrid.innerHTML = '';
 
-            const doctorsToShow = filter
-                ? allDoctors.filter(doc => doc.specialty === filter)
-                : allDoctors;
+        const doctorsToShow = filter
+            ? allDoctors.filter(doc => doc.specialty === filter)
+            : allDoctors;
 
-            if (doctorsToShow.length === 0) {
-                doctorsGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">No doctors found for this specialty.</p>`;
-                return;
-            }
-            function formatTime(timeStr) {
-                if (!timeStr) return '';
-                const date = new Date("1970-01-01T" + timeStr);
-                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            }
-
-            doctorsToShow.forEach(doc => {
-                const card = document.createElement('div');
-                card.className = 'doctor-card';
-
-                const imagePath = '<?= URLROOT ?>/' + doc.profile_image;
-                const startTime = doc.start_time ? formatTime(doc.start_time) : '';
-                const endTime = doc.end_time ? formatTime(doc.end_time) : '';
-                card.innerHTML = `
-                    <div class="doctor-image-placeholder">
-                        <img src="${imagePath}" alt="Doctor Image" class="w-24 h-24 object-cover" />
-                    </div>
-
-                    <h3 class="text-xl font-semibold text-gray-800">Dr. ${doc.name}</h3>
-                    <p class="text-green-600">${doc.specialty}</p>
-                    <p class="text-gray-600">${doc.degree}</p>
-                    <p class="text-sm text-gray-500">${doc.experience ?? 'Experience N/A'} Years Experience</p>
-                    <p class="text-sm text-blue-700 bg-blue-100 p-2 rounded font-medium">${startTime} - ${endTime}</p>
-                    <button class="view-profile-btn" data-doctor-id="${doc.user_id}">
-                        View Profile
-                    </button>
-                `;
-                
-
-                doctorsGrid.appendChild(card);
-            });
-
-
-
-            // View Profile Button Click Handler
-            document.querySelectorAll('.view-profile-btn').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const id = this.dataset.doctorId;
-                    const encodedId = btoa(id); // encode
-                    window.location.href = `<?php echo URLROOT; ?>/patient/doctorprofile/${encodedId}`;
-                });
-            });
+        if (doctorsToShow.length === 0) {
+            doctorsGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">No doctors found for this specialty.</p>`;
+            return;
         }
 
-        specialtyCards.forEach(card => {
-            card.addEventListener('click', () => {
-                renderDoctors(card.dataset.specialty);
-            });
+        function formatTime(timeStr) {
+            if (!timeStr) return '';
+            const date = new Date("1970-01-01T" + timeStr);
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        doctorsToShow.forEach(doc => {
+            const card = document.createElement('div');
+            card.className = 'doctor-card';
+
+            const imagePath = '<?= URLROOT ?>/' + doc.profile_image;
+            const startTime = doc.start_time ? formatTime(doc.start_time) : '';
+            const endTime = doc.end_time ? formatTime(doc.end_time) : '';
+            card.innerHTML = `
+                <img src="${imagePath}" alt="Dr. ${doc.name}" class="w-24 h-24 object-cover mb-4 rounded-lg">
+                <h3 class="text-xl font-semibold text-gray-800">Dr. ${doc.name}</h3>
+                <p class="text-gray-600 mt-2">${doc.specialty}</p>
+                <p class="text-gray-600 mt-2">${doc.degree}</p>
+                <p class="text-sm text-gray-500 mt-2">${doc.experience ?? 'Experience N/A'} Years Experience</p>
+                <p class="text-sm text-blue-700 bg-blue-100 p-2 rounded font-medium mt-2">${startTime} - ${endTime}</p>
+                <button class="view-profile-btn"  mt-4 data-doctor-id="${doc.user_id}">View Profile</button>
+            `;
+
+            doctorsGrid.appendChild(card);
         });
 
-        showAllBtn.addEventListener('click', () => renderDoctors());
+        document.querySelectorAll('.view-profile-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = this.dataset.doctorId;
+                const encodedId = btoa(id);
+                window.location.href = `<?php echo URLROOT; ?>/patient/doctorprofile/${encodedId}`;
+            });
+        });
+    }
 
-        // Initial render
-        renderDoctors();
+    specialtyCards.forEach(card => {
+        card.addEventListener('click', () => renderDoctors(card.dataset.specialty));
     });
-</script>
 
+    showAllBtn.addEventListener('click', () => renderDoctors());
+
+    // ✅ Check if there's a specialty in the URL and filter automatically
+    const initialFilter = getQueryParam('specialty');
+    renderDoctors(initialFilter);
+});
+</script>
 <?php require APPROOT . '/views/inc/footer.php'; ?>
 </body>
 </html>

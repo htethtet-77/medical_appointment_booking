@@ -70,7 +70,7 @@ class AppointmentService implements AppointmentServiceInterface
         );
 
         $count = count(array_filter($_SESSION['booking_requests'], fn($r) => $r['user_id'] === $userId));
-        if ($count >= 5) {
+        if ($count >= 3) {
             throw new Exception("You have reached the daily booking limit (3).");
         }
 
