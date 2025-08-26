@@ -1,110 +1,96 @@
 <title><?php echo SITENAME; ?></title>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/patientlist.css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/appointmentview.css">
 <?php require APPROOT . '/views/inc/sidebar.php'; ?>
-<pre>
-<?php print_r($patients); ?>
-</pre>
 
-<!-- Main Content -->
-<main class="main-container">
-    <div class="content-card">
-        <div class="card-header">
-            <h1 class="card-title">Patient Management</h1>
-            <div class="search-container">
-                <div class="search-icon">🔍</div>
-                <input type="text" id="patientSearch" class="search-input" placeholder="Search patients...">
+<div class="app-container">
+    <!-- Header with filters -->
+    <div class="appointment-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <h1 class="appointment-title" style="margin: 0;">Patient Management</h1>
+        
+        <div class="filters" style="display: flex; gap: 1rem; align-items: center;">
+            <div class="filter-group" style="display: flex; align-items: center; gap: 0.5rem;">
+                <label for="patientSearch">Search:</label>
+                <input type="text" id="patientSearch" class="date-input" placeholder="Search patients...">
+            </div>
+            <div class="filter-group" style="display: flex; align-items: center; gap: 0.5rem;">
+                <label for="statusFilter">Status:</label>
+                <select id="statusFilter" class="status-select">
+                    <option value="all">All Patients</option>
+                    <option value="active">Active</option>
+                    <option value="not active">Not Active</option>
+                </select>
             </div>
         </div>
-<?php $i=1;?>;
-        <!-- Desktop Table View -->
-        <div class="table-container">
-            <table class="patient-table">
-                <thead>
-                    <tr>
-                        <th>Patient ID</th>
-                        <th>Patient Name</th>
-                        <th>Gender</th>
-                        <th>Email</th>
-                        <th>Phone No</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="patientTableBody">
-                    <?php if(!empty($data['user'])): ?>
-                        <?php foreach($data['user'] as $patient): ?>
-                            <tr>
-                                <td><strong><?php echo $i++; ?></strong></td>
-                                <td><?php echo htmlspecialchars($patient['name']); ?></td>
-                                <td><?php echo htmlspecialchars($patient['gender']); ?></td>
-                                <td><?php echo htmlspecialchars($patient['email']); ?></td>
-
-                                <td><?php echo htmlspecialchars($patient['phone']); ?></td>
-                               <td>
-                                    <span style="color: <?= $patient['is_login'] == 1 ? 'green' : 'red'; ?>; font-weight: bold;">
-                                        <?= $patient['is_login'] == 1 ? 'Active' : 'Not Active'; ?>
-                                    </span>
-                                </td>
-
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="5" style="text-align:center;">No patients found.</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Mobile Card View -->
-        <div class="mobile-cards" id="mobileCards">
-            <?php if(!empty($data['user'])): ?>
-                <?php foreach($data['user'] as $patient): ?>
-                    <div class="patient-card">
-                        <div class="patient-card-header">
-                            <span class="patient-id">Patient #<?php echo htmlspecialchars($patient->id); ?></span>
-                            <a href="<?php echo URLROOT ?>/pages/userprofile/<?php echo $patient->id; ?>" class="view-btn">View</a>
-                        </div>
-                        <div class="patient-info">
-                            <div class="info-item">
-                                <span class="info-label">Full Name</span>
-                                <span class="info-value"><?php echo htmlspecialchars($patient->fullname); ?></span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">Gender</span>
-                                <span class="info-value"><?php echo htmlspecialchars($patient->gender); ?></span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">Phone</span>
-                                <span class="info-value"><?php echo htmlspecialchars($patient->phone); ?></span>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p style="text-align:center;">No patients available.</p>
-            <?php endif; ?>
-        </div>
     </div>
-</main>
 
+    <?php $i = 1; ?>
+    <div class="appointmentview-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Patient Name</th>
+                    <th>Gender</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="patientTableBody">
+                <?php if (!empty($data['user'])): ?>
+                    <?php foreach ($data['user'] as $patient): ?>
+                        <tr>
+                            <td><?php echo $i++; ?></td>
+                            <td><?php echo htmlspecialchars($patient['name']); ?></td>
+                            <td><?php echo htmlspecialchars($patient['gender']); ?></td>
+                            <td><?php echo htmlspecialchars($patient['email']); ?></td>
+                            <td><?php echo htmlspecialchars($patient['phone']); ?></td>
+                            <td>
+                                <span class="status-badge status-<?php echo $patient['is_login'] == 1 ? 'confirmed' : 'cancelled'; ?>">
+                                    <?php echo $patient['is_login'] == 1 ? 'Active' : 'Not Active'; ?>
+                                </span>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <div class="empty-state-icon">👤</div>
+                            No patients found.
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- JS for search + filter -->
 <script>
-// Patient search filter (works for both desktop and mobile)
-document.getElementById('patientSearch').addEventListener('keyup', function() {
-    let filter = this.value.toLowerCase();
-    let tableRows = document.querySelectorAll('#patientTableBody tr');
-    let cardItems = document.querySelectorAll('#mobileCards .patient-card');
+const searchInput = document.getElementById("patientSearch");
+const statusFilter = document.getElementById("statusFilter");
+const tableRows = document.querySelectorAll("#patientTableBody tr");
 
-    // Filter table rows
+// Search Filter
+searchInput.addEventListener("keyup", function() {
+    const filter = this.value.toLowerCase();
     tableRows.forEach(row => {
         let text = row.textContent.toLowerCase();
         row.style.display = text.includes(filter) ? "" : "none";
     });
+});
 
-    // Filter mobile cards
-    cardItems.forEach(card => {
-        let text = card.textContent.toLowerCase();
-        card.style.display = text.includes(filter) ? "" : "none";
+// Status Filter
+statusFilter.addEventListener("change", function () {
+    const selectedStatus = this.value.toLowerCase();
+    tableRows.forEach(row => {
+        const statusBadge = row.querySelector(".status-badge");
+        const rowStatus = statusBadge ? statusBadge.textContent.trim().toLowerCase() : "";
+        if (selectedStatus === "all" || rowStatus === selectedStatus) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
     });
 });
 </script>

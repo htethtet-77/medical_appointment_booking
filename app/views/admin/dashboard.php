@@ -2,24 +2,27 @@
 <?php require APPROOT . '/views/inc/sidebar.php'; ?>
     
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dashboard.css?v=2">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/dashboard.css">
 
 <div class="dashboard-container">
     <div class="container">
         <div class="stats">
-            <div class="stat-item">
-                <div class="stat-number"><?= $data['todaysAppointments'] ?? 0 ?></div>
-                <div class="stat-label">Today's Appointments</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number"><?= $data['totalPatients'] ?? 0 ?></div>
-                <div class="stat-label">Total Patients</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number"><?= $data['totalAppointments'] ?? 0 ?></div>
-                <div class="stat-label">Total Appointments</div>
-            </div>
-        </div>
+        <a href="<?= URLROOT; ?>/admin/dashboard" class="stat-item">
+            <div class="stat-number"><?= $data['todaysAppointments'] ?? 0 ?></div>
+            <div class="stat-label">Today's Appointments</div>
+        </a>
+        
+        <a href="<?= URLROOT; ?>/admin/patientlist" class="stat-item">
+            <div class="stat-number"><?= $data['totalPatients'] ?? 0 ?></div>
+            <div class="stat-label">Total Patients</div>
+        </a>
+        
+        <a href="<?= URLROOT; ?>/admin/appointmentview" class="stat-item">
+            <div class="stat-number"><?= $data['totalAppointments'] ?? 0 ?></div>
+            <div class="stat-label">Total Appointments</div>
+        </a>
+    </div>
+
 
         <div class="main-content">
             <div class="content-body">
