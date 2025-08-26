@@ -1,7 +1,7 @@
 <?php use function Asus\Medical\helpers\csrfInput;
 ?>
 <title><?php echo SITENAME; ?></title>
-<!-- <?php require APPROOT . '/views/inc/navbar.php'; ?> -->
+<?php require APPROOT . '/views/inc/navbar.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/appointmentform.css">
 <div class="appointmentform-container">
    <?php

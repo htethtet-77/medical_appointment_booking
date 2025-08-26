@@ -123,7 +123,7 @@
 
        <div class="see-more-button-container mt-6 flex justify-end">
     <a href="<?= URLROOT; ?>/patient/doctors" 
-       class="see-more-button px-3 py-1 bg-[#0C969C] text-white font-semibold rounded hover:bg-[#0A7B80] transition">
+       class="see-more-button px-3 py-2 bg-[#0C969C] text-white font-semibold rounded hover:bg-[#0A7B80] transition">
         See More <span>&rarr;</span>
     </a>
 </div>
@@ -134,8 +134,8 @@
 <!-- How It Works Section -->
 <section class="py-16 bg-gray-100">
     <div class="max-w-6xl mx-auto px-4">
-        <h2 class="text-3xl font-bold text-gray-800 mb-12 text-left">How does it Works?</h2>
-        <div class="flex flex-wrap justify-start gap-6">
+        <h2 class="text-3xl font-bold text-gray-800 mb-12 text-center">How does it Works?</h2>
+        <div class="flex flex-wrap justify-center gap-6">
             <div class="step bg-white rounded-xl p-6 flex flex-col items-start shadow hover:shadow-lg transition w-56">
                 <i class="fas fa-user-plus text-2xl text-[#6BA3BE] mb-4"></i>
                 <p class="font-medium text-gray-700">Register or Login</p>
