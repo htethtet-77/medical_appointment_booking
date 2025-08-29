@@ -272,6 +272,9 @@
     .table th:nth-child(4) {
         width: 20%;
     }
+    .table th:nth-child(5) {
+        width: 20%;
+    }
 
     .table th:last-child {
         border-radius: 0 var(--radius-lg) 0 0;

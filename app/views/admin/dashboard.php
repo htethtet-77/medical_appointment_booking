@@ -22,8 +22,7 @@
             <div class="stat-label">Total Appointments</div>
         </a>
     </div>
-
-
+ 
         <div class="main-content">
             <div class="content-body">
                 <?php if (!empty($data['appointmentsByDate'])): ?>
@@ -44,6 +43,7 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th></th>
                             <th class="date-time-header">Date </th>
                             <th>Time</th>
                             <th>Patient</th>
