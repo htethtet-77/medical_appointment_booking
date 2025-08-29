@@ -56,8 +56,9 @@
 <!-- Specialties Section -->
 <section class="py-10 px-4 bg-white">
     <div class="max-w-6xl mx-auto text-center">
-        <h2 class="text-3xl font-bold text-gray-800 mb-10">Categories of Specialities</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
+    <h2 class="text-3xl font-bold text-gray-800 mb-10" style="word-spacing: 0.25rem;">
+    Categories of Specialities</h2>    
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
             
             <a href="<?= URLROOT ?>/patient/doctors?specialty=General Physician" 
                class="specialty-category-card block bg-white rounded-xl shadow p-6 flex flex-col items-center justify-center cursor-pointer hover:shadow-lg">
