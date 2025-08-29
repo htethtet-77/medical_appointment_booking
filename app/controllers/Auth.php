@@ -7,6 +7,7 @@ use Asus\Medical\helpers\UserValidator;
 use Asus\Medical\libraries\Mail;
 use Asus\Medical\models\UserModel;
 use function Asus\Medical\helpers\setMessage;
+use Asus\Medical\libraries\SessionManager;
 class Auth extends Controller
 {
     private $db;

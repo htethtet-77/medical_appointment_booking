@@ -246,25 +246,44 @@ body {
     border-radius: 0 var(--radius-lg) 0 0;
 }
 
-.table td {
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-primary);
-    vertical-align: middle;
-}
 
-.table tbody tr {
-    transition: all 0.2s ease;
-}
+ .table td {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-primary);
+        vertical-align: middle;
+    }
 
-.table tbody tr:hover {
-    background: rgba(10, 112, 117, 0.02);
-    transform: scale(1.01);
-}
+    .table tbody tr {
+        transition: all 0.2s ease;
+        position: relative;
+        left: 5px;
+    }
 
-.table tbody tr:last-child td {
-    border-bottom: none;
-}
+    .table tbody tr::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        transform: scaleY(0);
+        transition: transform 0.3s ease;
+    }
+
+    .table tbody tr:hover {
+        background: rgba(10, 112, 117, 0.02);
+        transform: scale(1.01);
+    }
+
+    .table tbody tr:hover::before {
+        transform: scaleY(1);
+    }
+
+    .table tbody tr:last-child td {
+        border-bottom: none;
+    }
 
 .date-time-cell {
     font-size: 0.875rem;

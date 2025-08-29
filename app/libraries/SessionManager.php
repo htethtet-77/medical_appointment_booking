@@ -1,5 +1,7 @@
 <?php
 namespace Asus\Medical\libraries;
+use function Asus\Medical\helpers\setMessage;
+
 class SessionManager
 {
     private $regenInterval = 300; // Regenerate ID every 5 min
@@ -53,6 +55,10 @@ class SessionManager
     {
         session_unset();
         session_destroy();
-        die($message);
+        if($message){
+            setMessage('error',$message);
+        }
+        redirect('pages/login');
+        exit;
     }
 }
