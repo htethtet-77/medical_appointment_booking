@@ -22,31 +22,28 @@ if (!empty($data['appointments'])) {
 }
 ?>
 <div class="app-container">
-    <!-- The appointment-header now uses flexbox to arrange its children -->
-    <div class="appointment-header flex flex-col md:flex-row md:justify-between md:items-center">
-        <!-- Container for title and filters, now placed alongside the cards -->
-        <div class="flex flex-col md:flex-row md:items-center mb-4 md:mb-0">
-            <h1 class="appointment-title mr-4">All Appointments</h1>
-            <div class="filters">
-            <div class="filter-group">
+    <!-- Header with filters -->
+    <div class="appointment-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <h1 class="appointment-title" style="margin: 0;">All Appointments</h1>
+        
+        <div class="filters" style="display: flex; gap: 1rem; align-items: center;">
+            <div class="filter-group" style="display: flex; align-items: center; gap: 0.5rem;">
                 <label for="selectedDate">Selected Date:</label>
                 <input type="date" id="selectedDate" class="date-input" value="<?php echo date('Y-m-d'); ?>">
-            </div> 
-                <div class="filter-group">
-                    <label for="statusFilter">Status:</label>
-                    <select id="statusFilter" class="status-select">
-                        <option value="all">All Appointments</option>
-                        <option value="confirmed">Confirmed</option>
-                        <option value="pending">Pending </option>
-                        <option value="cancelled">Cancelled </option>
-                    </select>
-                </div>
+            </div>
+            <div class="filter-group" style="display: flex; align-items: center; gap: 0.5rem;">
+                <label for="statusFilter">Status:</label>
+                <select id="statusFilter" class="status-select">
+                    <option value="all">All Appointments</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="pending">Pending</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
             </div>
         </div>
-        
-        
-  
     </div>
+
+
     
     <div class="appointmentview-table mt-8">
         <table>

@@ -4,7 +4,10 @@ require_once "config/config.php";
 require_once "helpers/url_helper.php";
 require_once "helpers/message_helper.php";
 require_once "helpers/UserValidator.php";
-
+// require_once  OpenIDConnect/OpenIDConnectClient.php';
+// require_once __DIR__ . '/OpenIDConnect/phpseclib/Math/BigInteger.php';
+// require_once __DIR__ . '/OpenIDConnect/phpseclib/Crypt/RSA.php';
+// require_once __DIR__ . '/OpenIDConnect/OpenIDConnectClient.php';
 
 spl_autoload_register(function ($class) {
     $prefix = 'Asus\\Medical\\';
@@ -24,3 +27,4 @@ spl_autoload_register(function ($class) {
         throw new Exception("Autoloader error: Class: $class Expected: $file");
     }
 });
+

@@ -20,10 +20,74 @@
 				<input type="checkbox" id="togglePassword" />
 				<label for="togglePassword">Show Password</label>
 			</div>
+			<div class="separator">
+    <span>Or</span>
+</div>
+			<!-- Google Sign-In Button -->
+<a href="<?php echo URLROOT; ?>/auth/oauthLogin" class="google-btn">
+  <img class="google-icon" src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo">
+  <span class="btn-text">Sign in with Google</span>
+</a><br><br>
+
+<style>
+	/* Separator styling */
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+    color: #666;
+    font-weight: 500;
+}
+
+.separator::before,
+.separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #dadce0;
+}
+
+.separator::before {
+    margin-right: 10px;
+}
+
+.separator::after {
+    margin-left: 10px;
+}
+
+.google-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    height: 50px;
+    padding: 0 16px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: box-shadow 0.2s, background-color 0.2s;
+}
+
+.google-btn:hover {
+    background-color: #f7f7f7;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.google-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 12px;
+}
+</style>
+
  <!-- Google reCAPTCHA -->
             <div class="form-group">
                 <div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_V2_SITEKEY;?>"></div>
-            </div>
+            </div><br>
 			<button type="submit">Login</button>
 
 			Do not have an account! 

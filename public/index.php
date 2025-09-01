@@ -11,6 +11,7 @@ require_once '../app/class_loader.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 // require_once '../app/middleware/CsrfMiddleware.php';
 require_once '../app/helpers/csrf_helper.php';
+// require_once '../app/OpenIDConnect/OpenIDConnectClient.php';
 
 require_once '../app/libraries/SessionManager.php';
 new \Asus\Medical\libraries\SessionManager();

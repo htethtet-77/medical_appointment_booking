@@ -7,7 +7,11 @@ use Asus\Medical\helpers\UserValidator;
 use Asus\Medical\libraries\Mail;
 use Asus\Medical\models\UserModel;
 use function Asus\Medical\helpers\setMessage;
-use Asus\Medical\libraries\SessionManager;
+// require_once __DIR__ . '/../OpenIDConnect/OpenIDConnectClient.php';
+require_once APPROOT . '/../OpenIDConnect/OpenIDConnectClient.php';
+use Jumbojett\OpenIDConnectClient;
+use Asus\Medical\helpers\OIDCUserHelper;
+
 class Auth extends Controller
 {
     private $db;
@@ -179,6 +183,107 @@ class Auth extends Controller
         $this->view('pages/login');
     }
 }*/
+public function oauthLogin()
+{
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    $oidc = new OpenIDConnectClient(
+        OIDC_PROVIDER_URL,
+        OIDC_CLIENT_ID,
+        OIDC_CLIENT_SECRET
+    );
+
+    $oidc->setRedirectURL(OIDC_REDIRECT_URI);
+    $oidc->addScope(['openid','email','profile']);
+
+    // Required for PKCE
+    $oidc->setCodeChallengeMethod('S256');
+
+    $oidc->authenticate(); // redirects user to Google
+}
+
+
+
+public function oauthCallback()
+{
+    // Start session if not already started
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    try {
+        $oidc = new OpenIDConnectClient(
+            OIDC_PROVIDER_URL,
+            OIDC_CLIENT_ID,
+            OIDC_CLIENT_SECRET
+        );
+
+        // Set redirect URL and scopes
+        $oidc->setRedirectURL(OIDC_REDIRECT_URI);
+        $oidc->addScope(['openid', 'email', 'profile']);
+
+        // Use PKCE for security
+        $oidc->setCodeChallengeMethod('S256');
+
+        // Authenticate: this reads $_GET['code'] automatically
+        $oidc->authenticate();
+
+        // Get verified claims from Google
+        $claims = $oidc->getVerifiedClaims();
+
+        // Use helper to map Google user to local database
+        $helper = new OIDCUserHelper($this->db);
+        $userId = $helper->handleOIDCLogin('google', (array)$claims);
+
+        if (!$userId) {
+            setMessage('error', 'Unable to process login. Please try again.');
+            redirect('pages/login');
+            return;
+        }
+
+        // Regenerate session for security
+        session_regenerate_id(true);
+
+        // Fetch the full user info from DB
+        $_SESSION['current_user'] = $this->db->getById('users', $userId);
+
+        // Mark the user as logged in
+        $this->db->setLogin($userId);
+
+        // Redirect based on role
+        switch ($_SESSION['current_user']['type_id']) {
+            case ROLE_ADMIN:
+                redirect('admin/dashboard');
+                break;
+            case ROLE_DOCTOR:
+                $doctor = $this->db->columnFilter('doctor_view', 'user_id', $userId);
+                $_SESSION['current_doctor'] = $doctor;
+                redirect('doctor/dash');
+                break;
+            case ROLE_PATIENT:
+                $patient = $this->db->columnFilter('users', 'id', $userId);
+                $_SESSION['current_patient'] = $patient;
+                redirect('patient/doctors');
+                break;
+            default:
+                setMessage('error', 'Invalid user role.');
+                redirect('pages/login');
+                break;
+        }
+
+    } catch (\Jumbojett\OpenIDConnectClientException $e) {
+        // Catch errors from the library
+        setMessage('error', 'OIDC login failed: ' . $e->getMessage());
+        redirect('pages/login');
+    } catch (\Exception $e) {
+        setMessage('error', 'Unexpected error: ' . $e->getMessage());
+        redirect('pages/login');
+    }
+}
+
+
 public function login() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = trim($_POST['email'] ?? '');

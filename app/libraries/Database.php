@@ -387,6 +387,18 @@ class Database
     }
 
 
+public function findIdentity($provider, $subject)
+{
+    $sql = "SELECT * FROM user_identities WHERE provider = :provider AND subject = :subject LIMIT 1";
+    $stm = $this->pdo->prepare($sql);
+    $stm->bindValue(':provider', $provider);
+    $stm->bindValue(':subject', $subject);
+    $success = $stm->execute();
+    $row = $stm->fetch(PDO::FETCH_ASSOC);
+    return ($success) ? $row : [];
+}
+
+
 
 
 }
