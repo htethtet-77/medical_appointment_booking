@@ -43,8 +43,58 @@ class Mail
             $mail->Subject = 'Verify Mail';
             // $token = hash_hmac('sha256', $recipient_mail, SECRET_KEY);
             // $verificationLink = "http://localhost:8000/verify?email=" . urlencode($recipient_mail) . "&token=" ;
-            $mail->Body = "<b><a href='http://localhost:8000/pages/login' target='_blank'>Click</a></b> Thank you for your registration.";
-            $mail->AltBody = 'Visit the verification link to complete registration.';
+            $mail->Body = "
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <meta charset='UTF-8'>
+        <style>
+            body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            padding: 20px;
+            }
+            .email-container {
+            background: white;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+            }
+            .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #28a745;
+            text-decoration: none;
+            border-radius: 5px;
+            }
+            .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #888;
+            }
+        </style>
+        </head>
+        <body>
+        <div class='email-container'>
+            <h2>Verify Your Email</h2>
+            <p>Thank you for registering with us, <b>{$recipient_name}</b>!</p>
+            <p>Please click the button below to verify your email address:</p>
+            <a class='btn' href='http://localhost:8000/pages/login' target='_blank'>Verify Email</a>
+            <div class='footer'>
+            If you did not sign up for this account, you can safely ignore this email.
+            </div>
+        </div>
+        </body>
+        </html>
+        ";
+
+        $mail->AltBody = "Thank you for registering, {$recipient_name}! Please verify your email by visiting: http://localhost:8000/pages/login";
             return $mail->send();
         } catch (Exception $e) {
             return false;

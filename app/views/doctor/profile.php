@@ -74,11 +74,11 @@ ini_set('display_error',1);
             </div>
             <div class="form-group">
                 <label for="new_password">New Password:</label>
-                <input type="text" id="new_password" name="new_password" required minlength="8" autocomplete="new-password">
+                <input type="text" id="new_password" name="new_password" required minlength="8" autocomplete="off">
             </div>
             <div class="form-group">
                 <label for="confirm_password">Confirm New Password:</label>
-                <input type="text" id="confirm_password" name="confirm_password" required autocomplete="new-password">
+                <input type="text" id="confirm_password" name="confirm_password" required autocomplete="off">
             </div>
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">Update Password</button>
